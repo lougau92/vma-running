@@ -36,7 +36,7 @@ class VmaPaceTable extends StatelessWidget {
                     ),
                   ),
                 ),
-                const DataColumn(label: Text('Pace (min/km)')),
+                const DataColumn(label: Text('Pace /km')),
                 DataColumn(
                   label: InkWell(
                     onTap: onEditDistance,

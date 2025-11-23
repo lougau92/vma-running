@@ -17,7 +17,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
   final _paceCalculator = VmaPaceCalculator();
   double? _vma;
   bool _loading = true;
-  double _minPercent = 50;
+  double _minPercent = 60;
   double _maxPercent = 120;
   double _step = 5;
   double _distanceMeters = 400;

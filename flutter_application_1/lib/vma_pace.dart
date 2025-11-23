@@ -16,10 +16,10 @@ class VmaPaceEntry {
 class VmaPaceCalculator {
   List<VmaPaceEntry> buildTable(
     double vma, {
-    double minPercent = 50,
-    double maxPercent = 120,
-    double step = 5,
-    double distanceMeters = 400,
+    required double minPercent,
+    required double maxPercent,
+    required double step,
+    required double distanceMeters,
   }) {
     final entries = <VmaPaceEntry>[];
     for (double percent = minPercent;

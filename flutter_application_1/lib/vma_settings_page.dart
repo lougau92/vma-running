@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
+import 'decorated_scaffold.dart';
 import 'vma_settings_view.dart';
 
 class VmaSettingsPage extends StatelessWidget {
@@ -16,7 +17,7 @@ class VmaSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return Scaffold(
+    return DecoratedScaffold(
       appBar: AppBar(
         title: Text(strings.settingsTab),
       ),

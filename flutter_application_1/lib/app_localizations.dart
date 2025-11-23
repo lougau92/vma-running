@@ -57,6 +57,10 @@ class AppLocalizations {
   String get systemDefault => _t('systemDefault');
   String get english => _t('english');
   String get french => _t('french');
+  String get dutch => _t('dutch');
+  String get theme => _t('theme');
+  String get dark => _t('dark');
+  String get light => _t('light');
   String get settingsComingSoon => _t('settingsComingSoon');
   String get adjustIntensity => _t('adjustIntensity');
   String get minPercent => _t('minPercent');
@@ -79,7 +83,6 @@ class AppLocalizations {
   String get distanceGreaterThanZero => _t('distanceGreaterThanZero');
   String get halfMarathon => _t('halfMarathon');
   String get marathon => _t('marathon');
-  String get dutch => _t('dutch');
 
   String yourVma(double vma) =>
       _t('yourVma').replaceFirst('{value}', vma.toStringAsFixed(2));

@@ -16,6 +16,7 @@ class VmaSettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     final localeValue = settings.localeCode ?? 'system';
+    final themeValue = settings.themeMode.name;
 
     return ListView(
       padding: const EdgeInsets.all(24),
@@ -49,6 +50,39 @@ class VmaSettingsView extends StatelessWidget {
             DropdownMenuItem(
               value: 'nl',
               child: Text(strings.dutch),
+            ),
+          ],
+        ),
+        const SizedBox(height: 24),
+        Text(
+          strings.theme,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        const SizedBox(height: 8),
+        DropdownButton<String>(
+          value: themeValue,
+          onChanged: (value) {
+            final nextTheme = switch (value) {
+              'light' => ThemeMode.light,
+              'system' => ThemeMode.system,
+              _ => ThemeMode.dark,
+            };
+            onSettingsChanged(
+              settings.copyWith(themeMode: nextTheme),
+            );
+          },
+          items: [
+            DropdownMenuItem(
+              value: 'dark',
+              child: Text(strings.dark),
+            ),
+            DropdownMenuItem(
+              value: 'light',
+              child: Text(strings.light),
+            ),
+            DropdownMenuItem(
+              value: 'system',
+              child: Text(strings.systemDefault),
             ),
           ],
         ),

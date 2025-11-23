@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
+import 'decorated_scaffold.dart';
 import 'distance_input.dart';
+import 'theme.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
@@ -131,9 +133,20 @@ class _VmaHomePageState extends State<VmaHomePage> {
             ),
           );
 
-    return Scaffold(
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return DecoratedScaffold(
       appBar: AppBar(
-        title: Text(strings.appTitle),
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/enjambee_img/logo-header-minimized.png',
+              height: 32,
+            ),
+            const SizedBox(width: 8),
+            Text(strings.appTitle),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -153,6 +166,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
       ),
       body: body,
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor:
+            isDark ? EnjambeeTheme.navy : Theme.of(context).colorScheme.surface,
+        selectedItemColor:
+            isDark ? EnjambeeTheme.orange : Theme.of(context).colorScheme.primary,
+        unselectedItemColor:
+            isDark ? Colors.white70 : Theme.of(context).colorScheme.onSurface,
         currentIndex: _tabIndex,
         onTap: (idx) => setState(() => _tabIndex = idx),
         items: [

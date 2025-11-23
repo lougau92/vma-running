@@ -19,6 +19,10 @@ class TranslationsNl {
     'systemDefault': 'Systeemtaal',
     'english': 'Engels',
     'french': 'Frans',
+    'dutch': 'Nederlands',
+    'theme': 'Thema',
+    'dark': 'Donker',
+    'light': 'Licht',
     'settingsComingSoon': 'Meer instellingen komen eraan.',
     'adjustIntensity': 'Intensiteit aanpassen',
     'minPercent': 'Min %',
@@ -41,6 +45,5 @@ class TranslationsNl {
     'distanceGreaterThanZero': 'Voer een afstand groter dan 0 in.',
     'halfMarathon': 'Halve marathon',
     'marathon': 'Marathon',
-    'dutch': 'Nederlands',
   };
 }

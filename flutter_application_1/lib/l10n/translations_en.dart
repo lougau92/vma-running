@@ -19,6 +19,10 @@ class TranslationsEn {
     'systemDefault': 'System default',
     'english': 'English',
     'french': 'French',
+    'dutch': 'Dutch',
+    'theme': 'Theme',
+    'dark': 'Dark',
+    'light': 'Light',
     'settingsComingSoon': 'More settings coming soon.',
     'adjustIntensity': 'Adjust intensity range',
     'minPercent': 'Min %',
@@ -41,6 +45,5 @@ class TranslationsEn {
     'distanceGreaterThanZero': 'Enter a distance greater than 0.',
     'halfMarathon': 'Half marathon',
     'marathon': 'Marathon',
-    'dutch': 'Dutch',
   };
 }

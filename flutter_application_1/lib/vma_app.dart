@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'settings_storage.dart';
+import 'theme.dart';
 import 'vma_home.dart';
 
 class VmaApp extends StatefulWidget {
@@ -44,9 +45,9 @@ class _VmaAppState extends State<VmaApp> {
 
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      theme: EnjambeeTheme.lightTheme(),
+      darkTheme: EnjambeeTheme.darkTheme(),
+      themeMode: _settings.themeMode,
       locale: _settings.localeCode != null ? Locale(_settings.localeCode!) : null,
       localizationsDelegates: const [
         AppLocalizations.delegate,

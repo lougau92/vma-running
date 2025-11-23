@@ -1,17 +1,25 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'app_localizations.dart';
+import 'app_settings.dart';
+import 'distance_input.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
 import 'vma_storage.dart';
+import 'vma_settings_page.dart';
 import 'vma_table.dart';
 import 'vma_times_settings_dialog.dart';
 import 'vma_times_table.dart';
-import 'distance_extensions.dart';
 
 class VmaHomePage extends StatefulWidget {
-  const VmaHomePage({super.key});
+  const VmaHomePage({
+    super.key,
+    required this.settings,
+    required this.onSettingsChanged,
+  });
+
+  final AppSettings settings;
+  final ValueChanged<AppSettings> onSettingsChanged;
 
   @override
   State<VmaHomePage> createState() => _VmaHomePageState();
@@ -28,7 +36,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
   double _step = 5;
   double _distanceMeters = 400;
   double _timesMinDistance = 100;
-  double _timesMaxDistance = marathon.toDouble();
+  double _timesMaxDistance = kMarathonMeters;
 
   @override
   void initState() {
@@ -63,10 +71,11 @@ class _VmaHomePageState extends State<VmaHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     final body = _loading
         ? const Center(child: CircularProgressIndicator())
         : Padding(
-            padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
+            padding: const EdgeInsets.all(24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -77,8 +86,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
                     Flexible(
                       child: Text(
                         _vma == null
-                            ? 'No VMA saved yet'
-                            : 'Your VMA: ${_vma!.toStringAsFixed(2)} km/h',
+                            ? strings.noVma
+                            : strings.yourVma(_vma!),
                         style: Theme.of(context).textTheme.headlineSmall,
                         textAlign: TextAlign.center,
                       ),
@@ -87,51 +96,74 @@ class _VmaHomePageState extends State<VmaHomePage> {
                     ElevatedButton.icon(
                       onPressed: _promptForVma,
                       icon: const Icon(Icons.directions_run),
-                      label: Text(_vma == null ? 'Set VMA' : 'Update VMA'),
+                      label:
+                          Text(_vma == null ? strings.setVma : strings.updateVma),
                     ),
                   ],
                 ),
                 const SizedBox(height: 32),
                 Expanded(
                   child: _vma == null
-                      ? const Center(
-                          child: Text('Enter your VMA to see pace targets.'),
+                      ? Center(
+                          child: Text(strings.enterVmaPlaceholder),
                         )
                       : _tabIndex == 0
-                      ? VmaPaceTable(
-                          entries: _paceCalculator.buildTable(
-                            _vma!,
-                            minPercent: _minPercent,
-                            maxPercent: _maxPercent,
-                            step: _step,
-                            distanceMeters: _distanceMeters,
-                          ),
-                          onEditPercentages: _openTableSettingsDialog,
-                          distanceMeters: _distanceMeters,
-                          onEditDistance: _openDistanceDialog,
-                        )
-                      : VmaTimesTable(
-                          vma: _vma!,
-                          minDistanceMeters: _timesMinDistance,
-                          maxDistanceMeters: _timesMaxDistance,
-                          onEditDistances: _openTimesSettingsDialog,
-                        ),
+                          ? VmaPaceTable(
+                              entries: _paceCalculator.buildTable(
+                                _vma!,
+                                minPercent: _minPercent,
+                                maxPercent: _maxPercent,
+                                step: _step,
+                                distanceMeters: _distanceMeters,
+                              ),
+                              onEditPercentages: _openTableSettingsDialog,
+                              distanceMeters: _distanceMeters,
+                              onEditDistance: _openDistanceDialog,
+                            )
+                          : VmaTimesTable(
+                              vma: _vma!,
+                              minDistanceMeters: _timesMinDistance,
+                              maxDistanceMeters: _timesMaxDistance,
+                              onEditDistances: _openTimesSettingsDialog,
+                            ),
                 ),
               ],
             ),
           );
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(strings.appTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: strings.settingsTab,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => VmaSettingsPage(
+                    settings: widget.settings,
+                    onSettingsChanged: widget.onSettingsChanged,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
       body: body,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _tabIndex,
         onTap: (idx) => setState(() => _tabIndex = idx),
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.analytics),
-            label: 'Intensity',
+            icon: const Icon(Icons.analytics),
+            label: strings.intensityTab,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Times'),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.timer),
+            label: strings.timesTab,
+          ),
         ],
       ),
     );

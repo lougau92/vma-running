@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/distance_extensions.dart';
+import 'app_localizations.dart';
 import 'vma_pace.dart';
 
 class VmaPaceTable extends StatelessWidget {
@@ -18,6 +18,7 @@ class VmaPaceTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     return Scrollbar(
       thumbVisibility: true,
       child: SingleChildScrollView(
@@ -31,23 +32,23 @@ class VmaPaceTable extends StatelessWidget {
                 DataColumn(
                   label: InkWell(
                     onTap: onEditPercentages,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('Intensity'),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(strings.intensity),
                     ),
                   ),
                 ),
-                const DataColumn(label: Text('Pace /km')),
+                DataColumn(label: Text(strings.pacePerKm)),
                 DataColumn(
                   label: InkWell(
                     onTap: onEditDistance,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(distanceMeters.toRaceLabel()),
+                      child: Text(strings.timeForDistanceLabel(distanceMeters)),
                     ),
                   ),
                 ),
-                const DataColumn(label: Text('Speed (km/h)')),
+                DataColumn(label: Text(strings.speedKmh)),
               ],
               rows: entries
                   .map(

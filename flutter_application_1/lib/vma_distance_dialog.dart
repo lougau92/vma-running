@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'distance_extensions.dart';
+import 'app_localizations.dart';
+import 'distance_input.dart';
 
 Future<double?> showDistanceDialog(
   BuildContext context, {
   required double initialDistanceMeters,
 }) {
+  final strings = AppLocalizations.of(context);
   final controller =
       TextEditingController(text: initialDistanceMeters.toStringAsFixed(0));
   String? validationError;
@@ -13,7 +15,7 @@ Future<double?> showDistanceDialog(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (context, setStateDialog) => AlertDialog(
-        title: const Text('Set target distance'),
+        title: Text(strings.setTargetDistance),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -23,7 +25,7 @@ Future<double?> showDistanceDialog(
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
-                labelText: 'Distance (meters)',
+                labelText: strings.distanceMetersLabel,
                 errorText: validationError,
               ),
               onChanged: (_) {
@@ -37,7 +39,7 @@ Future<double?> showDistanceDialog(
               spacing: 8,
               children: [
                 ActionChip(
-                  label: const Text('Half marathon'),
+                  label: Text(strings.halfMarathon),
                   onPressed: () {
                     controller.text =
                         kHalfMarathonMeters.toStringAsFixed(0);
@@ -45,7 +47,7 @@ Future<double?> showDistanceDialog(
                   },
                 ),
                 ActionChip(
-                  label: const Text('Marathon'),
+                  label: Text(strings.marathon),
                   onPressed: () {
                     controller.text = kMarathonMeters.toStringAsFixed(0);
                     setStateDialog(() => validationError = null);
@@ -58,20 +60,20 @@ Future<double?> showDistanceDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+            child: Text(strings.cancel),
           ),
           TextButton(
             onPressed: () {
               final value = parseDistanceInput(controller.text);
               if (value == null || value <= 0) {
                 setStateDialog(
-                  () => validationError = 'Enter a distance greater than 0.',
+                  () => validationError = strings.distanceGreaterThanZero,
                 );
                 return;
               }
               Navigator.of(dialogContext).pop(value);
             },
-            child: const Text('Save'),
+            child: Text(strings.save),
           ),
         ],
       ),

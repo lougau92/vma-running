@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_localizations.dart';
 
 class VmaTableSettings {
   const VmaTableSettings({
@@ -16,6 +17,7 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
   BuildContext context, {
   required VmaTableSettings initialSettings,
 }) {
+  final strings = AppLocalizations.of(context);
   final minController =
       TextEditingController(text: initialSettings.minPercent.toStringAsFixed(0));
   final maxController =
@@ -28,7 +30,7 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (context, setStateDialog) => AlertDialog(
-        title: const Text('Adjust intensity range'),
+        title: Text(strings.adjustIntensity),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -39,15 +41,15 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
               children: [
                 _NumberField(
                   controller: minController,
-                  label: 'Min %',
+                  label: strings.minPercent,
                 ),
                 _NumberField(
                   controller: maxController,
-                  label: 'Max %',
+                  label: strings.maxPercent,
                 ),
                 _NumberField(
                   controller: stepController,
-                  label: 'Step %',
+                  label: strings.stepPercent,
                 ),
               ],
             ),
@@ -62,49 +64,49 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
             ],
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              final minValue =
-                  double.tryParse(minController.text.replaceAll(',', '.'));
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(strings.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                final minValue =
+                    double.tryParse(minController.text.replaceAll(',', '.'));
               final maxValue =
                   double.tryParse(maxController.text.replaceAll(',', '.'));
               final stepValue =
                   double.tryParse(stepController.text.replaceAll(',', '.'));
 
-              String? error;
-              if (minValue == null || maxValue == null || stepValue == null) {
-                error = 'Use numbers only.';
-              } else if (minValue <= 0 || maxValue <= 0 || stepValue <= 0) {
-                error = 'Values must be greater than 0.';
-              } else if (minValue >= maxValue) {
-                error = 'Min must be less than Max.';
-              } else if (stepValue > (maxValue - minValue)) {
-                error = 'Step is too large for the range.';
-              }
+                String? error;
+                if (minValue == null || maxValue == null || stepValue == null) {
+                  error = strings.useNumbersOnly;
+                } else if (minValue <= 0 || maxValue <= 0 || stepValue <= 0) {
+                  error = strings.valuesGreaterThanZero;
+                } else if (minValue >= maxValue) {
+                  error = strings.minLessThanMax;
+                } else if (stepValue > (maxValue - minValue)) {
+                  error = strings.stepTooLarge;
+                }
 
-              if (error != null) {
-                setStateDialog(() => validationError = error);
-                return;
-              }
+                if (error != null) {
+                  setStateDialog(() => validationError = error);
+                  return;
+                }
 
-              Navigator.of(dialogContext).pop(
-                VmaTableSettings(
-                  minPercent: minValue!,
-                  maxPercent: maxValue!,
-                  step: stepValue!,
-                ),
-              );
-            },
-            child: const Text('Save'),
-          ),
-        ],
+                Navigator.of(dialogContext).pop(
+                  VmaTableSettings(
+                    minPercent: minValue!,
+                    maxPercent: maxValue!,
+                    step: stepValue!,
+                  ),
+                );
+              },
+              child: Text(strings.save),
+            ),
+          ],
+        ),
       ),
-    ),
   );
 }
 

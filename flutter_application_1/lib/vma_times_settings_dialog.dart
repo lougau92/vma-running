@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'distance_extensions.dart';
+import 'app_localizations.dart';
+import 'distance_input.dart';
 
 class VmaTimesSettings {
   const VmaTimesSettings({
@@ -15,6 +16,7 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
   BuildContext context, {
   required VmaTimesSettings initialSettings,
 }) {
+  final strings = AppLocalizations.of(context);
   final minController =
       TextEditingController(text: initialSettings.minDistance.toStringAsFixed(0));
   final maxController =
@@ -26,7 +28,7 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (context, setStateDialog) => AlertDialog(
-        title: const Text('Distance range'),
+        title: Text(strings.distanceRange),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -37,12 +39,12 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
               children: [
                 _NumberField(
                   controller: minController,
-                  label: 'Min (m)',
+                  label: strings.minMeters,
                   onTap: () => activeController = minController,
                 ),
                 _NumberField(
                   controller: maxController,
-                  label: 'Max (m)',
+                  label: strings.maxMeters,
                   onTap: () => activeController = maxController,
                 ),
               ],
@@ -52,7 +54,7 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
               spacing: 8,
               children: [
                 ActionChip(
-                  label: const Text('Half marathon'),
+                  label: Text(strings.halfMarathon),
                   onPressed: () {
                     (activeController ?? maxController).text =
                         kHalfMarathonMeters.toStringAsFixed(0);
@@ -60,7 +62,7 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
                   },
                 ),
                 ActionChip(
-                  label: const Text('Marathon'),
+                  label: Text(strings.marathon),
                   onPressed: () {
                     (activeController ?? maxController).text =
                         kMarathonMeters.toStringAsFixed(0);
@@ -80,10 +82,10 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
             ],
           ],
         ),
-        actions: [
+          actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
+            child: Text(strings.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -92,11 +94,11 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
 
               String? error;
               if (minValue == null || maxValue == null) {
-                error = 'Use numbers only.';
+                error = strings.useNumbersOnly;
               } else if (minValue <= 0 || maxValue <= 0) {
-                error = 'Values must be greater than 0.';
+                error = strings.valuesGreaterThanZero;
               } else if (minValue >= maxValue) {
-                error = 'Min must be less than Max.';
+                error = strings.minLessThanMax;
               }
 
               if (error != null) {
@@ -111,7 +113,7 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
                 ),
               );
             },
-            child: const Text('Save'),
+            child: Text(strings.save),
           ),
         ],
       ),

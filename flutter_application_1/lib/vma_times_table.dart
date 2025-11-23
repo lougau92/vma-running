@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'distance_extensions.dart';
+import 'app_localizations.dart';
+import 'distance_input.dart';
 import 'time_utils.dart';
 
 class VmaTimesTable extends StatelessWidget {
@@ -18,6 +19,7 @@ class VmaTimesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
     final distances = _buildDistances();
     final speedMs = vma * 1000 / 3600;
 
@@ -34,20 +36,20 @@ class VmaTimesTable extends StatelessWidget {
                 DataColumn(
                   label: InkWell(
                     onTap: onEditDistances,
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text('Distance'),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(strings.distance),
                     ),
                   ),
                 ),
-                const DataColumn(label: Text('Time')),
-                const DataColumn(label: Text('Avg pace')),
+                DataColumn(label: Text(strings.time)),
+                DataColumn(label: Text(strings.avgPace)),
               ],
               rows: distances
                   .map(
                     (distance) => DataRow(
                       cells: [
-                        DataCell(Text(_formatDistance(distance))),
+                        DataCell(Text(_formatDistance(distance, strings))),
                         DataCell(Text(_formatDistanceTime(speedMs, distance))),
                         DataCell(Text(formatPacePerKm(vma))),
                       ],
@@ -104,7 +106,17 @@ class VmaTimesTable extends StatelessWidget {
         .toList();
   }
 
-  String _formatDistance(double meters) {
-    return meters.toRaceLabel();
+  String _formatDistance(double meters, AppLocalizations strings) {
+    if ((meters - kMarathonMeters).abs() <= 1) {
+      return strings.marathon;
+    }
+    if ((meters - kHalfMarathonMeters).abs() <= 2) {
+      return strings.halfMarathon;
+    }
+    if (meters >= 1000) {
+      final km = meters / 1000;
+      return '${km.toStringAsFixed(km % 1 == 0 ? 0 : 1)} km';
+    }
+    return '${meters.toStringAsFixed(0)} m';
   }
 }

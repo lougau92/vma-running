@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'app_localizations.dart';
 
 /// Handles loading, saving, and prompting for the user's VMA value.
 class VmaStorage {
@@ -20,6 +21,7 @@ class VmaStorage {
     double? initialValue,
     SharedPreferences? prefs,
   }) async {
+    final strings = AppLocalizations.of(context);
     final controller = TextEditingController(
       text: initialValue != null ? initialValue.toStringAsFixed(2) : '',
     );
@@ -30,14 +32,14 @@ class VmaStorage {
       barrierDismissible: false,
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setStateDialog) => AlertDialog(
-          title: const Text('Enter your VMA'),
+          title: Text(strings.enterVmaTitle),
           content: TextField(
             controller: controller,
             autofocus: true,
             keyboardType:
                 const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
-              labelText: 'VMA (e.g. 17.15)',
+              labelText: strings.vmaLabel,
               errorText: validationError,
             ),
             onChanged: (_) {
@@ -54,13 +56,13 @@ class VmaStorage {
                 );
                 if (parsed == null) {
                   setStateDialog(
-                    () => validationError = 'Please enter a number',
+                    () => validationError = strings.enterNumber,
                   );
                   return;
                 }
                 Navigator.of(dialogContext).pop(parsed);
               },
-              child: const Text('Save'),
+              child: Text(strings.save),
             ),
           ],
         ),

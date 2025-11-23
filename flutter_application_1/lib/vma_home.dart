@@ -14,6 +14,7 @@ import 'vma_settings_page.dart';
 import 'vma_table.dart';
 import 'vma_times_settings_dialog.dart';
 import 'vma_times_table.dart';
+import 'vma_training_plan.dart';
 
 class VmaHomePage extends StatefulWidget {
   const VmaHomePage({
@@ -90,8 +91,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
             child: _vma == null
                 ? Center(child: Text(strings.enterVmaPlaceholder))
                 : _tabIndex == 0
-                    ? _buildPaceBody(strings)
-                    : _buildTimesBody(strings),
+                ? _buildPaceBody(strings)
+                : _tabIndex == 1
+                ? _buildTimesBody(strings)
+                : const VmaTrainingPlan(),
           );
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -127,12 +130,15 @@ class _VmaHomePageState extends State<VmaHomePage> {
       ),
       body: body,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:
-            isDark ? EnjambeeTheme.navy : Theme.of(context).colorScheme.surface,
-        selectedItemColor:
-            isDark ? EnjambeeTheme.orange : Theme.of(context).colorScheme.primary,
-        unselectedItemColor:
-            isDark ? Colors.white70 : Theme.of(context).colorScheme.onSurface,
+        backgroundColor: isDark
+            ? EnjambeeTheme.navy
+            : Theme.of(context).colorScheme.surface,
+        selectedItemColor: isDark
+            ? EnjambeeTheme.orange
+            : Theme.of(context).colorScheme.primary,
+        unselectedItemColor: isDark
+            ? Colors.white70
+            : Theme.of(context).colorScheme.onSurface,
         currentIndex: _tabIndex,
         onTap: (idx) => setState(() => _tabIndex = idx),
         items: [
@@ -143,6 +149,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
           BottomNavigationBarItem(
             icon: const Icon(Icons.timer),
             label: strings.timesTab,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.fitness_center),
+            label: strings.trainingPlanTab,
           ),
         ],
       ),
@@ -242,6 +252,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildVMAHeader(strings),
+        const SizedBox(height: 16),
         Card(
           margin: EdgeInsets.zero,
           child: Padding(

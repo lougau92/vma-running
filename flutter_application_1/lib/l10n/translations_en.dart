@@ -14,6 +14,7 @@ class TranslationsEn {
     'avgPace': 'Avg pace',
     'timesTab': 'Times',
     'intensityTab': 'Intensity',
+    'trainingPlanTab': 'Workout',
     'settingsTab': 'Settings',
     'language': 'Language',
     'systemDefault': 'System default',

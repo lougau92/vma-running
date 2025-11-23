@@ -14,6 +14,7 @@ class TranslationsFr {
     'avgPace': 'Allure moy.',
     'timesTab': 'Chronos',
     'intensityTab': 'Intensité',
+    'trainingPlanTab': 'Entrainement',
     'settingsTab': 'Réglages',
     'language': 'Langue',
     'systemDefault': 'Langue du système',

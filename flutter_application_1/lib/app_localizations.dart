@@ -59,6 +59,7 @@ class AppLocalizations {
   String get avgPace => _t('avgPace');
   String get timesTab => _t('timesTab');
   String get intensityTab => _t('intensityTab');
+  String get trainingPlanTab => _t('trainingPlanTab');
   String get settingsTab => _t('settingsTab');
   String get language => _t('language');
   String get systemDefault => _t('systemDefault');

@@ -14,6 +14,7 @@ class TranslationsNl {
     'avgPace': 'Gem. tempo',
     'timesTab': 'Tijden',
     'intensityTab': 'Intensiteit',
+    'trainingPlanTab': 'Training',
     'settingsTab': 'Instellingen',
     'language': 'Taal',
     'systemDefault': 'Systeemtaal',

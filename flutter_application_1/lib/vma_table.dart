@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/distance_extensions.dart';
 import 'vma_pace.dart';
 
 class VmaPaceTable extends StatelessWidget {
@@ -42,9 +43,7 @@ class VmaPaceTable extends StatelessWidget {
                     onTap: onEditDistance,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        '${distanceMeters.toStringAsFixed(distanceMeters % 1 == 0 ? 0 : 1)}m',
-                      ),
+                      child: Text(distanceMeters.toRaceLabel()),
                     ),
                   ),
                 ),

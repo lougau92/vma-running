@@ -1,9 +1,14 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
 import 'vma_storage.dart';
 import 'vma_table.dart';
+import 'vma_times_settings_dialog.dart';
+import 'vma_times_table.dart';
+import 'distance_extensions.dart';
 
 class VmaHomePage extends StatefulWidget {
   const VmaHomePage({super.key});
@@ -15,12 +20,15 @@ class VmaHomePage extends StatefulWidget {
 class _VmaHomePageState extends State<VmaHomePage> {
   final _vmaStorage = VmaStorage();
   final _paceCalculator = VmaPaceCalculator();
+  int _tabIndex = 0;
   double? _vma;
   bool _loading = true;
   double _minPercent = 60;
   double _maxPercent = 120;
   double _step = 5;
   double _distanceMeters = 400;
+  double _timesMinDistance = 100;
+  double _timesMaxDistance = marathon.toDouble();
 
   @override
   void initState() {
@@ -58,7 +66,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
     final body = _loading
         ? const Center(child: CircularProgressIndicator())
         : Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(24, 48, 24, 24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -89,7 +97,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
                       ? const Center(
                           child: Text('Enter your VMA to see pace targets.'),
                         )
-                      : VmaPaceTable(
+                      : _tabIndex == 0
+                      ? VmaPaceTable(
                           entries: _paceCalculator.buildTable(
                             _vma!,
                             minPercent: _minPercent,
@@ -100,6 +109,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
                           onEditPercentages: _openTableSettingsDialog,
                           distanceMeters: _distanceMeters,
                           onEditDistance: _openDistanceDialog,
+                        )
+                      : VmaTimesTable(
+                          vma: _vma!,
+                          minDistanceMeters: _timesMinDistance,
+                          maxDistanceMeters: _timesMaxDistance,
+                          onEditDistances: _openTimesSettingsDialog,
                         ),
                 ),
               ],
@@ -107,8 +122,18 @@ class _VmaHomePageState extends State<VmaHomePage> {
           );
 
     return Scaffold(
-      // appBar: AppBar(title: const Text('VMA Training')),
       body: body,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _tabIndex,
+        onTap: (idx) => setState(() => _tabIndex = idx),
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.analytics),
+            label: 'Intensity',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.timer), label: 'Times'),
+        ],
+      ),
     );
   }
 
@@ -140,6 +165,23 @@ class _VmaHomePageState extends State<VmaHomePage> {
     if (updatedDistance != null && mounted) {
       setState(() {
         _distanceMeters = updatedDistance;
+      });
+    }
+  }
+
+  Future<void> _openTimesSettingsDialog() async {
+    final result = await showTimesSettingsDialog(
+      context,
+      initialSettings: VmaTimesSettings(
+        minDistance: _timesMinDistance,
+        maxDistance: _timesMaxDistance,
+      ),
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        _timesMinDistance = result.minDistance;
+        _timesMaxDistance = result.maxDistance;
       });
     }
   }

@@ -1,3 +1,5 @@
+import 'time_utils.dart';
+
 class VmaPaceEntry {
   const VmaPaceEntry({
     required this.percent,
@@ -30,28 +32,11 @@ class VmaPaceCalculator {
         VmaPaceEntry(
           percent: percent,
           speedKmh: speed,
-          pacePerKm: _formatPace(speed),
-          timeForDistance: _formatDistanceTime(speed, distanceMeters),
+          pacePerKm: formatPacePerKm(speed),
+          timeForDistance: formatTimeForDistance(speed, distanceMeters),
         ),
       );
     }
     return entries;
-  }
-
-  String _formatPace(double speedKmh) {
-    if (speedKmh <= 0) return '-';
-    final totalSeconds = (3600 / speedKmh).round();
-    final minutes = totalSeconds ~/ 60;
-    final seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
-
-  String _formatDistanceTime(double speedKmh, double distanceMeters) {
-    if (speedKmh <= 0 || distanceMeters <= 0) return '-';
-    final speedMs = speedKmh * 1000 / 3600;
-    final totalSeconds = (distanceMeters / speedMs).round();
-    final minutes = totalSeconds ~/ 60;
-    final seconds = totalSeconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 }

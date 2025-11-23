@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'distance_extensions.dart';
 
 Future<double?> showDistanceDialog(
   BuildContext context, {
@@ -31,6 +32,27 @@ Future<double?> showDistanceDialog(
                 }
               },
             ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              children: [
+                ActionChip(
+                  label: const Text('Half marathon'),
+                  onPressed: () {
+                    controller.text =
+                        kHalfMarathonMeters.toStringAsFixed(0);
+                    setStateDialog(() => validationError = null);
+                  },
+                ),
+                ActionChip(
+                  label: const Text('Marathon'),
+                  onPressed: () {
+                    controller.text = kMarathonMeters.toStringAsFixed(0);
+                    setStateDialog(() => validationError = null);
+                  },
+                ),
+              ],
+            ),
           ],
         ),
         actions: [
@@ -40,8 +62,7 @@ Future<double?> showDistanceDialog(
           ),
           TextButton(
             onPressed: () {
-              final value =
-                  double.tryParse(controller.text.replaceAll(',', '.'));
+              final value = parseDistanceInput(controller.text);
               if (value == null || value <= 0) {
                 setStateDialog(
                   () => validationError = 'Enter a distance greater than 0.',

@@ -62,18 +62,26 @@ class _VmaHomePageState extends State<VmaHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(
-                  _vma == null
-                      ? 'No VMA saved yet'
-                      : 'Your VMA: ${_vma!.toStringAsFixed(2)} km/h',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton.icon(
-                  onPressed: _promptForVma,
-                  icon: const Icon(Icons.directions_run),
-                  label: Text(_vma == null ? 'Set VMA' : 'Update VMA'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        _vma == null
+                            ? 'No VMA saved yet'
+                            : 'Your VMA: ${_vma!.toStringAsFixed(2)} km/h',
+                        style: Theme.of(context).textTheme.headlineSmall,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton.icon(
+                      onPressed: _promptForVma,
+                      icon: const Icon(Icons.directions_run),
+                      label: Text(_vma == null ? 'Set VMA' : 'Update VMA'),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 32),
                 Expanded(
@@ -99,7 +107,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
           );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('VMA Training')),
+      // appBar: AppBar(title: const Text('VMA Training')),
       body: body,
     );
   }

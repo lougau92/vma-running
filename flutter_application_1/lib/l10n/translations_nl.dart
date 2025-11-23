@@ -10,7 +10,7 @@ class TranslationsNl {
     'pacePerKm': 'Tempo (min/km)',
     'speedKmh': 'Snelheid (km/u)',
     'distance': 'Afstand',
-    'time': 'Tijd',
+    'time': 'Tijd (s)',
     'avgPace': 'Gem. tempo',
     'timesTab': 'Tijden',
     'intensityTab': 'Intensiteit',
@@ -23,6 +23,7 @@ class TranslationsNl {
     'theme': 'Thema',
     'dark': 'Donker',
     'light': 'Licht',
+    'timeRange': 'Tijdbereik',
     'settingsComingSoon': 'Meer instellingen komen eraan.',
     'adjustIntensity': 'Intensiteit aanpassen',
     'minPercent': 'Min %',
@@ -45,5 +46,9 @@ class TranslationsNl {
     'distanceGreaterThanZero': 'Voer een afstand groter dan 0 in.',
     'halfMarathon': 'Halve marathon',
     'marathon': 'Marathon',
+    'metersAbbr': 'm',
+    'metersFull': 'meters',
+    'kilometersAbbr': 'km',
+    'kilometersFull': 'kilometers',
   };
 }

@@ -5,13 +5,24 @@ import 'app_settings.dart';
 class SettingsStorage {
   static const _localeKey = 'settings_locale';
   static const _themeKey = 'settings_theme';
+  static const _timesMinSecondsKey = 'times_min_seconds';
+  static const _timesMaxSecondsKey = 'times_max_seconds';
+  static const _timesMinDistanceKey = 'times_min_distance';
+  static const _timesMaxDistanceKey = 'times_max_distance';
 
   Future<AppSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
     final locale = prefs.getString(_localeKey);
     final themeString = prefs.getString(_themeKey);
     final themeMode = _parseTheme(themeString);
-    return AppSettings(localeCode: locale, themeMode: themeMode);
+    return AppSettings(
+      localeCode: locale,
+      themeMode: themeMode,
+      timesMinSeconds: prefs.getDouble(_timesMinSecondsKey),
+      timesMaxSeconds: prefs.getDouble(_timesMaxSecondsKey),
+      timesMinDistance: prefs.getDouble(_timesMinDistanceKey),
+      timesMaxDistance: prefs.getDouble(_timesMaxDistanceKey),
+    );
   }
 
   Future<void> save(AppSettings settings) async {
@@ -22,6 +33,10 @@ class SettingsStorage {
       await prefs.setString(_localeKey, settings.localeCode!);
     }
     await prefs.setString(_themeKey, settings.themeMode.name);
+    _writeNullableDouble(prefs, _timesMinSecondsKey, settings.timesMinSeconds);
+    _writeNullableDouble(prefs, _timesMaxSecondsKey, settings.timesMaxSeconds);
+    _writeNullableDouble(prefs, _timesMinDistanceKey, settings.timesMinDistance);
+    _writeNullableDouble(prefs, _timesMaxDistanceKey, settings.timesMaxDistance);
   }
 
   ThemeMode _parseTheme(String? raw) {
@@ -33,6 +48,18 @@ class SettingsStorage {
       case 'dark':
       default:
         return ThemeMode.dark;
+    }
+  }
+
+  Future<void> _writeNullableDouble(
+    SharedPreferences prefs,
+    String key,
+    double? value,
+  ) async {
+    if (value == null) {
+      await prefs.remove(key);
+    } else {
+      await prefs.setDouble(key, value);
     }
   }
 }

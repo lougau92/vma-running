@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
-import 'distance_input.dart';
+import 'distance_extensions.dart';
 
 Future<double?> showDistanceDialog(
   BuildContext context, {

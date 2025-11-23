@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'decorated_scaffold.dart';
-import 'distance_input.dart';
+import 'distance_extensions.dart';
+import 'presets.dart';
 import 'theme.dart';
+import 'time_utils.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
@@ -39,10 +41,17 @@ class _VmaHomePageState extends State<VmaHomePage> {
   double _distanceMeters = 400;
   double _timesMinDistance = 100;
   double _timesMaxDistance = kMarathonMeters;
+  double _timesMinSeconds = presetTimesSeconds().first;
+  double _timesMaxSeconds = presetTimesSeconds().last;
+  double _timesPercent = 100;
 
   @override
   void initState() {
     super.initState();
+    _timesMinDistance = widget.settings.timesMinDistance ?? _timesMinDistance;
+    _timesMaxDistance = widget.settings.timesMaxDistance ?? _timesMaxDistance;
+    _timesMinSeconds = widget.settings.timesMinSeconds ?? _timesMinSeconds;
+    _timesMaxSeconds = widget.settings.timesMaxSeconds ?? _timesMaxSeconds;
     _loadVma();
   }
 
@@ -78,59 +87,11 @@ class _VmaHomePageState extends State<VmaHomePage> {
         ? const Center(child: CircularProgressIndicator())
         : Padding(
             padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        _vma == null
-                            ? strings.noVma
-                            : strings.yourVma(_vma!),
-                        style: Theme.of(context).textTheme.headlineSmall,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    ElevatedButton.icon(
-                      onPressed: _promptForVma,
-                      icon: const Icon(Icons.directions_run),
-                      label:
-                          Text(_vma == null ? strings.setVma : strings.updateVma),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 32),
-                Expanded(
-                  child: _vma == null
-                      ? Center(
-                          child: Text(strings.enterVmaPlaceholder),
-                        )
-                      : _tabIndex == 0
-                          ? VmaPaceTable(
-                              entries: _paceCalculator.buildTable(
-                                _vma!,
-                                minPercent: _minPercent,
-                                maxPercent: _maxPercent,
-                                step: _step,
-                                distanceMeters: _distanceMeters,
-                              ),
-                              onEditPercentages: _openTableSettingsDialog,
-                              distanceMeters: _distanceMeters,
-                              onEditDistance: _openDistanceDialog,
-                            )
-                          : VmaTimesTable(
-                              vma: _vma!,
-                              minDistanceMeters: _timesMinDistance,
-                              maxDistanceMeters: _timesMaxDistance,
-                              onEditDistances: _openTimesSettingsDialog,
-                            ),
-                ),
-              ],
-            ),
+            child: _vma == null
+                ? Center(child: Text(strings.enterVmaPlaceholder))
+                : _tabIndex == 0
+                    ? _buildPaceBody(strings)
+                    : _buildTimesBody(strings),
           );
 
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -220,20 +181,138 @@ class _VmaHomePageState extends State<VmaHomePage> {
     }
   }
 
-  Future<void> _openTimesSettingsDialog() async {
-    final result = await showTimesSettingsDialog(
+  Future<void> _openDistancesSettingDialog() async {
+    final result = await showDistancesSettingsDialog(
       context,
-      initialSettings: VmaTimesSettings(
-        minDistance: _timesMinDistance,
-        maxDistance: _timesMaxDistance,
-      ),
+      initialMin: _timesMinDistance,
+      initialMax: _timesMaxDistance,
     );
 
     if (result != null && mounted) {
       setState(() {
-        _timesMinDistance = result.minDistance;
-        _timesMaxDistance = result.maxDistance;
+        _timesMinDistance = result.min;
+        _timesMaxDistance = result.max;
       });
     }
+  }
+
+  Future<void> _openTimesSettingsDialog() async {
+    final result = await showTimesSettingsDialog(
+      context,
+      initialMinSeconds: _timesMinSeconds,
+      initialMaxSeconds: _timesMaxSeconds,
+    );
+
+    if (result != null && mounted) {
+      setState(() {
+        _timesMinSeconds = result.minSeconds;
+        _timesMaxSeconds = result.maxSeconds;
+      });
+    }
+  }
+
+  Widget _buildPaceBody(AppLocalizations strings) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildVMAHeader(strings),
+        const SizedBox(height: 32),
+        Expanded(
+          child: VmaPaceTable(
+            entries: _paceCalculator.buildTable(
+              _vma!,
+              minPercent: _minPercent,
+              maxPercent: _maxPercent,
+              step: _step,
+              distanceMeters: _distanceMeters,
+            ),
+            onEditPercentages: _openTableSettingsDialog,
+            distanceMeters: _distanceMeters,
+            onEditDistance: _openDistanceDialog,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTimesBody(AppLocalizations strings) {
+    final adjustedSpeed = _vma! * _timesPercent / 100;
+    final paceText = formatPacePerKm(adjustedSpeed, includeUnit: true);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      '${strings.intensity}: ${_timesPercent.toStringAsFixed(0)}%VMA',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Spacer(),
+                    Text(
+                      '${strings.pacePerKm}: $paceText',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ],
+                ),
+                Slider(
+                  value: _timesPercent,
+                  min: 50,
+                  max: 120,
+                  divisions: 14,
+                  label: '${_timesPercent.toStringAsFixed(0)}%',
+                  onChanged: (value) {
+                    setState(() {
+                      _timesPercent = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Expanded(
+          child: VmaTimesTable(
+            speedKmh: adjustedSpeed,
+            minDistanceMeters: _timesMinDistance,
+            maxDistanceMeters: _timesMaxDistance,
+            minTimeSeconds: _timesMinSeconds,
+            maxTimeSeconds: _timesMaxSeconds,
+            onEditDistances: _openDistancesSettingDialog,
+            onEditTimes: _openTimesSettingsDialog,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVMAHeader(AppLocalizations strings) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            _vma == null ? strings.noVma : strings.yourVma(_vma!),
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        const SizedBox(width: 12),
+        ElevatedButton.icon(
+          onPressed: _promptForVma,
+          icon: const Icon(Icons.directions_run),
+          label: Text(_vma == null ? strings.setVma : strings.updateVma),
+        ),
+      ],
+    );
   }
 }

@@ -10,7 +10,7 @@ class TranslationsEn {
     'pacePerKm': 'Pace (min/km)',
     'speedKmh': 'Speed (km/h)',
     'distance': 'Distance',
-    'time': 'Time',
+    'time': 'Time (s)',
     'avgPace': 'Avg pace',
     'timesTab': 'Times',
     'intensityTab': 'Intensity',
@@ -23,6 +23,7 @@ class TranslationsEn {
     'theme': 'Theme',
     'dark': 'Dark',
     'light': 'Light',
+    'timeRange': 'Time range',
     'settingsComingSoon': 'More settings coming soon.',
     'adjustIntensity': 'Adjust intensity range',
     'minPercent': 'Min %',
@@ -45,5 +46,9 @@ class TranslationsEn {
     'distanceGreaterThanZero': 'Enter a distance greater than 0.',
     'halfMarathon': 'Half marathon',
     'marathon': 'Marathon',
+    'metersAbbr': 'm',
+    'metersFull': 'meters',
+    'kilometersAbbr': 'km',
+    'kilometersFull': 'kilometers',
   };
 }

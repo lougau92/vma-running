@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'distance_extensions.dart';
 import 'l10n/translations_en.dart';
 import 'l10n/translations_fr.dart';
 import 'l10n/translations_nl.dart';
@@ -35,6 +36,12 @@ class AppLocalizations {
     'nl': TranslationsNl.values,
   };
 
+  /// Direct translation access.
+  String translate(String key) => _t(key);
+
+  /// Shorthand for translate(key).
+  String operator [](String key) => _t(key);
+
   String _t(String key) =>
       _localizedValues[locale.languageCode]?[key] ??
       _localizedValues['en']![key]!;
@@ -61,6 +68,7 @@ class AppLocalizations {
   String get theme => _t('theme');
   String get dark => _t('dark');
   String get light => _t('light');
+  String get timeRange => _t('timeRange');
   String get settingsComingSoon => _t('settingsComingSoon');
   String get adjustIntensity => _t('adjustIntensity');
   String get minPercent => _t('minPercent');
@@ -83,12 +91,22 @@ class AppLocalizations {
   String get distanceGreaterThanZero => _t('distanceGreaterThanZero');
   String get halfMarathon => _t('halfMarathon');
   String get marathon => _t('marathon');
+  String get metersAbbr => _t('metersAbbr');
+  String get metersFull => _t('metersFull');
+  String get kilometersAbbr => _t('kilometersAbbr');
+  String get kilometersFull => _t('kilometersFull');
+}
 
+extension DynamicStrings on AppLocalizations {
   String yourVma(double vma) =>
-      _t('yourVma').replaceFirst('{value}', vma.toStringAsFixed(2));
+      this['yourVma'].replaceFirst('{value}', vma.toStringAsFixed(2));
 
   String timeForDistanceLabel(double distanceMeters) =>
-      '${_t('time')} (${distanceMeters.toStringAsFixed(distanceMeters % 1 == 0 ? 0 : 1)} m)';
+      '${this['time']} (${formatDistanceShort(distanceMeters, this)})';
+
+  String distanceShort(double meters) => formatDistanceShort(meters, this);
+
+  String distanceLong(double meters) => formatDistanceLong(meters, this);
 }
 
 class _AppLocalizationsDelegate
@@ -96,10 +114,9 @@ class _AppLocalizationsDelegate
   const _AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      AppLocalizations.supportedLocales
-          .map((l) => l.languageCode)
-          .contains(locale.languageCode);
+  bool isSupported(Locale locale) => AppLocalizations.supportedLocales
+      .map((l) => l.languageCode)
+      .contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) async =>

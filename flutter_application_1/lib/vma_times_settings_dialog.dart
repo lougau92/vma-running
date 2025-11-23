@@ -1,30 +1,42 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
-import 'distance_input.dart';
+import 'presets.dart';
+import 'time_utils.dart';
 
-class VmaTimesSettings {
-  const VmaTimesSettings({
-    required this.minDistance,
-    required this.maxDistance,
-  });
-
-  final double minDistance;
-  final double maxDistance;
+class DistanceRange {
+  const DistanceRange({required this.min, required this.max});
+  final double min;
+  final double max;
 }
 
-Future<VmaTimesSettings?> showTimesSettingsDialog(
+class TimeRange {
+  const TimeRange({required this.minSeconds, required this.maxSeconds});
+  final double minSeconds;
+  final double maxSeconds;
+}
+
+Future<DistanceRange?> showDistancesSettingsDialog(
   BuildContext context, {
-  required VmaTimesSettings initialSettings,
+  required double initialMin,
+  required double initialMax,
 }) {
   final strings = AppLocalizations.of(context);
-  final minController =
-      TextEditingController(text: initialSettings.minDistance.toStringAsFixed(0));
-  final maxController =
-      TextEditingController(text: initialSettings.maxDistance.toStringAsFixed(0));
-  String? validationError;
-  TextEditingController? activeController;
+  final distances = presetDistances();
 
-  return showDialog<VmaTimesSettings>(
+  double selectedMin = initialMin;
+  double selectedMax = initialMax;
+  String? validationError;
+
+  List<DropdownMenuItem<double>> buildItems() => distances
+      .map(
+        (d) => DropdownMenuItem(
+          value: d,
+          child: Text(strings.distanceShort(d)),
+        ),
+      )
+      .toList();
+
+  return showDialog<DistanceRange>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (context, setStateDialog) => AlertDialog(
@@ -32,42 +44,36 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              crossAxisAlignment: WrapCrossAlignment.center,
+            Row(
               children: [
-                _NumberField(
-                  controller: minController,
-                  label: strings.minMeters,
-                  onTap: () => activeController = minController,
+                Expanded(
+                  child: DropdownButton<double>(
+                    value: _closest(distances, selectedMin),
+                    isExpanded: true,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setStateDialog(() {
+                        selectedMin = value;
+                        validationError = null;
+                      });
+                    },
+                    items: buildItems(),
+                  ),
                 ),
-                _NumberField(
-                  controller: maxController,
-                  label: strings.maxMeters,
-                  onTap: () => activeController = maxController,
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: [
-                ActionChip(
-                  label: Text(strings.halfMarathon),
-                  onPressed: () {
-                    (activeController ?? maxController).text =
-                        kHalfMarathonMeters.toStringAsFixed(0);
-                    setStateDialog(() => validationError = null);
-                  },
-                ),
-                ActionChip(
-                  label: Text(strings.marathon),
-                  onPressed: () {
-                    (activeController ?? maxController).text =
-                        kMarathonMeters.toStringAsFixed(0);
-                    setStateDialog(() => validationError = null);
-                  },
+                const SizedBox(width: 12),
+                Expanded(
+                  child: DropdownButton<double>(
+                    value: _closest(distances, selectedMax),
+                    isExpanded: true,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setStateDialog(() {
+                        selectedMax = value;
+                        validationError = null;
+                      });
+                    },
+                    items: buildItems(),
+                  ),
                 ),
               ],
             ),
@@ -82,35 +88,23 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
             ],
           ],
         ),
-          actions: [
+        actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(strings.cancel),
           ),
           TextButton(
             onPressed: () {
-              final minValue = parseDistanceInput(minController.text);
-              final maxValue = parseDistanceInput(maxController.text);
-
               String? error;
-              if (minValue == null || maxValue == null) {
-                error = strings.useNumbersOnly;
-              } else if (minValue <= 0 || maxValue <= 0) {
-                error = strings.valuesGreaterThanZero;
-              } else if (minValue >= maxValue) {
+              if (selectedMin >= selectedMax) {
                 error = strings.minLessThanMax;
               }
-
               if (error != null) {
                 setStateDialog(() => validationError = error);
                 return;
               }
-
               Navigator.of(dialogContext).pop(
-                VmaTimesSettings(
-                  minDistance: minValue!,
-                  maxDistance: maxValue!,
-                ),
+                DistanceRange(min: selectedMin, max: selectedMax),
               );
             },
             child: Text(strings.save),
@@ -121,30 +115,115 @@ Future<VmaTimesSettings?> showTimesSettingsDialog(
   );
 }
 
-class _NumberField extends StatelessWidget {
-  const _NumberField({
-    required this.controller,
-    required this.label,
-    this.onTap,
-  });
+Future<TimeRange?> showTimesSettingsDialog(
+  BuildContext context, {
+  required double initialMinSeconds,
+  required double initialMaxSeconds,
+}) {
+  final strings = AppLocalizations.of(context);
+  final times = presetTimesSeconds();
 
-  final TextEditingController controller;
-  final String label;
-  final VoidCallback? onTap;
+  double selectedMin = initialMinSeconds;
+  double selectedMax = initialMaxSeconds;
+  String? validationError;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      child: TextField(
-        controller: controller,
-        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        decoration: InputDecoration(
-          labelText: label,
-          isDense: true,
+  List<DropdownMenuItem<double>> buildItems() => times
+      .map(
+        (t) => DropdownMenuItem(
+          value: t,
+          child: Text(formatElapsed(t.toInt())),
         ),
-        onTap: onTap,
+      )
+      .toList();
+
+  return showDialog<TimeRange>(
+    context: context,
+    builder: (dialogContext) => StatefulBuilder(
+      builder: (context, setStateDialog) => AlertDialog(
+        title: Text(strings.timeRange),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButton<double>(
+                    value: _closest(times, selectedMin),
+                    isExpanded: true,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setStateDialog(() {
+                        selectedMin = value;
+                        validationError = null;
+                      });
+                    },
+                    items: buildItems(),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: DropdownButton<double>(
+                    value: _closest(times, selectedMax),
+                    isExpanded: true,
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setStateDialog(() {
+                        selectedMax = value;
+                        validationError = null;
+                      });
+                    },
+                    items: buildItems(),
+                  ),
+                ),
+              ],
+            ),
+            if (validationError != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                validationError!,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(strings.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              String? error;
+              if (selectedMin >= selectedMax) {
+                error = strings.minLessThanMax;
+              }
+              if (error != null) {
+                setStateDialog(() => validationError = error);
+                return;
+              }
+              Navigator.of(dialogContext).pop(
+                TimeRange(minSeconds: selectedMin, maxSeconds: selectedMax),
+              );
+            },
+            child: Text(strings.save),
+          ),
+        ],
       ),
-    );
+    ),
+  );
+}
+
+double _closest(List<double> values, double target) {
+  double best = values.first;
+  double bestDelta = (values.first - target).abs();
+  for (final v in values.skip(1)) {
+    final delta = (v - target).abs();
+    if (delta < bestDelta) {
+      best = v;
+      bestDelta = delta;
+    }
   }
+  return best;
 }

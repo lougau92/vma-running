@@ -60,13 +60,6 @@ class AppLocalizations {
   String get timesTab => _t('timesTab');
   String get intensityTab => _t('intensityTab');
   String get trainingPlanTab => _t('trainingPlanTab');
-  String get groupOne => _t('groupOne');
-  String get groupTwo => _t('groupTwo');
-  String get preSession => _t('preSession');
-  String get warmup => _t('warmup');
-  String get sessionContent => _t('sessionContent');
-  String get cooldown => _t('cooldown');
-  String get remarks => _t('remarks');
   String get settingsTab => _t('settingsTab');
   String get language => _t('language');
   String get systemDefault => _t('systemDefault');
@@ -103,6 +96,18 @@ class AppLocalizations {
   String get metersFull => _t('metersFull');
   String get kilometersAbbr => _t('kilometersAbbr');
   String get kilometersFull => _t('kilometersFull');
+  String get groupOne => _t('groupOne');
+  String get groupTwo => _t('groupTwo');
+  String get preSession => _t('preSession');
+  String get warmup => _t('warmup');
+  String get sessionContent => _t('sessionContent');
+  String get cooldown => _t('cooldown');
+  String get remarks => _t('remarks');
+  String get recovery => _t('recovery');
+  String get activeRecovery => _t('activeRecovery');
+  String get walkRecovery => _t('walkRecovery');
+  String get jogRecovery => _t('jogRecovery');
+  String get restRecovery => _t('restRecovery');
 }
 
 extension DynamicStrings on AppLocalizations {

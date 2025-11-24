@@ -6,6 +6,7 @@ import 'distance_extensions.dart';
 import 'presets.dart';
 import 'theme.dart';
 import 'time_utils.dart';
+import 'training_plan.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
@@ -94,7 +95,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
                 ? _buildPaceBody(strings)
                 : _tabIndex == 1
                 ? _buildTimesBody(strings)
-                : const VmaTrainingPlan(),
+                : VmaTrainingPlan(userVma: _vma!),
           );
 
     final isDark = Theme.of(context).brightness == Brightness.dark;

@@ -39,6 +39,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  flutter_cache_manager: ^3.4.1
+  path_provider: ^2.1.5
+  http: ^1.6.0
+  path: ^1.9.1
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +68,7 @@ flutter:
   assets:
     - assets/enjambee_img/logo-enjambee-shape.png
     - assets/enjambee_img/logo-header-minimized.png
+    - assets/training_plans/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

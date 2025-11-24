@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/training_plan.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -48,7 +51,9 @@ class _VmaAppState extends State<VmaApp> {
       theme: EnjambeeTheme.lightTheme(),
       darkTheme: EnjambeeTheme.darkTheme(),
       themeMode: _settings.themeMode,
-      locale: _settings.localeCode != null ? Locale(_settings.localeCode!) : null,
+      locale: _settings.localeCode != null
+          ? Locale(_settings.localeCode!)
+          : null,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

@@ -11,9 +11,7 @@ class VmaTrainingPlan extends StatefulWidget {
 
   VmaTrainingPlan({super.key, required this.userVma});
 
-  final AdvancedGitHubCacheManager cacheManager = AdvancedGitHubCacheManager(
-    cacheDuration: const Duration(hours: 2),
-  );
+  final AdvancedGitHubCacheManager cacheManager = AdvancedGitHubCacheManager();
 
   @override
   State<VmaTrainingPlan> createState() => _VmaTrainingPlanState();
@@ -35,7 +33,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   // Load configuration with cache
   Future<TrainingPlan> loadTraining() async {
     const configUrl =
-        'https://github.com/lougau92/vma-running/tree/main/flutter_application_1/assets/training_plans/wednesday_plan.json';
+        'https://raw.githubusercontent.com/lougau92/vma-running/main/flutter_application_1/assets/training_plans/training_example.json';
 
     final result = await widget.cacheManager.getFile(configUrl);
 

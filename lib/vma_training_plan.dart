@@ -33,7 +33,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   // Load configuration with cache
   Future<TrainingPlan> loadTraining() async {
     const configUrl =
-        'https://raw.githubusercontent.com/lougau92/vma-running/main/vma_running/assets/training_plans/training_example.json';
+        "https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json";
 
     final result = await widget.cacheManager.getFile(configUrl);
 

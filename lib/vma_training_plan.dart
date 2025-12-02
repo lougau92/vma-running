@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/train_data_loader.dart';
+import 'package:vma_running/train_data_loader.dart';
 import 'app_localizations.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
@@ -33,7 +33,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   // Load configuration with cache
   Future<TrainingPlan> loadTraining() async {
     const configUrl =
-        'https://raw.githubusercontent.com/lougau92/vma-running/main/flutter_application_1/assets/training_plans/training_example.json';
+        'https://raw.githubusercontent.com/lougau92/vma-running/main/vma_running/assets/training_plans/training_example.json';
 
     final result = await widget.cacheManager.getFile(configUrl);
 

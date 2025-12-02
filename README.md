@@ -12,8 +12,7 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 ## Quick start
 1) Install Flutter (Dart 3.9+ / Flutter 3.24+ recommended).  
 2) Fetch deps: `flutter pub get`  
-3) Run: `flutter run -d chrome` (or any connected device)  
-4) Tests: `flutter test`
+3) Run: `flutter run -d chrome` (or any connected device)  `flutter run lib\main.dart`
 
 ## Training plan data
 - Default source: see `configUrl` in `lib/vma_training_plan.dart` (currently points to GitHub). The loader caches responses in a temp `github_cache` folder and falls back to stale data if offline. Update this URL to a raw JSON endpoint you control.

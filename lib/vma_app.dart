@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:vma_running/training_plan.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -46,10 +43,12 @@ class _VmaAppState extends State<VmaApp> {
       return const MaterialApp(home: SizedBox.shrink());
     }
 
+    final appTheme = AppThemes.resolve(_settings.themeId);
+
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
-      theme: EnjambeeTheme.lightTheme(),
-      darkTheme: EnjambeeTheme.darkTheme(),
+      theme: appTheme.light,
+      darkTheme: appTheme.dark,
       themeMode: _settings.themeMode,
       locale: _settings.localeCode != null
           ? Locale(_settings.localeCode!)

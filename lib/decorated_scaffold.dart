@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
 
 class DecoratedScaffold extends StatelessWidget {
   const DecoratedScaffold({
@@ -22,10 +21,10 @@ class DecoratedScaffold extends StatelessWidget {
       bottomNavigationBar: bottomNavigationBar,
       body: Container(
         decoration: isDark
-            ? const BoxDecoration(
+            ? BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    EnjambeeTheme.navy,
+                    Theme.of(context).colorScheme.secondary,
                     Color(0xFF0F142F),
                   ],
                   begin: Alignment.topLeft,

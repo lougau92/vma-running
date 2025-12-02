@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_settings.dart';
+import 'theme.dart';
 
 class SettingsStorage {
   static const _localeKey = 'settings_locale';
   static const _themeKey = 'settings_theme';
+  static const _themeIdKey = 'settings_theme_id';
   static const _timesMinSecondsKey = 'times_min_seconds';
   static const _timesMaxSecondsKey = 'times_max_seconds';
   static const _timesMinDistanceKey = 'times_min_distance';
@@ -15,9 +17,11 @@ class SettingsStorage {
     final locale = prefs.getString(_localeKey);
     final themeString = prefs.getString(_themeKey);
     final themeMode = _parseTheme(themeString);
+    final themeId = _parseThemeId(prefs.getString(_themeIdKey));
     return AppSettings(
       localeCode: locale,
       themeMode: themeMode,
+      themeId: themeId,
       timesMinSeconds: prefs.getDouble(_timesMinSecondsKey),
       timesMaxSeconds: prefs.getDouble(_timesMaxSecondsKey),
       timesMinDistance: prefs.getDouble(_timesMinDistanceKey),
@@ -33,6 +37,7 @@ class SettingsStorage {
       await prefs.setString(_localeKey, settings.localeCode!);
     }
     await prefs.setString(_themeKey, settings.themeMode.name);
+    await prefs.setString(_themeIdKey, settings.themeId);
     _writeNullableDouble(prefs, _timesMinSecondsKey, settings.timesMinSeconds);
     _writeNullableDouble(prefs, _timesMaxSecondsKey, settings.timesMaxSeconds);
     _writeNullableDouble(prefs, _timesMinDistanceKey, settings.timesMinDistance);
@@ -49,6 +54,13 @@ class SettingsStorage {
       default:
         return ThemeMode.dark;
     }
+  }
+
+  String _parseThemeId(String? raw) {
+    if (AppThemes.isValid(raw)) {
+      return raw!;
+    }
+    return AppThemes.defaultId;
   }
 
   Future<void> _writeNullableDouble(

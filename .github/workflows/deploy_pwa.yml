@@ -1,0 +1,41 @@
+name: Deploy PWA to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+# Grant GITHUB_TOKEN the permissions to write to the repository
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    # This line ensures it ONLY runs if the commit message contains "release"
+    if: contains(github.event.head_commit.message, 'release')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          
+      - name: Install Dependencies
+        working-directory: ./
+        run: flutter pub get
+
+      - name: Build Web App
+        working-directory: ./
+        # Builds the app with the correct base-href for GitHub Pages
+        run: flutter build web --release --base-href "/vma-running/"
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Points to the build output inside your subfolder
+          publish_dir: .//build/web

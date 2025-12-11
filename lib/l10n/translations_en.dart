@@ -10,7 +10,7 @@ class TranslationsEn {
     'pacePerKm': 'Pace (min/km)',
     'speedKmh': 'Speed (km/h)',
     'distance': 'Distance',
-    'time': 'Time (s)',
+    'time': 'Time (m:s)',
     'avgPace': 'Avg pace',
     'timesTab': 'Times',
     'intensityTab': 'Intensity',

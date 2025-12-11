@@ -10,7 +10,7 @@ class TranslationsNl {
     'pacePerKm': 'Tempo (min/km)',
     'speedKmh': 'Snelheid (km/u)',
     'distance': 'Afstand',
-    'time': 'Tijd (s)',
+    'time': 'Tijd (m:s)',
     'avgPace': 'Gem. tempo',
     'timesTab': 'Tijden',
     'intensityTab': 'Intensiteit',

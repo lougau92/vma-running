@@ -10,7 +10,7 @@ class TranslationsFr {
     'pacePerKm': 'Allure (min/km)',
     'speedKmh': 'Vitesse (km/h)',
     'distance': 'Distance',
-    'time': 'Temps (s)',
+    'time': 'Temps (m:s)',
     'avgPace': 'Allure moy.',
     'timesTab': 'Chronos',
     'intensityTab': 'Intensité',

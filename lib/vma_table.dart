@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
+import 'interactive_header.dart';
 import 'vma_pace.dart';
 
 class VmaPaceTable extends StatelessWidget {
@@ -30,22 +31,18 @@ class VmaPaceTable extends StatelessWidget {
             child: DataTable(
               columns: [
                 DataColumn(
-                  label: InkWell(
+                  label: InteractiveHeader(
+                    label: strings.intensity,
                     onTap: onEditPercentages,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(strings.intensity),
-                    ),
+                    tooltip: strings.intensity,
                   ),
                 ),
                 DataColumn(label: Text(strings.pacePerKm)),
                 DataColumn(
-                  label: InkWell(
+                  label: InteractiveHeader(
+                    label: strings.timeForDistanceLabel(distanceMeters),
                     onTap: onEditDistance,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(strings.timeForDistanceLabel(distanceMeters)),
-                    ),
+                    tooltip: strings.timeForDistanceLabel(distanceMeters),
                   ),
                 ),
                 DataColumn(label: Text(strings.speedKmh)),

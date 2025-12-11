@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
+import 'interactive_header.dart';
 import 'presets.dart';
 import 'time_utils.dart';
 
@@ -37,24 +38,24 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     final speedMs = widget.speedKmh * 1000 / 3600;
 
     final distanceHeader = SizedBox(
-      width: 150,
-      child: InkWell(
+      width: 170,
+      child: InteractiveHeader(
+        label: strings.distance,
+        icon: Icons.straighten,
         onTap: _distanceFirst ? widget.onEditDistances : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Text(strings.distance, overflow: TextOverflow.ellipsis),
-        ),
+        tooltip: strings.distance,
+        compact: true,
       ),
     );
 
     final timeHeader = SizedBox(
-      width: 110,
-      child: InkWell(
+      width: 140,
+      child: InteractiveHeader(
+        label: strings.time,
+        icon: Icons.schedule,
         onTap: !_distanceFirst ? widget.onEditTimes : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child: Text(strings.time, overflow: TextOverflow.ellipsis),
-        ),
+        tooltip: strings.time,
+        compact: true,
       ),
     );
 

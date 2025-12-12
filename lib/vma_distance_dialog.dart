@@ -7,8 +7,9 @@ Future<double?> showDistanceDialog(
   required double initialDistanceMeters,
 }) {
   final strings = AppLocalizations.of(context);
-  final controller =
-      TextEditingController(text: initialDistanceMeters.toStringAsFixed(0));
+  final controller = TextEditingController(
+    text: initialDistanceMeters.toStringAsFixed(0),
+  );
   String? validationError;
 
   return showDialog<double>(
@@ -22,8 +23,9 @@ Future<double?> showDistanceDialog(
             TextField(
               controller: controller,
               autofocus: true,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 labelText: strings.distanceMetersLabel,
                 errorText: validationError,
@@ -41,8 +43,7 @@ Future<double?> showDistanceDialog(
                 ActionChip(
                   label: Text(strings.halfMarathon),
                   onPressed: () {
-                    controller.text =
-                        kHalfMarathonMeters.toStringAsFixed(0);
+                    controller.text = kHalfMarathonMeters.toStringAsFixed(0);
                     setStateDialog(() => validationError = null);
                   },
                 ),

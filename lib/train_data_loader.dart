@@ -4,7 +4,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class AdvancedGitHubCacheManager {
   AdvancedGitHubCacheManager({CacheManager? cacheManager})
-      : _cacheManager = cacheManager ?? DefaultCacheManager();
+    : _cacheManager = cacheManager ?? DefaultCacheManager();
 
   final CacheManager _cacheManager;
 

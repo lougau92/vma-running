@@ -40,8 +40,16 @@ class SettingsStorage {
     await prefs.setString(_themeIdKey, settings.themeId);
     _writeNullableDouble(prefs, _timesMinSecondsKey, settings.timesMinSeconds);
     _writeNullableDouble(prefs, _timesMaxSecondsKey, settings.timesMaxSeconds);
-    _writeNullableDouble(prefs, _timesMinDistanceKey, settings.timesMinDistance);
-    _writeNullableDouble(prefs, _timesMaxDistanceKey, settings.timesMaxDistance);
+    _writeNullableDouble(
+      prefs,
+      _timesMinDistanceKey,
+      settings.timesMinDistance,
+    );
+    _writeNullableDouble(
+      prefs,
+      _timesMaxDistanceKey,
+      settings.timesMaxDistance,
+    );
   }
 
   ThemeMode _parseTheme(String? raw) {

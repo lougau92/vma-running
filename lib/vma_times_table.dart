@@ -113,9 +113,10 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     double speedMs,
     AppLocalizations strings,
   ) {
-    final distanceCell =
-        DataCell(Text(strings.distanceShort(distanceMeters)));
-    final timeCell = DataCell(Text(_formatDistanceTime(speedMs, distanceMeters)));
+    final distanceCell = DataCell(Text(strings.distanceShort(distanceMeters)));
+    final timeCell = DataCell(
+      Text(_formatDistanceTime(speedMs, distanceMeters)),
+    );
     const spacer = DataCell(SizedBox.shrink());
     return [spacer, distanceCell, timeCell];
   }
@@ -141,7 +142,9 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
   List<double> _buildDistances() {
     final distances = presetDistances();
     return distances
-        .where((d) => d >= widget.minDistanceMeters && d <= widget.maxDistanceMeters)
+        .where(
+          (d) => d >= widget.minDistanceMeters && d <= widget.maxDistanceMeters,
+        )
         .toList();
   }
 

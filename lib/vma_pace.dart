@@ -24,9 +24,7 @@ class VmaPaceCalculator {
     required double distanceMeters,
   }) {
     final entries = <VmaPaceEntry>[];
-    for (double percent = minPercent;
-        percent <= maxPercent;
-        percent += step) {
+    for (double percent = minPercent; percent <= maxPercent; percent += step) {
       final speed = vma * (percent / 100);
       entries.add(
         VmaPaceEntry(

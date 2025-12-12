@@ -29,10 +29,8 @@ Future<DistanceRange?> showDistancesSettingsDialog(
 
   List<DropdownMenuItem<double>> buildItems() => distances
       .map(
-        (d) => DropdownMenuItem(
-          value: d,
-          child: Text(strings.distanceShort(d)),
-        ),
+        (d) =>
+            DropdownMenuItem(value: d, child: Text(strings.distanceShort(d))),
       )
       .toList();
 
@@ -81,9 +79,7 @@ Future<DistanceRange?> showDistancesSettingsDialog(
               const SizedBox(height: 12),
               Text(
                 validationError!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ],
           ],
@@ -103,9 +99,9 @@ Future<DistanceRange?> showDistancesSettingsDialog(
                 setStateDialog(() => validationError = error);
                 return;
               }
-              Navigator.of(dialogContext).pop(
-                DistanceRange(min: selectedMin, max: selectedMax),
-              );
+              Navigator.of(
+                dialogContext,
+              ).pop(DistanceRange(min: selectedMin, max: selectedMax));
             },
             child: Text(strings.save),
           ),
@@ -129,10 +125,8 @@ Future<TimeRange?> showTimesSettingsDialog(
 
   List<DropdownMenuItem<double>> buildItems() => times
       .map(
-        (t) => DropdownMenuItem(
-          value: t,
-          child: Text(formatElapsed(t.toInt())),
-        ),
+        (t) =>
+            DropdownMenuItem(value: t, child: Text(formatElapsed(t.toInt()))),
       )
       .toList();
 
@@ -181,9 +175,7 @@ Future<TimeRange?> showTimesSettingsDialog(
               const SizedBox(height: 12),
               Text(
                 validationError!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ],
           ],

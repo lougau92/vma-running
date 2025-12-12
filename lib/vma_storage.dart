@@ -36,8 +36,7 @@ class VmaStorage {
           content: TextField(
             controller: controller,
             autofocus: true,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
               labelText: strings.vmaLabel,
               errorText: validationError,
@@ -55,9 +54,7 @@ class VmaStorage {
                   controller.text.replaceAll(',', '.'),
                 );
                 if (parsed == null) {
-                  setStateDialog(
-                    () => validationError = strings.enterNumber,
-                  );
+                  setStateDialog(() => validationError = strings.enterNumber);
                   return;
                 }
                 Navigator.of(dialogContext).pop(parsed);

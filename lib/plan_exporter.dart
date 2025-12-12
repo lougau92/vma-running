@@ -5,7 +5,6 @@ import 'app_localizations.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
 
-
 class PlanExportData {
   const PlanExportData({
     required this.plan,
@@ -23,6 +22,7 @@ class PlanExportData {
 abstract class PlanExporter {
   String get id;
   String label(AppLocalizations strings);
+  IconData get icon;
   Future<void> export(PlanExportData data, BuildContext context);
 }
 
@@ -32,6 +32,9 @@ class ClipboardPlanExporter implements PlanExporter {
 
   @override
   String label(AppLocalizations strings) => strings.export;
+
+  @override
+  IconData get icon => Icons.content_copy;
 
   @override
   Future<void> export(PlanExportData data, BuildContext context) async {
@@ -52,9 +55,10 @@ class GarminPlanExporter implements PlanExporter {
   String label(AppLocalizations strings) => strings.exportToGarmin;
 
   @override
-  Future<void> export(PlanExportData data, BuildContext context) async {
-    
-  }
+  IconData get icon => Icons.watch;
+
+  @override
+  Future<void> export(PlanExportData data, BuildContext context) async {}
 }
 
 class PlanExportFormatter {

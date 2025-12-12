@@ -18,9 +18,7 @@ class VmaSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return DecoratedScaffold(
-      appBar: AppBar(
-        title: Text(strings.settingsTab),
-      ),
+      appBar: AppBar(title: Text(strings.settingsTab)),
       body: VmaSettingsView(
         settings: settings,
         onSettingsChanged: onSettingsChanged,

@@ -212,7 +212,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
           children: _exporters
               .map(
                 (exp) => ListTile(
-                  leading: const Icon(Icons.ios_share_rounded),
+                  leading: Icon(exp.icon),
                   title: Text(exp.label(strings)),
                   onTap: () => Navigator.of(ctx).pop(exp),
                 ),
@@ -230,9 +230,9 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       if (!mounted) return;
       final strings = AppLocalizations.of(context);
       final message = strings[noticeKey];
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(message)));
     });
   }
 }

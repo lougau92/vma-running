@@ -18,12 +18,15 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
   required VmaTableSettings initialSettings,
 }) {
   final strings = AppLocalizations.of(context);
-  final minController =
-      TextEditingController(text: initialSettings.minPercent.toStringAsFixed(0));
-  final maxController =
-      TextEditingController(text: initialSettings.maxPercent.toStringAsFixed(0));
-  final stepController =
-      TextEditingController(text: initialSettings.step.toStringAsFixed(0));
+  final minController = TextEditingController(
+    text: initialSettings.minPercent.toStringAsFixed(0),
+  );
+  final maxController = TextEditingController(
+    text: initialSettings.maxPercent.toStringAsFixed(0),
+  );
+  final stepController = TextEditingController(
+    text: initialSettings.step.toStringAsFixed(0),
+  );
   String? validationError;
 
   return showDialog<VmaTableSettings>(
@@ -57,64 +60,62 @@ Future<VmaTableSettings?> showVmaSettingsDialog(
               const SizedBox(height: 12),
               Text(
                 validationError!,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ],
           ],
         ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(strings.cancel),
-            ),
-            TextButton(
-              onPressed: () {
-                final minValue =
-                    double.tryParse(minController.text.replaceAll(',', '.'));
-              final maxValue =
-                  double.tryParse(maxController.text.replaceAll(',', '.'));
-              final stepValue =
-                  double.tryParse(stepController.text.replaceAll(',', '.'));
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(strings.cancel),
+          ),
+          TextButton(
+            onPressed: () {
+              final minValue = double.tryParse(
+                minController.text.replaceAll(',', '.'),
+              );
+              final maxValue = double.tryParse(
+                maxController.text.replaceAll(',', '.'),
+              );
+              final stepValue = double.tryParse(
+                stepController.text.replaceAll(',', '.'),
+              );
 
-                String? error;
-                if (minValue == null || maxValue == null || stepValue == null) {
-                  error = strings.useNumbersOnly;
-                } else if (minValue <= 0 || maxValue <= 0 || stepValue <= 0) {
-                  error = strings.valuesGreaterThanZero;
-                } else if (minValue >= maxValue) {
-                  error = strings.minLessThanMax;
-                } else if (stepValue > (maxValue - minValue)) {
-                  error = strings.stepTooLarge;
-                }
+              String? error;
+              if (minValue == null || maxValue == null || stepValue == null) {
+                error = strings.useNumbersOnly;
+              } else if (minValue <= 0 || maxValue <= 0 || stepValue <= 0) {
+                error = strings.valuesGreaterThanZero;
+              } else if (minValue >= maxValue) {
+                error = strings.minLessThanMax;
+              } else if (stepValue > (maxValue - minValue)) {
+                error = strings.stepTooLarge;
+              }
 
-                if (error != null) {
-                  setStateDialog(() => validationError = error);
-                  return;
-                }
+              if (error != null) {
+                setStateDialog(() => validationError = error);
+                return;
+              }
 
-                Navigator.of(dialogContext).pop(
-                  VmaTableSettings(
-                    minPercent: minValue!,
-                    maxPercent: maxValue!,
-                    step: stepValue!,
-                  ),
-                );
-              },
-              child: Text(strings.save),
-            ),
-          ],
-        ),
+              Navigator.of(dialogContext).pop(
+                VmaTableSettings(
+                  minPercent: minValue!,
+                  maxPercent: maxValue!,
+                  step: stepValue!,
+                ),
+              );
+            },
+            child: Text(strings.save),
+          ),
+        ],
       ),
+    ),
   );
 }
 
 class _NumberField extends StatelessWidget {
-  const _NumberField({
-    required this.controller,
-    required this.label,
-  });
+  const _NumberField({required this.controller, required this.label});
 
   final TextEditingController controller;
   final String label;
@@ -126,10 +127,7 @@ class _NumberField extends StatelessWidget {
       child: TextField(
         controller: controller,
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
-        decoration: InputDecoration(
-          labelText: label,
-          isDense: true,
-        ),
+        decoration: InputDecoration(labelText: label, isDense: true),
       ),
     );
   }

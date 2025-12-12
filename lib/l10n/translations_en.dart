@@ -63,5 +63,9 @@ class TranslationsEn {
     'walkRecovery': 'walk',
     'jogRecovery': 'jog',
     'restRecovery': 'rest',
+    'export': 'Export',
+    'exportSuccess': 'Plan copied to clipboard',
+    'exportToClipboard': 'Export to Clipboard',
+    'exportToGarmin': 'Export to Garmin',
   };
 }

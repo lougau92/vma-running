@@ -63,5 +63,9 @@ class TranslationsFr {
     'walkRecovery': 'marche',
     'jogRecovery': 'trot',
     'restRecovery': 'repos',
+    'export': 'Exporter',
+    'exportSuccess': 'Plan copie dans le presse-papiers',
+    'exportToClipboard': 'Exporter vers le presse-papiers',
+    'exportToGarmin': 'Exporter vers Garmin',
   };
 }

@@ -63,5 +63,9 @@ class TranslationsNl {
     'walkRecovery': 'wandelen',
     'jogRecovery': 'joggen',
     'restRecovery': 'rust',
+    'export': 'Exporteren',
+    'exportSuccess': 'Plan gekopieerd naar klembord',
+    'exportToClipboard': 'Exporteren naar klembord',
+    'exportToGarmin': 'Exporteren naar Garmin',
   };
 }

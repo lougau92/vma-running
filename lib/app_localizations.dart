@@ -108,6 +108,10 @@ class AppLocalizations {
   String get walkRecovery => _t('walkRecovery');
   String get jogRecovery => _t('jogRecovery');
   String get restRecovery => _t('restRecovery');
+  String get export => _t('export');
+  String get exportSuccess => _t('exportSuccess');
+  String get exportToClipboard => _t('exportToClipboard');
+  String get exportToGarmin => _t('exportToGarmin');
 }
 
 extension DynamicStrings on AppLocalizations {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:vma_running/train_data_loader.dart';
 import 'app_localizations.dart';
+import 'plan_exporter.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
 
@@ -20,17 +21,17 @@ class VmaTrainingPlan extends StatefulWidget {
 class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   int _selectedGroup = 0;
   late final Future<TrainingPlan> _planFuture;
+  final List<PlanExporter> _exporters = [
+    ClipboardPlanExporter(),
+    GarminPlanExporter(),
+  ];
 
   @override
   void initState() {
     super.initState();
-    // _planFuture = loadTrainingPlanFromAssets(
-    //   'assets/training_plans/training_example.json',
-    // );
     _planFuture = loadTraining();
   }
 
-  // Load configuration with cache
   Future<TrainingPlan> loadTraining() async {
     const configUrl =
         "https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json";
@@ -76,7 +77,6 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       thumbVisibility: true,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-
         child: ConstrainedBox(
           constraints: const BoxConstraints(minWidth: 320),
           child: Padding(
@@ -123,9 +123,55 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
                 _SectionCard(title: strings.cooldown, items: [plan.cooldown]),
                 const SizedBox(height: 12),
                 _SectionCard(title: strings.remarks, items: [plan.remarks]),
+                const SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: OutlinedButton.icon(
+                    onPressed: () => _exportPlan(plan),
+                    icon: const Icon(Icons.ios_share_rounded, size: 18),
+                    label: Text(strings.export),
+                  ),
+                ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _exportPlan(TrainingPlan plan) async {
+    if (_exporters.isEmpty || !mounted) return;
+    final strings = AppLocalizations.of(context);
+    final exporter = await _chooseExporter(strings);
+    if (exporter == null || !mounted) return;
+
+    final data = PlanExportData(
+      plan: plan,
+      group: plan.groups[_selectedGroup],
+      userVma: widget.userVma,
+      strings: strings,
+    );
+
+    await exporter.export(data, context);
+  }
+
+  Future<PlanExporter?> _chooseExporter(AppLocalizations strings) async {
+    if (_exporters.length == 1) return _exporters.first;
+    return showModalBottomSheet<PlanExporter>(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: _exporters
+              .map(
+                (exp) => ListTile(
+                  leading: const Icon(Icons.ios_share_rounded),
+                  title: Text(exp.label(strings)),
+                  onTap: () => Navigator.of(ctx).pop(exp),
+                ),
+              )
+              .toList(),
         ),
       ),
     );
@@ -188,51 +234,19 @@ class _BlockView extends StatelessWidget {
           ...block.sets.map(
             (set) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
-              child: Text(_formatSet(set, strings)),
+              child: Text(formatSetLine(set, vma, strings)),
             ),
           ),
           if (block.afterRecoverySeconds != null) ...[
             const SizedBox(height: 4),
             Text(
-              '${strings.recovery}: ${formatElapsed(block.afterRecoverySeconds!.toInt())} (${_recoveryLabel(block.afterRecoveryType, strings)})',
+              '${strings.recovery}: ${formatElapsed(block.afterRecoverySeconds!.toInt())} (${recoveryLabel(block.afterRecoveryType, strings)})',
               style: theme.textTheme.bodySmall,
             ),
           ],
         ],
       ),
     );
-  }
-
-  String vmaToPace(double timesPercent) {
-    final adjustedSpeed = vma * timesPercent / 100;
-    final paceText = formatPacePerKm(adjustedSpeed, includeUnit: true);
-    return paceText;
-  }
-
-  String _formatSet(IntervalSet set, AppLocalizations strings) {
-    final reps = '${set.repetitions}x';
-    final load = set.distanceMeters != null
-        ? strings.distanceShort(set.distanceMeters!)
-        : set.durationSeconds != null
-        ? formatElapsed(set.durationSeconds!.toInt())
-        : '';
-    final pace = vmaToPace(set.vmaPercent);
-    final recov =
-        '${formatElapsed(set.recoverySeconds.toInt())} ${_recoveryLabel(set.recoveryType, strings)}';
-    return '$reps $load @ $pace — $recov';
-  }
-
-  String _recoveryLabel(RecoveryType type, AppLocalizations strings) {
-    switch (type) {
-      case RecoveryType.active:
-        return strings.activeRecovery;
-      case RecoveryType.walk:
-        return strings.walkRecovery;
-      case RecoveryType.jog:
-        return strings.jogRecovery;
-      case RecoveryType.rest:
-        return strings.restRecovery;
-    }
   }
 }
 

@@ -52,45 +52,74 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
       children: [
         Text(strings.language, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        DropdownButton<String>(
-          value: localeValue,
-          onChanged: (value) {
-            final nextLocale = value == 'system' ? null : value;
-            widget.onSettingsChanged(
-              widget.settings.copyWith(localeCode: nextLocale),
-            );
-          },
-          items: [
-            DropdownMenuItem(
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _LanguageChip(
+              label: strings.systemDefault,
               value: 'system',
-              child: Text(strings.systemDefault),
+              current: localeValue,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(localeCode: null),
+              ),
             ),
-            DropdownMenuItem(value: 'en', child: Text(strings.english)),
-            DropdownMenuItem(value: 'fr', child: Text(strings.french)),
-            DropdownMenuItem(value: 'nl', child: Text(strings.dutch)),
+            _LanguageChip(
+              label: strings.english,
+              value: 'en',
+              current: localeValue,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(localeCode: 'en'),
+              ),
+            ),
+            _LanguageChip(
+              label: strings.french,
+              value: 'fr',
+              current: localeValue,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(localeCode: 'fr'),
+              ),
+            ),
+            _LanguageChip(
+              label: strings.dutch,
+              value: 'nl',
+              current: localeValue,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(localeCode: 'nl'),
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 24),
         Text(strings.theme, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        DropdownButton<String>(
-          value: themeValue,
-          onChanged: (value) {
-            final nextTheme = switch (value) {
-              'light' => ThemeMode.light,
-              'system' => ThemeMode.system,
-              _ => ThemeMode.dark,
-            };
-            widget.onSettingsChanged(
-              widget.settings.copyWith(themeMode: nextTheme),
-            );
-          },
-          items: [
-            DropdownMenuItem(value: 'dark', child: Text(strings.dark)),
-            DropdownMenuItem(value: 'light', child: Text(strings.light)),
-            DropdownMenuItem(
-              value: 'system',
-              child: Text(strings.systemDefault),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _ThemeChip(
+              label: strings.dark,
+              value: ThemeMode.dark,
+              current: widget.settings.themeMode,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(themeMode: ThemeMode.dark),
+              ),
+            ),
+            _ThemeChip(
+              label: strings.light,
+              value: ThemeMode.light,
+              current: widget.settings.themeMode,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(themeMode: ThemeMode.light),
+              ),
+            ),
+            _ThemeChip(
+              label: strings.systemDefault,
+              value: ThemeMode.system,
+              current: widget.settings.themeMode,
+              onSelected: () => widget.onSettingsChanged(
+                widget.settings.copyWith(themeMode: ThemeMode.system),
+              ),
             ),
           ],
         ),
@@ -166,6 +195,52 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _LanguageChip extends StatelessWidget {
+  const _LanguageChip({
+    required this.label,
+    required this.value,
+    required this.current,
+    required this.onSelected,
+  });
+
+  final String label;
+  final String value;
+  final String current;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      label: Text(label),
+      selected: current == value,
+      onSelected: (_) => onSelected(),
+    );
+  }
+}
+
+class _ThemeChip extends StatelessWidget {
+  const _ThemeChip({
+    required this.label,
+    required this.value,
+    required this.current,
+    required this.onSelected,
+  });
+
+  final String label;
+  final ThemeMode value;
+  final ThemeMode current;
+  final VoidCallback onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      label: Text(label),
+      selected: current == value,
+      onSelected: (_) => onSelected(),
     );
   }
 }

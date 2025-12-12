@@ -67,5 +67,9 @@ class TranslationsNl {
     'exportSuccess': 'Plan gekopieerd naar klembord',
     'exportToClipboard': 'Exporteren naar klembord',
     'exportToGarmin': 'Exporteren naar Garmin',
+    'trainingPlanUsedCache':
+        'Server niet bereikbaar, plan uit cache wordt getoond.',
+    'trainingPlanUsedFallback':
+        'Offline: gebundeld trainingsplan wordt getoond.',
   };
 }

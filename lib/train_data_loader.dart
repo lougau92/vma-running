@@ -8,14 +8,19 @@ class AdvancedGitHubCacheManager {
 
   final CacheManager _cacheManager;
 
-  Future<CacheResult> getFile(String url) async {
+  Future<CacheResult> getFile(String url, {bool forceRefresh = false}) async {
     try {
-      final cached = await _cacheManager.getFileFromCache(url);
-      if (cached != null) {
-        return _toResult(cached);
+      if (!forceRefresh) {
+        final cached = await _cacheManager.getFileFromCache(url);
+        if (cached != null) {
+          return _toResult(cached);
+        }
       }
 
-      final fetched = await _cacheManager.downloadFile(url);
+      final fetched = await _cacheManager.downloadFile(
+        url,
+        force: forceRefresh,
+      );
       return _toResult(fetched);
     } catch (e) {
       // If download fails but a stale cache exists, return it.

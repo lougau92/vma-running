@@ -112,6 +112,8 @@ class AppLocalizations {
   String get exportSuccess => _t('exportSuccess');
   String get exportToClipboard => _t('exportToClipboard');
   String get exportToGarmin => _t('exportToGarmin');
+  String get trainingPlanUsedCache => _t('trainingPlanUsedCache');
+  String get trainingPlanUsedFallback => _t('trainingPlanUsedFallback');
 }
 
 extension DynamicStrings on AppLocalizations {

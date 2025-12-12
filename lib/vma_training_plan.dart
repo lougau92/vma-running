@@ -1,11 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:vma_running/train_data_loader.dart';
 import 'app_localizations.dart';
 import 'plan_exporter.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
+
+class TrainingPlanResult {
+  const TrainingPlanResult({required this.plan, this.noticeKey});
+
+  final TrainingPlan plan;
+  final String? noticeKey;
+}
 
 class VmaTrainingPlan extends StatefulWidget {
   final double userVma;
@@ -20,7 +28,8 @@ class VmaTrainingPlan extends StatefulWidget {
 
 class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   int _selectedGroup = 0;
-  late final Future<TrainingPlan> _planFuture;
+  late Future<TrainingPlanResult> _planFuture;
+  String? _lastNoticeKey;
   final List<PlanExporter> _exporters = [
     ClipboardPlanExporter(),
     GarminPlanExporter(),
@@ -32,24 +41,49 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     _planFuture = loadTraining();
   }
 
-  Future<TrainingPlan> loadTraining() async {
+  void _refreshPlan() {
+    setState(() {
+      _lastNoticeKey = null;
+      _planFuture = loadTraining(forceRefresh: true);
+    });
+  }
+
+  Future<TrainingPlanResult> loadTraining({bool forceRefresh = false}) async {
     const configUrl =
         "https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json";
+    const assetFallbackPath = 'assets/training_plans/training_example.json';
 
-    final result = await widget.cacheManager.getFile(configUrl);
+    try {
+      final result = await widget.cacheManager.getFile(
+        configUrl,
+        forceRefresh: forceRefresh,
+      );
 
-    if (!result.fromCache) {
-      print('Config loaded from network - fresh data');
-    } else {
+      if (!result.fromCache) {
+        print('Config loaded from network - fresh data');
+        return TrainingPlanResult(
+          plan: TrainingPlan.fromJson(jsonDecode(result.data)),
+        );
+      }
+
       print('Config loaded from cache (source: ${result.source})');
+      return TrainingPlanResult(
+        plan: TrainingPlan.fromJson(jsonDecode(result.data)),
+        noticeKey: forceRefresh ? 'trainingPlanUsedCache' : null,
+      );
+    } catch (e) {
+      print('Failed to load remote training plan, falling back to asset: $e');
+      final bundled = await rootBundle.loadString(assetFallbackPath);
+      return TrainingPlanResult(
+        plan: TrainingPlan.fromJson(jsonDecode(bundled)),
+        noticeKey: 'trainingPlanUsedFallback',
+      );
     }
-
-    return TrainingPlan.fromJson(jsonDecode(result.data));
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<TrainingPlan>(
+    return FutureBuilder<TrainingPlanResult>(
       future: _planFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -59,8 +93,9 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
             child: Text('Error loading training plan: ${snapshot.error}'),
           );
         } else if (snapshot.hasData) {
-          final plan = snapshot.data!;
-          return _buildPlanContent(plan, context);
+          final result = snapshot.data!;
+          _notifyIfNeeded(result.noticeKey);
+          return _buildPlanContent(result.plan, context);
         } else {
           return Center(child: Text('No data available'));
         }
@@ -73,66 +108,77 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    return Scrollbar(
-      thumbVisibility: true,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 320),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      strings.trainingPlanTab,
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const Spacer(),
-                    ToggleButtons(
-                      isSelected: List.generate(
-                        plan.groups.length,
-                        (i) => i == _selectedGroup,
+    return RefreshIndicator(
+      onRefresh: () async {
+        final future = loadTraining(forceRefresh: true);
+        setState(() {
+          _lastNoticeKey = null;
+          _planFuture = future;
+        });
+        await future;
+      },
+      child: Scrollbar(
+        thumbVisibility: true,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 320),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        strings.trainingPlanTab,
+                        style: theme.textTheme.titleMedium,
                       ),
-                      onPressed: (index) =>
-                          setState(() => _selectedGroup = index),
-                      children: plan.groups
-                          .map(
-                            (g) => Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
+                      const Spacer(),
+                      ToggleButtons(
+                        isSelected: List.generate(
+                          plan.groups.length,
+                          (i) => i == _selectedGroup,
+                        ),
+                        onPressed: (index) =>
+                            setState(() => _selectedGroup = index),
+                        children: plan.groups
+                            .map(
+                              (g) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                ),
+                                child: Text(g.title),
                               ),
-                              child: Text(g.title),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _SectionCard(title: strings.preSession, items: [plan.warmup]),
-                const SizedBox(height: 12),
-                _BlocksCard(
-                  group: group,
-                  strings: strings,
-                  vma: widget.userVma,
-                ),
-                const SizedBox(height: 12),
-                _SectionCard(title: strings.cooldown, items: [plan.cooldown]),
-                const SizedBox(height: 12),
-                _SectionCard(title: strings.remarks, items: [plan.remarks]),
-                const SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: OutlinedButton.icon(
-                    onPressed: () => _exportPlan(plan),
-                    icon: const Icon(Icons.ios_share_rounded, size: 18),
-                    label: Text(strings.export),
+                            )
+                            .toList(),
+                      ),
+                    ],
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  _SectionCard(title: strings.preSession, items: [plan.warmup]),
+                  const SizedBox(height: 12),
+                  _BlocksCard(
+                    group: group,
+                    strings: strings,
+                    vma: widget.userVma,
+                  ),
+                  const SizedBox(height: 12),
+                  _SectionCard(title: strings.cooldown, items: [plan.cooldown]),
+                  const SizedBox(height: 12),
+                  _SectionCard(title: strings.remarks, items: [plan.remarks]),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: OutlinedButton.icon(
+                      onPressed: () => _exportPlan(plan),
+                      icon: const Icon(Icons.ios_share_rounded, size: 18),
+                      label: Text(strings.export),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -175,6 +221,19 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
         ),
       ),
     );
+  }
+
+  void _notifyIfNeeded(String? noticeKey) {
+    if (noticeKey == null || noticeKey == _lastNoticeKey || !mounted) return;
+    _lastNoticeKey = noticeKey;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final strings = AppLocalizations.of(context);
+      final message = strings[noticeKey];
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
+    });
   }
 }
 

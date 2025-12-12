@@ -67,5 +67,8 @@ class TranslationsEn {
     'exportSuccess': 'Plan copied to clipboard',
     'exportToClipboard': 'Export to Clipboard',
     'exportToGarmin': 'Export to Garmin',
+    'trainingPlanUsedCache': 'Couldn\'t reach server, showing cached plan.',
+    'trainingPlanUsedFallback':
+        'Offline mode: showing bundled training plan instead.',
   };
 }

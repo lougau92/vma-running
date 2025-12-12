@@ -67,5 +67,9 @@ class TranslationsFr {
     'exportSuccess': 'Plan copie dans le presse-papiers',
     'exportToClipboard': 'Exporter vers le presse-papiers',
     'exportToGarmin': 'Exporter vers Garmin',
+    'trainingPlanUsedCache':
+        'Impossible de joindre le serveur, plan en cache affiché.',
+    'trainingPlanUsedFallback':
+        'Mode hors ligne : plan intégré de demo affiché.',
   };
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vma_running/train_data_loader.dart';
 import 'app_localizations.dart';
+import 'app_settings.dart';
 import 'plan_exporter.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
@@ -17,8 +18,15 @@ class TrainingPlanResult {
 
 class VmaTrainingPlan extends StatefulWidget {
   final double userVma;
+  final AppSettings settings;
+  final ValueChanged<AppSettings> onSettingsChanged;
 
-  VmaTrainingPlan({super.key, required this.userVma});
+  VmaTrainingPlan({
+    super.key,
+    required this.userVma,
+    required this.settings,
+    required this.onSettingsChanged,
+  });
 
   final AdvancedGitHubCacheManager cacheManager = AdvancedGitHubCacheManager();
 
@@ -197,6 +205,8 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       group: plan.groups[_selectedGroup],
       userVma: widget.userVma,
       strings: strings,
+      settings: widget.settings,
+      onSettingsChanged: widget.onSettingsChanged,
     );
 
     await exporter.export(data, context);

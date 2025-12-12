@@ -69,6 +69,16 @@ class AppLocalizations {
   String get theme => _t('theme');
   String get dark => _t('dark');
   String get light => _t('light');
+  String get intervalsApiKeyLabel => _t('intervalsApiKeyLabel');
+  String get intervalsApiKeyHint => _t('intervalsApiKeyHint');
+  String get intervalsApiKeyInstructions => _t('intervalsApiKeyInstructions');
+  String get intervalsApiKeyInstructionsTitle =>
+      _t('intervalsApiKeyInstructionsTitle');
+  String get intervalsApiKeyInfo => _t('intervalsApiKeyInfo');
+  String get intervalsApiKeyPromptTitle => _t('intervalsApiKeyPromptTitle');
+  String get enterIntervalsApiKey => _t('enterIntervalsApiKey');
+  String get intervalsApiKeySaved => _t('intervalsApiKeySaved');
+  String get intervalsApiKeyClear => _t('intervalsApiKeyClear');
   String get timeRange => _t('timeRange');
   String get settingsComingSoon => _t('settingsComingSoon');
   String get adjustIntensity => _t('adjustIntensity');
@@ -112,6 +122,7 @@ class AppLocalizations {
   String get exportSuccess => _t('exportSuccess');
   String get exportToClipboard => _t('exportToClipboard');
   String get exportToGarmin => _t('exportToGarmin');
+  String get exportToGarminComingSoon => _t('exportToGarminComingSoon');
   String get trainingPlanUsedCache => _t('trainingPlanUsedCache');
   String get trainingPlanUsedFallback => _t('trainingPlanUsedFallback');
 }

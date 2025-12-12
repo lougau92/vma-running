@@ -24,6 +24,19 @@ class TranslationsEn {
     'theme': 'Theme',
     'dark': 'Dark',
     'light': 'Light',
+    'intervalsApiKeyLabel': 'Intervals.icu API key',
+    'intervalsApiKeyHint': 'Paste the Intervals.icu API key',
+    'intervalsApiKeyInstructionsTitle': 'Where to find this key',
+    'intervalsApiKeyInfo': 'How to find it',
+    'intervalsApiKeyInstructions':
+        '1) Create a free Intervals.icu account.\n'
+        '2) Settings > Connections > Garmin: link Garmin Connect and tick "Upload planned workouts".\n'
+        '3) Settings > Developer: copy the API Key and paste it here.',
+    'intervalsApiKeyPromptTitle': 'Connect to Intervals.icu',
+    'enterIntervalsApiKey': 'Please paste your Intervals.icu API key.',
+    'intervalsApiKeySaved':
+        'API key saved. Export again to push workouts to Garmin.',
+    'intervalsApiKeyClear': 'Clear API key',
     'timeRange': 'Time range',
     'settingsComingSoon': 'More settings coming soon.',
     'adjustIntensity': 'Adjust intensity range',
@@ -67,6 +80,7 @@ class TranslationsEn {
     'exportSuccess': 'Plan copied to clipboard',
     'exportToClipboard': 'Export to Clipboard',
     'exportToGarmin': 'Export to Garmin',
+    'exportToGarminComingSoon': 'Garmin export will use your API key soon.',
     'trainingPlanUsedCache': 'Couldn\'t reach server, showing cached plan.',
     'trainingPlanUsedFallback':
         'Offline mode: showing bundled training plan instead.',

@@ -10,6 +10,7 @@ class AppSettings {
     this.timesMaxSeconds,
     this.timesMinDistance,
     this.timesMaxDistance,
+    this.intervalsApiKey,
   });
 
   final String? localeCode;
@@ -19,24 +20,40 @@ class AppSettings {
   final double? timesMaxSeconds;
   final double? timesMinDistance;
   final double? timesMaxDistance;
+  final String? intervalsApiKey;
 
   AppSettings copyWith({
-    String? localeCode,
+    Object? localeCode = _unset,
     ThemeMode? themeMode,
     String? themeId,
-    double? timesMinSeconds,
-    double? timesMaxSeconds,
-    double? timesMinDistance,
-    double? timesMaxDistance,
+    Object? timesMinSeconds = _unset,
+    Object? timesMaxSeconds = _unset,
+    Object? timesMinDistance = _unset,
+    Object? timesMaxDistance = _unset,
+    Object? intervalsApiKey = _unset,
   }) {
     return AppSettings(
-      localeCode: localeCode ?? this.localeCode,
+      localeCode: _resolve<String?>(localeCode, this.localeCode),
       themeMode: themeMode ?? this.themeMode,
       themeId: themeId ?? this.themeId,
-      timesMinSeconds: timesMinSeconds ?? this.timesMinSeconds,
-      timesMaxSeconds: timesMaxSeconds ?? this.timesMaxSeconds,
-      timesMinDistance: timesMinDistance ?? this.timesMinDistance,
-      timesMaxDistance: timesMaxDistance ?? this.timesMaxDistance,
+      timesMinSeconds: _resolve<double?>(timesMinSeconds, this.timesMinSeconds),
+      timesMaxSeconds: _resolve<double?>(timesMaxSeconds, this.timesMaxSeconds),
+      timesMinDistance: _resolve<double?>(
+        timesMinDistance,
+        this.timesMinDistance,
+      ),
+      timesMaxDistance: _resolve<double?>(
+        timesMaxDistance,
+        this.timesMaxDistance,
+      ),
+      intervalsApiKey: _resolve<String?>(intervalsApiKey, this.intervalsApiKey),
     );
+  }
+
+  static const _unset = Object();
+
+  T _resolve<T>(Object? candidate, T current) {
+    if (identical(candidate, _unset)) return current;
+    return candidate as T;
   }
 }

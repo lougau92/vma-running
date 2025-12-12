@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_localizations.dart';
+import 'app_settings.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
 
@@ -11,12 +12,16 @@ class PlanExportData {
     required this.group,
     required this.userVma,
     required this.strings,
+    required this.settings,
+    required this.onSettingsChanged,
   });
 
   final TrainingPlan plan;
   final BlockGroup group;
   final double userVma;
   final AppLocalizations strings;
+  final AppSettings settings;
+  final ValueChanged<AppSettings> onSettingsChanged;
 }
 
 abstract class PlanExporter {
@@ -58,7 +63,86 @@ class GarminPlanExporter implements PlanExporter {
   IconData get icon => Icons.watch;
 
   @override
-  Future<void> export(PlanExportData data, BuildContext context) async {}
+  Future<void> export(PlanExportData data, BuildContext context) async {
+    final strings = data.strings;
+    final existingKey = _normalizeKey(data.settings.intervalsApiKey);
+    var apiKey = existingKey;
+
+    if (apiKey == null) {
+      apiKey = await _promptForApiKey(context, strings);
+      if (apiKey == null || !context.mounted) return;
+      data.onSettingsChanged(data.settings.copyWith(intervalsApiKey: apiKey));
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(strings.intervalsApiKeySaved)));
+      return;
+    }
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(strings.exportToGarminComingSoon)));
+  }
+
+  String? _normalizeKey(String? raw) {
+    final trimmed = raw?.trim();
+    if (trimmed == null || trimmed.isEmpty) return null;
+    return trimmed;
+  }
+
+  Future<String?> _promptForApiKey(
+    BuildContext context,
+    AppLocalizations strings,
+  ) async {
+    final controller = TextEditingController();
+    String? validationError;
+
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogCtx, setStateDialog) => AlertDialog(
+          title: Text(strings.intervalsApiKeyPromptTitle),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(strings.intervalsApiKeyInstructions),
+              const SizedBox(height: 12),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: strings.intervalsApiKeyLabel,
+                  errorText: validationError,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(strings.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                final value = controller.text.trim();
+                if (value.isEmpty) {
+                  setStateDialog(
+                    () => validationError = strings.enterIntervalsApiKey,
+                  );
+                  return;
+                }
+                Navigator.of(dialogContext).pop(value);
+              },
+              child: Text(strings.save),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class PlanExportFormatter {

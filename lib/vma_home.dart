@@ -93,7 +93,11 @@ class _VmaHomePageState extends State<VmaHomePage> {
                 ? _buildPaceBody(strings)
                 : _tabIndex == 1
                 ? _buildTimesBody(strings)
-                : VmaTrainingPlan(userVma: _vma!),
+                : VmaTrainingPlan(
+                    userVma: _vma!,
+                    settings: widget.settings,
+                    onSettingsChanged: widget.onSettingsChanged,
+                  ),
           );
 
     final isDark = Theme.of(context).brightness == Brightness.dark;

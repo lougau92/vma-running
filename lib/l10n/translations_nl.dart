@@ -24,6 +24,19 @@ class TranslationsNl {
     'theme': 'Thema',
     'dark': 'Donker',
     'light': 'Licht',
+    'intervalsApiKeyLabel': 'Intervals.icu API-sleutel',
+    'intervalsApiKeyHint': 'Plak de Intervals.icu API-sleutel',
+    'intervalsApiKeyInstructionsTitle': 'Waar vind je de sleutel',
+    'intervalsApiKeyInfo': 'Hoe vind ik deze sleutel',
+    'intervalsApiKeyInstructions':
+        '1) Maak een gratis Intervals.icu-account.\n'
+        '2) Instellingen > Verbindingen > Garmin: koppel Garmin Connect en vink "Upload planned workouts" aan.\n'
+        '3) Instellingen > Developer: kopieer de API-sleutel en plak hem hier.',
+    'intervalsApiKeyPromptTitle': 'Verbind met Intervals.icu',
+    'enterIntervalsApiKey': 'Voeg je Intervals.icu API-sleutel toe.',
+    'intervalsApiKeySaved':
+        'API-sleutel opgeslagen. Exporteer opnieuw om naar Garmin te sturen.',
+    'intervalsApiKeyClear': 'API-sleutel wissen',
     'timeRange': 'Tijdbereik',
     'settingsComingSoon': 'Meer instellingen komen eraan.',
     'adjustIntensity': 'Intensiteit aanpassen',
@@ -67,6 +80,8 @@ class TranslationsNl {
     'exportSuccess': 'Plan gekopieerd naar klembord',
     'exportToClipboard': 'Exporteren naar klembord',
     'exportToGarmin': 'Exporteren naar Garmin',
+    'exportToGarminComingSoon':
+        'Garmin-export gebruikt deze sleutel binnenkort.',
     'trainingPlanUsedCache':
         'Server niet bereikbaar, plan uit cache wordt getoond.',
     'trainingPlanUsedFallback':

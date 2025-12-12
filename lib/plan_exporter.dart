@@ -36,7 +36,7 @@ class ClipboardPlanExporter implements PlanExporter {
   String get id => 'clipboard';
 
   @override
-  String label(AppLocalizations strings) => strings.export;
+  String label(AppLocalizations strings) => strings.exportToClipboard;
 
   @override
   IconData get icon => Icons.content_copy;

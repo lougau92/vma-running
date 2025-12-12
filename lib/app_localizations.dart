@@ -75,6 +75,11 @@ class AppLocalizations {
   String get intervalsApiKeyInstructionsTitle =>
       _t('intervalsApiKeyInstructionsTitle');
   String get intervalsApiKeyInfo => _t('intervalsApiKeyInfo');
+  String get intervalsSectionTitle => _t('intervalsSectionTitle');
+  String get intervalsAthleteIdLabel => _t('intervalsAthleteIdLabel');
+  String get intervalsAthleteIdHint => _t('intervalsAthleteIdHint');
+  String get intervalsAthleteIdInvalid => _t('intervalsAthleteIdInvalid');
+  String get intervalsApiKeyInvalid => _t('intervalsApiKeyInvalid');
   String get intervalsApiKeyPromptTitle => _t('intervalsApiKeyPromptTitle');
   String get enterIntervalsApiKey => _t('enterIntervalsApiKey');
   String get intervalsApiKeySaved => _t('intervalsApiKeySaved');

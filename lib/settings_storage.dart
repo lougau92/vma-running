@@ -12,6 +12,7 @@ class SettingsStorage {
   static const _timesMinDistanceKey = 'times_min_distance';
   static const _timesMaxDistanceKey = 'times_max_distance';
   static const _intervalsApiKeyKey = 'intervals_api_key';
+  static const _intervalsAthleteIdKey = 'intervals_athlete_id';
 
   Future<AppSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -28,6 +29,7 @@ class SettingsStorage {
       timesMinDistance: prefs.getDouble(_timesMinDistanceKey),
       timesMaxDistance: prefs.getDouble(_timesMaxDistanceKey),
       intervalsApiKey: prefs.getString(_intervalsApiKeyKey),
+      intervalsAthleteId: prefs.getString(_intervalsAthleteIdKey),
     );
   }
 
@@ -56,6 +58,11 @@ class SettingsStorage {
       prefs,
       _intervalsApiKeyKey,
       settings.intervalsApiKey?.trim(),
+    );
+    _writeNullableString(
+      prefs,
+      _intervalsAthleteIdKey,
+      settings.intervalsAthleteId?.trim(),
     );
   }
 

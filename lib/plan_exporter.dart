@@ -65,13 +65,27 @@ class GarminPlanExporter implements PlanExporter {
   @override
   Future<void> export(PlanExportData data, BuildContext context) async {
     final strings = data.strings;
-    final existingKey = _normalizeKey(data.settings.intervalsApiKey);
-    var apiKey = existingKey;
+    final existingKey = _normalize(data.settings.intervalsApiKey);
+    final existingAthlete = _normalize(data.settings.intervalsAthleteId);
+    String? apiKey = existingKey;
+    String? athleteId = existingAthlete;
 
-    if (apiKey == null) {
-      apiKey = await _promptForApiKey(context, strings);
-      if (apiKey == null || !context.mounted) return;
-      data.onSettingsChanged(data.settings.copyWith(intervalsApiKey: apiKey));
+    if (apiKey == null || athleteId == null) {
+      final result = await _promptForCredentials(
+        context,
+        strings,
+        existingApiKey: apiKey,
+        existingAthleteId: athleteId,
+      );
+      if (result == null || !context.mounted) return;
+      apiKey = result.apiKey;
+      athleteId = result.athleteId;
+      data.onSettingsChanged(
+        data.settings.copyWith(
+          intervalsApiKey: apiKey,
+          intervalsAthleteId: athleteId,
+        ),
+      );
       if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
@@ -85,20 +99,24 @@ class GarminPlanExporter implements PlanExporter {
     ).showSnackBar(SnackBar(content: Text(strings.exportToGarminComingSoon)));
   }
 
-  String? _normalizeKey(String? raw) {
+  String? _normalize(String? raw) {
     final trimmed = raw?.trim();
     if (trimmed == null || trimmed.isEmpty) return null;
     return trimmed;
   }
 
-  Future<String?> _promptForApiKey(
+  Future<_IntervalsCredentials?> _promptForCredentials(
     BuildContext context,
     AppLocalizations strings,
-  ) async {
-    final controller = TextEditingController();
-    String? validationError;
+    {String? existingApiKey, String? existingAthleteId}) async {
+    final apiKeyController = TextEditingController(text: existingApiKey ?? '');
+    final athleteController =
+        TextEditingController(text: existingAthleteId ?? '');
+    String? keyError;
+    String? athleteError;
+    final steps = strings.intervalsApiKeyInstructions.split('\n');
 
-    return showDialog<String>(
+    return showDialog<_IntervalsCredentials>(
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => StatefulBuilder(
@@ -108,15 +126,45 @@ class GarminPlanExporter implements PlanExporter {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(strings.intervalsApiKeyInstructions),
+              Text(
+                strings.intervalsApiKeyInstructionsTitle,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 8),
+              ...steps.map(
+                (line) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(line),
+                ),
+              ),
               const SizedBox(height: 12),
               TextField(
-                controller: controller,
+                controller: athleteController,
+                decoration: InputDecoration(
+                  labelText: strings.intervalsAthleteIdLabel,
+                  hintText: strings.intervalsAthleteIdHint,
+                  errorText: athleteError,
+                ),
+                onChanged: (_) {
+                  if (athleteError != null) {
+                    setStateDialog(() => athleteError = null);
+                  }
+                },
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: apiKeyController,
                 autofocus: true,
                 decoration: InputDecoration(
                   labelText: strings.intervalsApiKeyLabel,
-                  errorText: validationError,
+                  hintText: strings.intervalsApiKeyHint,
+                  errorText: keyError,
                 ),
+                onChanged: (_) {
+                  if (keyError != null) {
+                    setStateDialog(() => keyError = null);
+                  }
+                },
               ),
             ],
           ),
@@ -127,14 +175,33 @@ class GarminPlanExporter implements PlanExporter {
             ),
             TextButton(
               onPressed: () {
-                final value = controller.text.trim();
-                if (value.isEmpty) {
-                  setStateDialog(
-                    () => validationError = strings.enterIntervalsApiKey,
-                  );
+                final keyValue = apiKeyController.text.trim();
+                final athleteValue = athleteController.text.trim();
+                String? nextKeyError;
+                String? nextAthleteError;
+
+                if (athleteValue.isEmpty ||
+                    !_isValidAthleteId(athleteValue)) {
+                  nextAthleteError = strings.intervalsAthleteIdInvalid;
+                }
+                if (keyValue.isEmpty || !_isValidApiKey(keyValue)) {
+                  nextKeyError = keyValue.isEmpty
+                      ? strings.enterIntervalsApiKey
+                      : strings.intervalsApiKeyInvalid;
+                }
+                if (nextAthleteError != null || nextKeyError != null) {
+                  setStateDialog(() {
+                    keyError = nextKeyError;
+                    athleteError = nextAthleteError;
+                  });
                   return;
                 }
-                Navigator.of(dialogContext).pop(value);
+                Navigator.of(dialogContext).pop(
+                  _IntervalsCredentials(
+                    apiKey: keyValue,
+                    athleteId: athleteValue,
+                  ),
+                );
               },
               child: Text(strings.save),
             ),
@@ -143,6 +210,21 @@ class GarminPlanExporter implements PlanExporter {
       ),
     );
   }
+}
+
+class _IntervalsCredentials {
+  const _IntervalsCredentials({required this.apiKey, required this.athleteId});
+
+  final String apiKey;
+  final String athleteId;
+}
+
+bool _isValidAthleteId(String value) {
+  return RegExp(r'^i[0-9]+$').hasMatch(value.trim());
+}
+
+bool _isValidApiKey(String value) {
+  return RegExp(r'^[A-Za-z0-9]{20,40}$').hasMatch(value.trim());
 }
 
 class PlanExportFormatter {

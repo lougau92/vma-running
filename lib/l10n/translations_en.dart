@@ -25,17 +25,23 @@ class TranslationsEn {
     'dark': 'Dark',
     'light': 'Light',
     'intervalsApiKeyLabel': 'Intervals.icu API key',
-    'intervalsApiKeyHint': 'Paste the Intervals.icu API key',
+    'intervalsApiKeyHint':
+        'Paste the Intervals.icu API key (e.g. 5l59eeg3l2t649230use6y568)',
     'intervalsApiKeyInstructionsTitle': 'Where to find this key',
     'intervalsApiKeyInfo': 'How to find it',
+    'intervalsSectionTitle': 'Intervals.icu connection',
     'intervalsApiKeyInstructions':
         '1) Create a free Intervals.icu account.\n'
         '2) Settings > Connections > Garmin: link Garmin Connect and tick "Upload planned workouts".\n'
-        '3) Settings > Developer: copy the API Key and paste it here.',
+        '3) Settings > Developer: copy the athlete ID and API Key and paste it here.',
+    'intervalsAthleteIdLabel': 'Athlete ID',
+    'intervalsAthleteIdHint': 'e.g. i434321',
+    'intervalsAthleteIdInvalid': 'Use the format i434321 (i + digits).',
+    'intervalsApiKeyInvalid': 'API key looks invalid; use the long alphanumeric key.',
     'intervalsApiKeyPromptTitle': 'Connect to Intervals.icu',
     'enterIntervalsApiKey': 'Please paste your Intervals.icu API key.',
     'intervalsApiKeySaved':
-        'API key saved. Export again to push workouts to Garmin.',
+        'Saved Intervals.icu credentials. Export again to push workouts to Garmin.',
     'intervalsApiKeyClear': 'Clear API key',
     'timeRange': 'Time range',
     'settingsComingSoon': 'More settings coming soon.',

@@ -11,6 +11,7 @@ class AppSettings {
     this.timesMinDistance,
     this.timesMaxDistance,
     this.intervalsApiKey,
+    this.intervalsAthleteId,
   });
 
   final String? localeCode;
@@ -21,6 +22,7 @@ class AppSettings {
   final double? timesMinDistance;
   final double? timesMaxDistance;
   final String? intervalsApiKey;
+  final String? intervalsAthleteId;
 
   AppSettings copyWith({
     Object? localeCode = _unset,
@@ -31,6 +33,7 @@ class AppSettings {
     Object? timesMinDistance = _unset,
     Object? timesMaxDistance = _unset,
     Object? intervalsApiKey = _unset,
+    Object? intervalsAthleteId = _unset,
   }) {
     return AppSettings(
       localeCode: _resolve<String?>(localeCode, this.localeCode),
@@ -47,6 +50,8 @@ class AppSettings {
         this.timesMaxDistance,
       ),
       intervalsApiKey: _resolve<String?>(intervalsApiKey, this.intervalsApiKey),
+      intervalsAthleteId:
+          _resolve<String?>(intervalsAthleteId, this.intervalsAthleteId),
     );
   }
 

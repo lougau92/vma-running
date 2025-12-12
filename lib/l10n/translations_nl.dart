@@ -25,17 +25,24 @@ class TranslationsNl {
     'dark': 'Donker',
     'light': 'Licht',
     'intervalsApiKeyLabel': 'Intervals.icu API-sleutel',
-    'intervalsApiKeyHint': 'Plak de Intervals.icu API-sleutel',
+    'intervalsApiKeyHint':
+        'Plak de Intervals.icu API-sleutel (bijv. 5l59eeg3l2t649230use6y568)',
     'intervalsApiKeyInstructionsTitle': 'Waar vind je de sleutel',
     'intervalsApiKeyInfo': 'Hoe vind ik deze sleutel',
+    'intervalsSectionTitle': 'Intervals.icu-verbinding',
     'intervalsApiKeyInstructions':
         '1) Maak een gratis Intervals.icu-account.\n'
         '2) Instellingen > Verbindingen > Garmin: koppel Garmin Connect en vink "Upload planned workouts" aan.\n'
-        '3) Instellingen > Developer: kopieer de API-sleutel en plak hem hier.',
+        '3) Instellingen > Developer: kopieer de athleteId en de API-sleutel en plak hem hier.',
+    'intervalsAthleteIdLabel': 'Athlete ID',
+    'intervalsAthleteIdHint': 'bijv. i434321',
+    'intervalsAthleteIdInvalid': 'Gebruik het formaat i12345 (i + cijfers).',
+    'intervalsApiKeyInvalid':
+        'API-sleutel lijkt ongeldig; gebruik de lange alfanumerieke sleutel.',
     'intervalsApiKeyPromptTitle': 'Verbind met Intervals.icu',
     'enterIntervalsApiKey': 'Voeg je Intervals.icu API-sleutel toe.',
     'intervalsApiKeySaved':
-        'API-sleutel opgeslagen. Exporteer opnieuw om naar Garmin te sturen.',
+        'Intervals.icu-gegevens opgeslagen. Exporteer opnieuw om naar Garmin te sturen.',
     'intervalsApiKeyClear': 'API-sleutel wissen',
     'timeRange': 'Tijdbereik',
     'settingsComingSoon': 'Meer instellingen komen eraan.',

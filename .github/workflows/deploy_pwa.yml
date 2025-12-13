@@ -53,11 +53,11 @@ jobs:
           BUILD_NAME: ${{ env.VERSION_NAME }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-      # --- 3. BUILD ---
-      - name: Build Web App
+      # --- 3. BUILD FOR TESTING (No Base HREF) ---
+      # We build for root "/" so the local http-server can serve it correctly
+      - name: Build Web App (Test Version)
         run: |
           flutter build web --release \
-            --base-href "/vma-running/" \
             --build-name=${{ env.VERSION_NAME }} \
             --build-number=${{ github.run_number }}
 
@@ -66,6 +66,22 @@ jobs:
         run: node tool/sw-offline-test.mjs
         env:
           SW_TEST_PORT: 8080
+
+      # --- 5. RE-BUILD FOR DEPLOY (With Base HREF) ---
+      # Now we rebuild with the correct path for GitHub Pages
+      - name: Build Web App (Deploy Version)
+        run: |
+          flutter build web --release \
+            --base-href "/vma-running/" \
+            --build-name=${{ env.VERSION_NAME }} \
+            --build-number=${{ github.run_number }}
+
+      # --- 6. DEPLOY ---
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
 
       # --- 5. DEPLOY ---
       - name: Deploy to gh-pages branch

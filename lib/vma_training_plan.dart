@@ -75,13 +75,13 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       );
 
       if (!result.fromCache) {
-        print('Config loaded from network - fresh data');
+        print('Plan loaded from network - fresh data');
         return TrainingPlanResult(
           plan: TrainingPlan.fromJson(jsonDecode(result.data)),
         );
       }
 
-      print('Config loaded from cache (source: ${result.source})');
+      print('Plan loaded from cache (source: ${result.source})');
       return TrainingPlanResult(
         plan: TrainingPlan.fromJson(jsonDecode(result.data)),
         noticeKey: forceRefresh ? 'trainingPlanUsedCache' : null,

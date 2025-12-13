@@ -35,5 +35,14 @@
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('service_worker.js')
+          .catch((e) => console.warn('SW registration failed', e));
+      });
+    }
+  </script>
 </body>
 </html>

@@ -9,11 +9,12 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 - Training plan tab: loads an interval plan from GitHub with disk/memory caching and shows reps, pace targets, and recoveries by group.
 - Export: clipboard copy or Garmin (Intervals.icu) export flow that stores your Intervals.icu athlete ID and API key locally.
 - Settings: language (EN/FR/NL), theme (light/dark/system), default distance/time ranges, and Intervals.icu credentials.
+- Offline-first: ships a service worker that caches the app shell so core features load without network; training plan data reuses cached responses if offline.
 
 ## Quick start
 1) Install Flutter (Dart 3.9+ / Flutter 3.24+ recommended).  
 2) Fetch deps: `flutter pub get`  
-3) Run: `flutter run -d chrome` (or any connected device) or `flutter run lib\main.dart`
+3) Run: `flutter run -d chrome` (or any connected device)
 
 ## Intervals.icu (Garmin) export
 1) In the app, go to Settings → Intervals.icu connection.
@@ -22,6 +23,22 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
    - API key from Intervals.icu (looks like `5l59eeg3l2t649230use6y568`).
 3) Save both fields. You can clear either field with the inline clear icon.
 4) Export a workout to Garmin; if a credential is missing, the app will prompt you to fill it.
+
+## Service worker offline/online switch test
+1) Run web build: `flutter run -d chrome` (or `flutter build web && npx serve build/web`).
+2) Load once online so the service worker installs and caches assets (including `assets/training_plans/training_example.json`).
+3) In DevTools → Application → Service Workers, confirm it is “activated”.
+4) In DevTools → Network, toggle “Offline” and reload:
+   - App shell should load from cache.
+   - Training plan should come from the cached example JSON.
+   - Console should not spam font errors (fonts are cached with a graceful fallback).
+5) Toggle “Offline” off and reload to confirm it resumes normal online fetching.
+
+### Automated local SW test (same as CI)
+1) Build web: `flutter build web --release`
+2) Install test deps: `npm install playwright@1.41.2 http-server && npx playwright install --with-deps chromium`
+3) Run: `node tool/sw-offline-test.js`
+   - Starts a local server, waits for the service worker, goes offline, checks the cached training plan, and asserts no font error spam.
 
 ## Training plan data
 - Default source: see `configUrl` in `lib/vma_training_plan.dart` (currently points to GitHub). The loader caches responses in a temp `github_cache` folder and falls back to stale data if offline. Update this URL to a raw JSON endpoint you control.

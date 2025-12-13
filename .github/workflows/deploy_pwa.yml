@@ -4,38 +4,74 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
-# Grant GITHUB_TOKEN the permissions to write to the repository
 permissions:
   contents: write
 
 jobs:
   build-and-deploy:
-    # This line ensures it ONLY runs if the commit message contains "release"
-    if: contains(github.event.head_commit.message, 'release')
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # --- 1. SETUP ENVIRONMENT ---
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          
-      - name: Install Dependencies
-        working-directory: ./
+
+      - name: Install Flutter Dependencies
         run: flutter pub get
 
-      - name: Build Web App
-        working-directory: ./
-        # Builds the app with the correct base-href for GitHub Pages
-        run: flutter build web --release --base-href "/vma-running/"
+      # --- 2. VERSION MANAGEMENT ---
+      - name: Extract Version from Tag
+        id: extract_version
+        run: |
+          # Converts 'refs/tags/v1.0.2' -> '1.0.2'
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "VERSION_NAME=$VERSION" >> $GITHUB_ENV
+          echo "Detected Release Version: $VERSION"
 
+      - name: Stamp Service Worker Version
+        run: node tool/inject-sw-version.mjs
+        env:
+          # Uses the tag version (1.0.2) and the build run number (45)
+          BUILD_NAME: ${{ env.VERSION_NAME }}
+          BUILD_NUMBER: ${{ github.run_number }}
+
+      # --- 3. BUILD ---
+      - name: Build Web App
+        run: |
+          flutter build web --release \
+            --base-href "/vma-running/" \
+            --build-name=${{ env.VERSION_NAME }} \
+            --build-number=${{ github.run_number }}
+
+      # --- 4. TEST ---
+      - name: Verify Offline Capabilities
+        run: node tool/sw-offline-test.mjs
+        env:
+          SW_TEST_PORT: 8080
+
+      # --- 5. DEPLOY ---
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Points to the build output inside your subfolder
-          publish_dir: .//build/web
+          publish_dir: ./build/web

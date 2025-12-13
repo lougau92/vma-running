@@ -3,9 +3,16 @@ import { chromium } from 'playwright';
 import { join } from 'path';
 import { spawn } from 'child_process';
 import { createServer, Socket } from 'net'; // Used to check if port is ready
+import { existsSync, symlinkSync } from 'fs';
 import treeKill from 'tree-kill';
 
 const root = join(process.cwd(), 'build', 'web');
+const host = '127.0.0.1'; // Explicit IPv4 to avoid IPv6-only localhost resolution issues in CI
+
+// Honor build base path (e.g., /vma-running/) so asset URLs resolve in tests
+const rawBasePath = process.env.BASE_PATH || process.env.BASE_HREF || '/vma-running/';
+const normalizedBasePath = rawBasePath.replace(/\/+$/, '').replace(/^\/+/, '');
+const basePath = normalizedBasePath ? `/${normalizedBasePath}` : '';
 
 // 1. Cross-platform spawn command
 const npmCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
@@ -22,7 +29,14 @@ const getFreePort = async () => {
   });
 };
 
-const host = '127.0.0.1'; // Explicit IPv4 to avoid IPv6-only localhost resolution issues in CI
+if (normalizedBasePath) {
+  const mountDir = join(root, normalizedBasePath);
+  if (!existsSync(mountDir)) {
+    // Create a symlink so requests to /<basePath>/* resolve to the built assets
+    symlinkSync(root, mountDir, process.platform === 'win32' ? 'junction' : 'dir');
+  }
+}
+
 const port = process.env.SW_TEST_PORT || await getFreePort();
 const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], {
   stdio: 'inherit',
@@ -70,7 +84,7 @@ const waitForServer = async (port) => {
   await waitForServer(port);
 
   const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ baseURL: `http://localhost:${port}` });
+  const context = await browser.newContext({ baseURL: `http://${host}:${port}${basePath}` });
   const page = await context.newPage();
 
   const consoleErrors = [];

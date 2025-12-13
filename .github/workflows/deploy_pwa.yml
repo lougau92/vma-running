@@ -53,13 +53,16 @@ jobs:
           BUILD_NAME: ${{ env.VERSION_NAME }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-      # --- 3. BUILD FOR TESTING (No Base HREF) ---
-      # We build for root "/" so the local http-server can serve it correctly
+        # --- 3. BUILD FOR TESTING ---
       - name: Build Web App (Test Version)
         run: |
           flutter build web --release \
             --build-name=${{ env.VERSION_NAME }} \
             --build-number=${{ github.run_number }}
+
+      # We delete Flutter's auto-generated SW so the browser MUST use ours.
+      - name: Remove Default Service Worker
+        run: rm build/web/flutter_service_worker.js
 
       # --- 4. TEST ---
       - name: Verify Offline Capabilities
@@ -67,14 +70,17 @@ jobs:
         env:
           SW_TEST_PORT: 8080
 
-      # --- 5. RE-BUILD FOR DEPLOY (With Base HREF) ---
-      # Now we rebuild with the correct path for GitHub Pages
+      # --- 5. RE-BUILD FOR DEPLOY ---
       - name: Build Web App (Deploy Version)
         run: |
           flutter build web --release \
             --base-href "/vma-running/" \
             --build-name=${{ env.VERSION_NAME }} \
             --build-number=${{ github.run_number }}
+            
+      # This ensures your real users also get YOUR custom SW, not the default one.
+      - name: Remove Default SW for Deploy
+        run: rm build/web/flutter_service_worker.js
 
       # --- 6. DEPLOY ---
       - name: Deploy to gh-pages branch

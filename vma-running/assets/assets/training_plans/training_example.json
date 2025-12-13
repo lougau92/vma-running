@@ -1,0 +1,130 @@
+{
+  "title": "Mercredi (séance piste)",
+  "warmup": "15' boucle habituelle + 3 gammes",
+  "cooldown": "en footing lent autour de la piste dans le sens horlogique 5'",
+  "remarks": "Bien respecter les % de VMA très important.",
+  "groups": [
+    {
+      "title": "Groupe 1",
+      "blocks": [
+        {
+          "title": "Bloc 1",
+          "sets": [
+            {
+              "repetitions": 1,
+              "distanceMeters": 1200,
+              "vmaPercent": 75.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            },
+            {
+              "repetitions": 1,
+              "distanceMeters": 1200,
+              "vmaPercent": 80.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            },
+            {
+              "repetitions": 1,
+              "distanceMeters": 1200,
+              "vmaPercent": 85.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        },
+        {
+          "title": "Bloc 2",
+          "sets": [
+            {
+              "repetitions": 3,
+              "distanceMeters": 800,
+              "vmaPercent": 90.0,
+              "recoverySeconds": 120.0,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        },
+        {
+          "title": "Bloc 3",
+          "sets": [
+            {
+              "repetitions": 4,
+              "distanceMeters": 200,
+              "vmaPercent": 105.0,
+              "recoverySeconds": 60.0,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        }
+      ]
+    },
+    {
+      "title": "Groupe 2",
+      "blocks": [
+        {
+          "title": "Bloc 1",
+          "sets": [
+            {
+              "repetitions": 1,
+              "distanceMeters": 1000,
+              "vmaPercent": 75.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            },
+            {
+              "repetitions": 1,
+              "distanceMeters": 1000,
+              "vmaPercent": 80.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            },
+            {
+              "repetitions": 1,
+              "distanceMeters": 1000,
+              "vmaPercent": 85.0,
+              "recoverySeconds": 150,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        },
+        {
+          "title": "Bloc 2",
+          "sets": [
+            {
+              "repetitions": 3,
+              "distanceMeters": 600,
+              "vmaPercent": 90.0,
+              "recoverySeconds": 120.0,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        },
+        {
+          "title": "Bloc 3",
+          "sets": [
+            {
+              "repetitions": 4,
+              "distanceMeters": 100,
+              "vmaPercent": 105.0,
+              "recoverySeconds": 60.0,
+              "recoveryType": "active"
+            }
+          ],
+          "afterRecoverySeconds": 180,
+          "afterRecoveryType": "rest"
+        }
+      ]
+    }
+  ]
+}

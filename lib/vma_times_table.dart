@@ -30,6 +30,15 @@ class VmaTimesTable extends StatefulWidget {
 
 class _VmaTimesTableState extends State<VmaTimesTable> {
   bool _distanceFirst = true;
+  final ScrollController _verticalController = ScrollController();
+  final ScrollController _horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    _verticalController.dispose();
+    _horizontalController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +92,12 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
 
     return Scrollbar(
       thumbVisibility: true,
+      controller: _verticalController,
       child: SingleChildScrollView(
+        controller: _verticalController,
         scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
+          controller: _horizontalController,
           scrollDirection: Axis.horizontal,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minWidth: 320),

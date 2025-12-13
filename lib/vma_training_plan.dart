@@ -42,11 +42,18 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     ClipboardPlanExporter(),
     GarminPlanExporter(),
   ];
+  final ScrollController _verticalController = ScrollController();
 
   @override
   void initState() {
     super.initState();
     _planFuture = loadTraining();
+  }
+
+  @override
+  void dispose() {
+    _verticalController.dispose();
+    super.dispose();
   }
 
   void _refreshPlan() {
@@ -127,7 +134,9 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       },
       child: Scrollbar(
         thumbVisibility: true,
+        controller: _verticalController,
         child: SingleChildScrollView(
+          controller: _verticalController,
           physics: const AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
           child: ConstrainedBox(

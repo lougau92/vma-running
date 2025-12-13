@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'distance_extensions.dart';
 import 'l10n/translations_en.dart';
@@ -154,8 +155,8 @@ class _AppLocalizationsDelegate
       .contains(locale.languageCode);
 
   @override
-  Future<AppLocalizations> load(Locale locale) async =>
-      AppLocalizations(locale);
+  Future<AppLocalizations> load(Locale locale) =>
+      SynchronousFuture(AppLocalizations(locale));
 
   @override
   bool shouldReload(covariant LocalizationsDelegate<AppLocalizations> old) =>

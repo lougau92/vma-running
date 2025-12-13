@@ -22,6 +22,7 @@ const getFreePort = async () => {
   });
 };
 
+const host = '127.0.0.1'; // Explicit IPv4 to avoid IPv6-only localhost resolution issues in CI
 const port = process.env.SW_TEST_PORT || await getFreePort();
 const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], {
   stdio: 'inherit',
@@ -47,7 +48,7 @@ const waitForServer = async (port) => {
     try {
       await new Promise((resolve, reject) => {
         const socket = new Socket();
-        socket.connect(port, 'localhost', () => {
+        socket.connect(port, host, () => {
           socket.end();
           resolve();
         });

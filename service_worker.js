@@ -1,7 +1,7 @@
 // Offline-first service worker for VMA Running Companion.
 // Caches core shell assets and serves navigation requests from cache when offline.
 
-const CACHE_NAME = 'vma-running-cache-1.4.6+17';
+const CACHE_NAME = 'vma-running-cache-1.4.10+21';
 const CORE_ASSETS = [
   '/',
   '/index.html',

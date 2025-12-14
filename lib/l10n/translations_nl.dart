@@ -94,5 +94,10 @@ class TranslationsNl {
         'Server niet bereikbaar, plan uit cache wordt getoond.',
     'trainingPlanUsedFallback':
         'Offline: gebundeld trainingsplan wordt getoond.',
+    'challengeTab': 'Challenge',
+    'challengeTitle': 'Team race challenge',
+    'challengeUsedCache': 'Server niet bereikbaar, gecachte challenge getoond.',
+    'challengeUsedFallback':
+        'Offline modus: ingebouwde challenge tabel getoond.',
   };
 }

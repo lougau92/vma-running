@@ -61,7 +61,9 @@ class AppLocalizations {
   String get timesTab => _t('timesTab');
   String get intensityTab => _t('intensityTab');
   String get trainingPlanTab => _t('trainingPlanTab');
+  String get challengeTab => _t('challengeTab');
   String get settingsTab => _t('settingsTab');
+  String get challengeTitle => _t('challengeTitle');
   String get appVersionLabel => _t('appVersionLabel');
   String get language => _t('language');
   String get systemDefault => _t('systemDefault');
@@ -132,6 +134,8 @@ class AppLocalizations {
   String get exportToGarminComingSoon => _t('exportToGarminComingSoon');
   String get trainingPlanUsedCache => _t('trainingPlanUsedCache');
   String get trainingPlanUsedFallback => _t('trainingPlanUsedFallback');
+  String get challengeUsedCache => _t('challengeUsedCache');
+  String get challengeUsedFallback => _t('challengeUsedFallback');
 }
 
 extension DynamicStrings on AppLocalizations {

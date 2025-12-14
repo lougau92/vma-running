@@ -15,7 +15,9 @@ class TranslationsEn {
     'timesTab': 'Times',
     'intensityTab': 'Intensity',
     'trainingPlanTab': 'Workout',
+    'challengeTab': 'Challenge',
     'settingsTab': 'Settings',
+    'challengeTitle': 'Team race challenge',
     'appVersionLabel': 'App version',
     'language': 'Language',
     'systemDefault': 'System default',
@@ -92,5 +94,8 @@ class TranslationsEn {
     'trainingPlanUsedCache': 'Couldn\'t reach server, showing cached plan.',
     'trainingPlanUsedFallback':
         'Offline mode: showing bundled training plan instead.',
+    'challengeUsedCache': 'Couldn\'t reach server, showing cached challenge.',
+    'challengeUsedFallback':
+        'Offline mode: showing bundled challenge table instead.',
   };
 }

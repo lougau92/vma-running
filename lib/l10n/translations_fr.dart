@@ -16,9 +16,7 @@ class TranslationsFr {
     'intensityTab': 'Intensité',
     'trainingPlanTab': 'Entrainement',
     'settingsTab': 'Réglages',
-    'appVersionLabel':
-        'Version de l'
-        'appli',
+    'appVersionLabel': 'Version de l\'appli',
     'language': 'Langue',
     'systemDefault': 'Langue du système',
     'english': 'Anglais',
@@ -48,7 +46,7 @@ class TranslationsFr {
         'Identifiants Intervals.icu enregistres. Relancez l export Garmin.',
     'intervalsApiKeyClear': 'Supprimer la cle API',
     'timeRange': 'Plage de temps',
-    'settingsComingSoon': 'D’autres paramètres arrivent bientôt.',
+    'settingsComingSoon': 'D\'autres paramètres arrivent bientôt.',
     'adjustIntensity': 'Ajuster les pourcentages',
     'minPercent': 'Min %',
     'maxPercent': 'Max %',
@@ -95,5 +93,10 @@ class TranslationsFr {
         'Impossible de joindre le serveur, plan en cache affiché.',
     'trainingPlanUsedFallback':
         'Mode hors ligne : plan intégré de demo affiché.',
+    'challengeTab': 'Challenge',
+    'challengeTitle': 'Classement challenge',
+    'challengeUsedCache':
+        'Impossible de joindre le serveur, classement en cache affiché.',
+    'challengeUsedFallback': 'Mode hors ligne : classement intégré affiché.',
   };
 }

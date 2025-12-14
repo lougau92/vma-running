@@ -8,11 +8,13 @@ import 'time_utils.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'vma_settings_dialog.dart';
+import 'remote_asset_loader.dart';
 import 'vma_storage.dart';
 import 'vma_settings_page.dart';
 import 'vma_table.dart';
 import 'vma_times_settings_dialog.dart';
 import 'vma_times_table.dart';
+import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
 
 class VmaHomePage extends StatefulWidget {
@@ -32,6 +34,7 @@ class VmaHomePage extends StatefulWidget {
 class _VmaHomePageState extends State<VmaHomePage> {
   final _vmaStorage = VmaStorage();
   final _paceCalculator = VmaPaceCalculator();
+  final RemoteAssetLoader _remoteLoader = RemoteAssetLoader();
   int _tabIndex = 0;
   double? _vma;
   bool _loading = true;
@@ -124,20 +127,22 @@ class _VmaHomePageState extends State<VmaHomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    Widget content;
-    if (_vma == null) {
-      content = Center(child: Text(strings.enterVmaPlaceholder));
-    } else if (_tabIndex == 0) {
-      content = _buildPaceBody(strings);
-    } else if (_tabIndex == 1) {
-      content = _buildTimesBody(strings);
-    } else {
-      content = VmaTrainingPlan(
+    final requiresVma = _tabIndex != 3;
+    if (_vma == null && requiresVma) {
+      return Center(child: Text(strings.enterVmaPlaceholder));
+    }
+
+    final content = switch (_tabIndex) {
+      0 => _buildPaceBody(strings),
+      1 => _buildTimesBody(strings),
+      2 => VmaTrainingPlan(
         userVma: _vma!,
         settings: widget.settings,
         onSettingsChanged: widget.onSettingsChanged,
-      );
-    }
+        loader: _remoteLoader,
+      ),
+      _ => _buildChallengeBody(),
+    };
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -178,6 +183,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.fitness_center),
           label: strings.trainingPlanTab,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.emoji_events),
+          label: strings.challengeTab,
         ),
       ],
     );
@@ -243,6 +252,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
         _timesMaxSeconds = result.maxSeconds;
       });
     }
+  }
+
+  Widget _buildChallengeBody() {
+    return _wrapCenteredWidth(VmaChallengeTable(loader: _remoteLoader));
   }
 
   Widget _buildPaceBody(AppLocalizations strings) {

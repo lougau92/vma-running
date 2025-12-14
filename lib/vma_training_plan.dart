@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:vma_running/train_data_loader.dart';
+import 'package:vma_running/remote_asset_loader.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'plan_exporter.dart';
@@ -20,15 +19,15 @@ class VmaTrainingPlan extends StatefulWidget {
   final double userVma;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
+  final RemoteAssetLoader loader;
 
   VmaTrainingPlan({
     super.key,
     required this.userVma,
     required this.settings,
     required this.onSettingsChanged,
-  });
-
-  final AdvancedGitHubCacheManager cacheManager = AdvancedGitHubCacheManager();
+    RemoteAssetLoader? loader,
+  }) : loader = loader ?? RemoteAssetLoader();
 
   @override
   State<VmaTrainingPlan> createState() => _VmaTrainingPlanState();
@@ -71,11 +70,17 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   }
 
   Future<TrainingPlanResult> loadTraining({bool forceRefresh = false}) async {
-    try {
-      return await _loadRemotePlan(forceRefresh);
-    } catch (e) {
-      return _loadFallbackPlan(e);
-    }
+    final result = await widget.loader.loadText(
+      remoteUrl: _configUrl,
+      assetPath: _assetFallbackPath,
+      forceRefresh: forceRefresh,
+    );
+
+    _logSource(result);
+    return TrainingPlanResult(
+      plan: TrainingPlan.fromJson(jsonDecode(result.data)),
+      noticeKey: _noticeKeyForOrigin(result, forceRefresh),
+    );
   }
 
   @override
@@ -224,39 +229,35 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       if (!mounted) return;
       final strings = AppLocalizations.of(context);
       final message = strings[noticeKey];
+      if (message == null) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
     });
   }
 
-  Future<TrainingPlanResult> _loadRemotePlan(bool forceRefresh) async {
-    final result = await widget.cacheManager.getFile(
-      _configUrl,
-      forceRefresh: forceRefresh,
-    );
-
-    print(
-      result.fromCache
-          ? 'Plan loaded from cache (source: ${result.source})'
-          : 'Plan loaded from network - fresh data',
-    );
-
-    return TrainingPlanResult(
-      plan: TrainingPlan.fromJson(jsonDecode(result.data)),
-      noticeKey: result.fromCache && forceRefresh
-          ? 'trainingPlanUsedCache'
-          : null,
-    );
+  void _logSource(RemoteLoadResult result) {
+    switch (result.origin) {
+      case RemoteLoadOrigin.network:
+        print('Plan loaded from network - fresh data');
+        break;
+      case RemoteLoadOrigin.cache:
+        print('Plan loaded from cache (source: ${result.source})');
+        break;
+      case RemoteLoadOrigin.asset:
+        print('Failed to load remote training plan, falling back to asset');
+        break;
+    }
   }
 
-  Future<TrainingPlanResult> _loadFallbackPlan(Object error) async {
-    print('Failed to load remote training plan, falling back to asset: $error');
-    final bundled = await rootBundle.loadString(_assetFallbackPath);
-    return TrainingPlanResult(
-      plan: TrainingPlan.fromJson(jsonDecode(bundled)),
-      noticeKey: 'trainingPlanUsedFallback',
-    );
+  String? _noticeKeyForOrigin(RemoteLoadResult result, bool forceRefresh) {
+    if (result.origin == RemoteLoadOrigin.cache && forceRefresh) {
+      return 'trainingPlanUsedCache';
+    }
+    if (result.origin == RemoteLoadOrigin.asset) {
+      return 'trainingPlanUsedFallback';
+    }
+    return null;
   }
 }
 

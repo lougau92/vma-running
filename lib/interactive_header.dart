@@ -8,6 +8,7 @@ class InteractiveHeader extends StatelessWidget {
     this.onTap,
     this.tooltip,
     this.compact = false,
+    this.tapIcon = true,
   });
 
   final String label;
@@ -15,6 +16,7 @@ class InteractiveHeader extends StatelessWidget {
   final VoidCallback? onTap;
   final String? tooltip;
   final bool compact;
+  final bool tapIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +56,13 @@ class InteractiveHeader extends StatelessWidget {
           Flexible(
             child: Text(
               label,
-              overflow: TextOverflow.ellipsis,
+              overflow: TextOverflow.visible,
+              softWrap: true,
+              maxLines: 2,
               style: labelStyle,
             ),
           ),
-          if (enabled) ...[
+          if (enabled && tapIcon) ...[
             const SizedBox(width: 6),
             Icon(
               Icons.touch_app,
@@ -80,6 +84,43 @@ class InteractiveHeader extends StatelessWidget {
       splashColor: colorScheme.primary.withOpacity(0.16),
       highlightColor: Colors.transparent,
       child: child,
+    );
+  }
+}
+
+enum SortDirection { none, ascending, descending }
+
+class SortableHeader extends StatelessWidget {
+  const SortableHeader({
+    super.key,
+    required this.label,
+    this.direction = SortDirection.none,
+    this.onTap,
+    this.tooltip,
+    this.compact = false,
+  });
+
+  final String label;
+  final SortDirection direction;
+  final VoidCallback? onTap;
+  final String? tooltip;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = switch (direction) {
+      SortDirection.ascending => Icons.arrow_upward_rounded,
+      SortDirection.descending => Icons.arrow_downward_rounded,
+      SortDirection.none => Icons.unfold_more,
+    };
+
+    return InteractiveHeader(
+      label: label,
+      icon: icon,
+      onTap: onTap,
+      tooltip: tooltip,
+      compact: compact,
+      tapIcon: false,
     );
   }
 }

@@ -2,17 +2,19 @@
 import { chromium } from 'playwright';
 import { join } from 'path';
 import { spawn } from 'child_process';
-import { createServer, Socket } from 'net'; // Used to check if port is ready
-import { existsSync, symlinkSync } from 'fs';
+import { createServer, Socket } from 'net';
+import { existsSync, symlinkSync, rmSync } from 'fs'; // ADD: rmSync
 import treeKill from 'tree-kill';
 
 const root = join(process.cwd(), 'build', 'web');
-const host = '127.0.0.1'; // Explicit IPv4 to avoid IPv6-only localhost resolution issues in CI
+const host = '127.0.0.1';
 
-// Honor build base path (e.g., /vma-running/) so asset URLs resolve in tests
 const rawBasePath = process.env.BASE_PATH || process.env.BASE_HREF || '/vma-running/';
 const normalizedBasePath = rawBasePath.replace(/\/+$/, '').replace(/^\/+/, '');
 const basePath = normalizedBasePath ? `/${normalizedBasePath}` : '';
+
+// Define mountDir outside to access it in cleanup
+const mountDir = normalizedBasePath ? join(root, normalizedBasePath) : null;
 
 // 1. Cross-platform spawn command
 const npmCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
@@ -29,24 +31,25 @@ const getFreePort = async () => {
   });
 };
 
-if (normalizedBasePath) {
-  const mountDir = join(root, normalizedBasePath);
-  if (!existsSync(mountDir)) {
-    // Create a symlink so requests to /<basePath>/* resolve to the built assets
-    symlinkSync(root, mountDir, process.platform === 'win32' ? 'junction' : 'dir');
-  }
+// Create Symlink
+if (mountDir && !existsSync(mountDir)) {
+  console.log(`Creating symlink: ${mountDir}`);
+  symlinkSync(root, mountDir, process.platform === 'win32' ? 'junction' : 'dir');
 }
 
-const port = process.env.SW_TEST_PORT || await getFreePort();
-const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], {
-  stdio: 'inherit',
-});
+const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], { stdio: 'inherit' });
 
-function stopServer() {
-  if (server && server.pid) {
-    treeKill(server.pid, 'SIGKILL', (err) => {
-      if (err) console.error('Failed to kill server:', err);
-    });
+function cleanup() {
+  if (server && server.pid) treeKill(server.pid, 'SIGKILL');
+
+  // ADD: Remove the symlink so it doesn't get deployed
+  if (mountDir && existsSync(mountDir)) {
+    console.log('Cleaning up symlink...');
+    try {
+      rmSync(mountDir, { recursive: true, force: true });
+    } catch (e) {
+      console.error('Failed to cleanup symlink:', e);
+    }
   }
 }
 
@@ -77,63 +80,59 @@ const waitForServer = async (port) => {
 };
 
 (async () => {
-  console.log('Waiting for server...');
+  try {
+    console.log('Waiting for server...');
 
-  console.log(`Starting server on port: ${port}`);
+    console.log(`Starting server on port: ${port}`);
 
-  await waitForServer(port);
+    await waitForServer(port);
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ baseURL: `http://${host}:${port}${basePath}` });
-  const page = await context.newPage();
+    const browser = await chromium.launch({ headless: true });
+    const context = await browser.newContext({ baseURL: `http://${host}:${port}${basePath}` });;
+    const page = await context.newPage();
 
-  const consoleErrors = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') consoleErrors.push(msg.text());
-  });
+    const consoleErrors = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
 
-  // 3. Robust Navigation
-  await page.goto('/', { waitUntil: 'domcontentloaded' }); // 'networkidle' can be flaky with SWs
+    // 3. Robust Navigation
+    await page.goto('./', { waitUntil: 'domcontentloaded' }); // 'networkidle' can be flaky with SWs
 
-  // Wait for Service Worker activation
-  await page.waitForFunction(() => navigator.serviceWorker?.ready);
+    // Wait for Service Worker activation
+    await page.waitForFunction(() => navigator.serviceWorker?.ready);
 
-  // 4. Replaced waitForTimeout(500)
-  // Instead of waiting blindly, we try to ensure the specific resource is cached
-  // or simply proceed if your SW caches on 'install/activate'. 
-  // If you must wait for the cache to populate, try waiting for a specific console log 
-  // from your SW or a specific network state.
+    console.log('Going offline...');
+    await context.setOffline(true);
 
-  console.log('Going offline...');
-  await context.setOffline(true);
+    const cachedOk = await page.evaluate(async () => {
+      try {
+        const res = await fetch('assets/assets/training_plans/training_example.json');
+        return res.ok;
+      } catch (e) {
+        return false;
+      }
+    });
 
-  const cachedOk = await page.evaluate(async () => {
-    try {
-      const res = await fetch('assets/assets/training_plans/training_example.json');
-      return res.ok;
-    } catch (e) {
-      return false;
+    if (!cachedOk) {
+      throw new Error('Cached training plan not available offline');
     }
-  });
 
-  if (!cachedOk) {
-    throw new Error('Cached training plan not available offline');
+    // Filter errors (same as your logic)
+    const fontErrors = consoleErrors.filter((msg) =>
+      msg.toLowerCase().includes('font') && msg.toLowerCase().includes('failed'),
+    );
+    if (fontErrors.length > 0) {
+      throw new Error('Font errors observed offline: ' + fontErrors.join(' | '));
+    }
+
+    console.log('Test Passed!');
+    await context.setOffline(false);
+    await browser.close();
+  } catch (err) {
+    console.error(err);
+    process.exitCode = 1;
+  } finally {
+    cleanup(); // Ensure cleanup runs even if test fails
   }
-
-  // Filter errors (same as your logic)
-  const fontErrors = consoleErrors.filter((msg) =>
-    msg.toLowerCase().includes('font') && msg.toLowerCase().includes('failed'),
-  );
-  if (fontErrors.length > 0) {
-    throw new Error('Font errors observed offline: ' + fontErrors.join(' | '));
-  }
-
-  console.log('Test Passed!');
-  await context.setOffline(false);
-  await browser.close();
-  stopServer();
-})().catch((err) => {
-  stopServer();
-  console.error(err);
-  process.exit(1);
-});
+})();

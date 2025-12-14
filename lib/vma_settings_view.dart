@@ -166,8 +166,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                   onChanged: (value) {
                     final trimmed = value.trim();
                     final nextValue = trimmed.isEmpty ? null : trimmed;
-                    if (trimmed.isNotEmpty &&
-                        !_isValidAthleteId(trimmed)) {
+                    if (trimmed.isNotEmpty && !_isValidAthleteId(trimmed)) {
                       setState(() {
                         _athleteError = strings.intervalsAthleteIdInvalid;
                       });

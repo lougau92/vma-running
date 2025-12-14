@@ -37,7 +37,8 @@ class TranslationsEn {
     'intervalsAthleteIdLabel': 'Athlete ID',
     'intervalsAthleteIdHint': 'e.g. i434321',
     'intervalsAthleteIdInvalid': 'Use the format i434321 (i + digits).',
-    'intervalsApiKeyInvalid': 'API key looks invalid; use the long alphanumeric key.',
+    'intervalsApiKeyInvalid':
+        'API key looks invalid; use the long alphanumeric key.',
     'intervalsApiKeyPromptTitle': 'Connect to Intervals.icu',
     'enterIntervalsApiKey': 'Please paste your Intervals.icu API key.',
     'intervalsApiKeySaved':

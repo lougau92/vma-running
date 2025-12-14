@@ -107,11 +107,14 @@ class GarminPlanExporter implements PlanExporter {
 
   Future<_IntervalsCredentials?> _promptForCredentials(
     BuildContext context,
-    AppLocalizations strings,
-    {String? existingApiKey, String? existingAthleteId}) async {
+    AppLocalizations strings, {
+    String? existingApiKey,
+    String? existingAthleteId,
+  }) async {
     final apiKeyController = TextEditingController(text: existingApiKey ?? '');
-    final athleteController =
-        TextEditingController(text: existingAthleteId ?? '');
+    final athleteController = TextEditingController(
+      text: existingAthleteId ?? '',
+    );
     String? keyError;
     String? athleteError;
     final steps = strings.intervalsApiKeyInstructions.split('\n');
@@ -180,8 +183,7 @@ class GarminPlanExporter implements PlanExporter {
                 String? nextKeyError;
                 String? nextAthleteError;
 
-                if (athleteValue.isEmpty ||
-                    !_isValidAthleteId(athleteValue)) {
+                if (athleteValue.isEmpty || !_isValidAthleteId(athleteValue)) {
                   nextAthleteError = strings.intervalsAthleteIdInvalid;
                 }
                 if (keyValue.isEmpty || !_isValidApiKey(keyValue)) {

@@ -58,8 +58,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
                 DataColumn(label: Text(strings.pacePerKm)),
                 DataColumn(
                   label: InteractiveHeader(
-                    label:
-                        strings.timeForDistanceLabel(widget.distanceMeters),
+                    label: strings.timeForDistanceLabel(widget.distanceMeters),
                     onTap: widget.onEditDistance,
                     tooltip: strings.timeForDistanceLabel(
                       widget.distanceMeters,

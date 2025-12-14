@@ -50,8 +50,10 @@ class AppSettings {
         this.timesMaxDistance,
       ),
       intervalsApiKey: _resolve<String?>(intervalsApiKey, this.intervalsApiKey),
-      intervalsAthleteId:
-          _resolve<String?>(intervalsAthleteId, this.intervalsAthleteId),
+      intervalsAthleteId: _resolve<String?>(
+        intervalsAthleteId,
+        this.intervalsAthleteId,
+      ),
     );
   }
 

@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "passwordHint": "Ask a coach for the shared comms password.",
+  "kdf": {
+    "salt": "rbE7DxXWNDr2z774oKgBjg==",
+    "iterations": 120000,
+    "hash": "sha256"
+  },
+  "messages": [
+    {
+      "id": "winter-updates",
+      "publishedAt": "2025-12-18",
+      "nonce": "TAhffBD8nF1NUttA",
+      "cipher": "f6TuAWyMbpXBUF6kubr3NE6mO7la40xCiwTw85Vq0Br4JwgNd+gAKtSAPrybtp192k/LZQ8h2j3rQwS/6ybjsrPNXyUdfRCVhp7ypqzFNuv5NbppR8u++G/D2k2osz9Hp487yXtW9XrD8+l4uaP6QU80g4nK0B+2ckSUs+T+kaozAq4tfWv2EP4Sh3VL1Is5+FhwiVWNtTt660kfiifHG4/7MbK84UpUEAhKl01CAWg3JMb+uUrWsa1sR8CKG/EDMtUnP9aS7RXEzPiIFFGajYg+3I3gW6JWwDERZtbmZiQAFgPrTNNGPPbP/daZhcLmlrhsmR5uBgDGOfeRwNBthIPA/wXcwqtWlR7i6EF6Fx9tPLY7",
+      "tag": "X2gIVHZtMONGUvTyq+3hCw=="
+    },
+    {
+      "id": "club-night",
+      "publishedAt": "2025-12-19",
+      "nonce": "J28ilm4t9BYJYAz8",
+      "cipher": "9ngJckr22VRA7ecI8z3HUAcBrc2jzFHuGp0IN4w7/oYMHD0ndExKfIehvW167V4aNrhdxUKRM+RAOB6ReR4NqcfW7xS027hiZKN7HJYiGcMkGajIBleVI2PFDSERWr3W3Ql0CW+q+dNGrSoiAQiYF3N4sBnYzRqVQzvAQCWQCKoYnzJsW60+D0ySi7Y7UMDpwnRofChvfNLxvtbsT4JAsuLh8DL28HCjsUH7QskAnVdukg+z7ijNuVa/OLFy6vdCpcPBbHhB683a8AivbCc+kAeZGul+cSYfXwoxeS82iwVtm/hQa4yw1RrIdSNfGfC37aTwx8jbzFk9jD0l+iLSE4GYceVeGzupg8mdAmfIEjjM",
+      "tag": "kXTQCkWg32ow4Z3mmXNGJw=="
+    },
+    {
+      "id": "race-weekend",
+      "publishedAt": "2025-12-21",
+      "nonce": "PeGXB7Dd1HMKC/ce",
+      "cipher": "13zqng7W/gjXVr98xTKWTD8Cx4SLcnpsOC7uPSczkgNE7ZSkp5XoWXdfgaFSquf9ZavkaxnBpsSJ3POisCM3Y6lYp25o3DwHQyXhn+gQUDO/8GXDRBY7syvVk2vS/ZGLN1eTT4TVMbwjVlb4suQ9WozvMFGe2XvQXfpkYPEtca4Svd5Rwq5/PjcFCgt9Zx6QrAHjyDXs8Q5TloMOu5J7I7XnIZFCJvJ4Lzymw3G/nkphGZtl/+dQR2E8QTiBfRACL9peZfI0UjGjABre9+p3a4i1HM7dhx8Y5oSG1hb0b6KI8ui62szmjSZgkqvPKY36",
+      "tag": "lhR0S/xK0+5bBlrvm68eBA=="
+    }
+  ]
+}

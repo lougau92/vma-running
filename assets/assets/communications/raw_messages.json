@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "passwordHint": "Ask a coach for the shared comms password.",
+  "messages": [
+    {
+      "id": "winter-updates",
+      "publishedAt": "2025-12-18",
+      "title": "Winter schedule & track updates",
+      "summary": "Track closed Dec 18; warm-up at Lacroix park.",
+      "body": "The track is booked for maintenance on Wednesday, Dec 18. We'll meet at Lacroix park, 19:00, for hill reps. Bring headlamps. Tempo block on Saturday stays unchanged."
+    },
+    {
+      "id": "club-night",
+      "publishedAt": "2025-12-19",
+      "title": "Club night with nutrition Q&A",
+      "summary": "Short tempo then talk by Coach Alice.",
+      "body": "Thursday Dec 19: 30' tempo @ 90% VMA then stretch. Afterwards, Coach Alice will host a 20-minute nutrition Q&A in the clubhouse. Please be on time so we can start together."
+    },
+    {
+      "id": "race-weekend",
+      "publishedAt": "2025-12-21",
+      "title": "Race weekend logistics",
+      "summary": "Carpool list and bib pickup.",
+      "body": "For Sunday's 10k, bib pickup closes at 9:30. Carpool from the stadium at 8:10 (drivers: Max, Elise, Julien). If you're late, message the group before 8:00."
+    }
+  ]
+}

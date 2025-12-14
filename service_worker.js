@@ -1,7 +1,11 @@
 // Offline-first service worker for VMA Running Companion.
-// Caches core shell assets and serves navigation requests from cache when offline.
 
-const CACHE_NAME = 'vma-running-cache-1.4.13+24';
+// 1. DYNAMIC CACHE NAME (Injected by your build script)
+const CACHE_NAME = 'vma-running-cache-1.4.14+25';
+
+// 2. RELATIVE PATHS (The Fix)
+// Using './' forces the browser to resolve paths relative to the Service Worker's location
+// (e.g., /vma-running/service_worker.js -> /vma-running/index.html)
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -18,7 +22,10 @@ const CORE_ASSETS = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)),
+    caches.open(CACHE_NAME).then((cache) => {
+      // atomic: if one fails (404), the whole install fails
+      return cache.addAll(CORE_ASSETS);
+    })
   );
   self.skipWaiting();
 });
@@ -29,9 +36,9 @@ self.addEventListener('activate', (event) => {
       Promise.all(
         keys
           .filter((key) => key.startsWith('vma-running-cache-') && key !== CACHE_NAME)
-          .map((key) => caches.delete(key)),
-      ),
-    ),
+          .map((key) => caches.delete(key))
+      )
+    )
   );
   self.clients.claim();
 });
@@ -66,29 +73,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Static assets: cache-first.
+  // --- 2. Fonts & Canvaskit (Cache First, Graceful) ---
+  if (request.destination === 'font' || url.pathname.includes('canvaskit')) {
+    event.respondWith(cacheFirst(request, { graceful: true }));
+    return;
+  }
+
+  // --- 3. Static Assets (Cache First) ---
   if (
     isSameOrigin &&
     (request.destination === 'script' ||
       request.destination === 'style' ||
       request.destination === 'image' ||
-      request.destination === 'font')
+      request.destination === 'font' ||
+      url.pathname.endsWith('.json'))
   ) {
     event.respondWith(cacheFirst(request));
     return;
   }
 
-  // Training plan JSON: prefer cache to keep offline availability consistent.
-  if (url.pathname.endsWith('training_plans/training_example.json')) {
-    event.respondWith(cacheFirst(request));
-    return;
-  }
-
-  // Remote JSON (e.g., training plan) and other GETs: network-first with cache fallback.
+  // --- 4. Default (Network First) ---
   event.respondWith(networkFirst(request));
 });
 
+// Helper: Cache First Strategy
 async function cacheFirst(request, { graceful = false } = {}) {
+  // caches.match(request) automatically handles full URLs 
+  // so it will match the absolute keys stored during install.
   const cached = await caches.match(request);
   if (cached) return cached;
   try {
@@ -100,13 +111,14 @@ async function cacheFirst(request, { graceful = false } = {}) {
     if (graceful) {
       return new Response('', {
         status: 200,
-        headers: { 'Content-Type': request.destination === 'font' ? 'font/woff2' : 'application/octet-stream' },
+        headers: { 'Content-Type': 'application/octet-stream' }
       });
     }
     throw error;
   }
 }
 
+// Helper: Network First Strategy
 async function networkFirst(request) {
   try {
     const response = await fetch(request);

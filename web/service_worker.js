@@ -7,8 +7,8 @@ const CACHE_NAME = 'vma-running-cache-v1';
 // Using './' forces the browser to resolve paths relative to the Service Worker's location
 // (e.g., /vma-running/service_worker.js -> /vma-running/index.html)
 const CORE_ASSETS = [
-  './',                     // Resolves to /vma-running/
-  './index.html',           // Resolves to /vma-running/index.html
+  './',
+  './index.html',
   './manifest.json',
   './favicon.png',
   './icons/Icon-192.png',
@@ -17,8 +17,6 @@ const CORE_ASSETS = [
   './main.dart.js',
   './assets/AssetManifest.bin.json',
   './assets/FontManifest.json',
-  // Note: Check your build folder. If you have double assets, keep this.
-  // If you fixed pubspec, it might be './assets/training_plans/...'
   './assets/assets/training_plans/training_example.json'
 ];
 
@@ -52,13 +50,25 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   const isSameOrigin = url.origin === self.location.origin;
 
-  // --- 1. Navigation (App Shell) ---
+  // Fonts (including Google Fonts): cache-first with graceful fallback to avoid noisy errors offline.
+  if (request.destination === 'font' || url.hostname.includes('fonts.gstatic.com')) {
+    event.respondWith(cacheFirst(request, { graceful: true }));
+    return;
+  }
+
+  // App shell / navigation
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => {
-        // FALLBACK: Look for the RELATIVE index.html
-        return caches.match('./index.html');
-      })
+      (async () => {
+        try {
+          const networkResponse = await fetch(request);
+          return networkResponse;
+        } catch (error) {
+          // CHANGE: Match relative path
+          const cachedShell = await caches.match('./index.html');
+          return cachedShell;
+        }
+      })()
     );
     return;
   }

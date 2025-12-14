@@ -53,26 +53,32 @@ jobs:
           BUILD_NAME: ${{ env.VERSION_NAME }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-        # --- 3. BUILD FOR TESTING & DEPLOY ---
-      - name: Build Web App (Deploy Version)
+      # --- SINGLE BUILD ---
+      - name: Build Web App
         run: |
           flutter build web --release \
             --base-href "/vma-running/" \
             --build-name=${{ env.VERSION_NAME }} \
             --build-number=${{ github.run_number }}
 
-      # We delete Flutter's auto-generated SW so the browser MUST use ours.
+      # Remove Flutter's generated SW to force using ours
       - name: Remove Default Service Worker
         run: rm build/web/flutter_service_worker.js
 
-      # --- 4. TEST ---
+      # --- TEST ---
       - name: Verify Offline Capabilities
         run: node tool/sw-offline-test.mjs
         env:
           SW_TEST_PORT: 8080
           BASE_HREF: "/vma-running/"
 
-      # --- 5. DEPLOY ---
+      # --- DEPLOY ---
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+      # --- 6. DEPLOY ---
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:

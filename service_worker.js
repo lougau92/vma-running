@@ -1,19 +1,19 @@
 // Offline-first service worker for VMA Running Companion.
 // Caches core shell assets and serves navigation requests from cache when offline.
 
-const CACHE_NAME = 'vma-running-cache-1.4.10+21';
+const CACHE_NAME = 'vma-running-cache-1.4.13+24';
 const CORE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.png',
-  '/icons/Icon-192.png',
-  '/icons/Icon-512.png',
-  '/flutter_bootstrap.js',
-  '/main.dart.js',
-  '/assets/AssetManifest.bin.json',
-  '/assets/FontManifest.json',
-  '/assets/assets/training_plans/training_example.json'
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.png',
+  './icons/Icon-192.png',
+  './icons/Icon-512.png',
+  './flutter_bootstrap.js',
+  './main.dart.js',
+  './assets/AssetManifest.bin.json',
+  './assets/FontManifest.json',
+  './assets/assets/training_plans/training_example.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -49,18 +49,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // App shell / navigation: always try cache first, fall back to network.
+  // App shell / navigation
   if (request.mode === 'navigate') {
     event.respondWith(
       (async () => {
         try {
-          // 1. Try Network first (to get the latest app version if online)
-          //    (Or switch to CacheFirst if you want instant load + background update)
           const networkResponse = await fetch(request);
           return networkResponse;
         } catch (error) {
-          // 2. Offline? Return the cached index.html shell
-          const cachedShell = await caches.match('/index.html');
+          // CHANGE: Match relative path
+          const cachedShell = await caches.match('./index.html');
           return cachedShell;
         }
       })()

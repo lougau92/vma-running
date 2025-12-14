@@ -139,7 +139,7 @@ extension DynamicStrings on AppLocalizations {
       this['yourVma'].replaceFirst('{value}', vma.toStringAsFixed(2));
 
   String timeForDistanceLabel(double distanceMeters) =>
-      '${this['time']} (${formatDistanceShort(distanceMeters, this)})';
+      '${this['time']}\\${formatDistanceShort(distanceMeters, this)}';
 
   String distanceShort(double meters) => formatDistanceShort(meters, this);
 

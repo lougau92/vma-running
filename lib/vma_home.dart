@@ -139,7 +139,16 @@ class _VmaHomePageState extends State<VmaHomePage> {
       );
     }
 
-    return Padding(padding: const EdgeInsets.all(24), child: content);
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: content,
+        ),
+      ),
+    );
   }
 
   BottomNavigationBar _buildBottomNavigation(
@@ -238,22 +247,24 @@ class _VmaHomePageState extends State<VmaHomePage> {
 
   Widget _buildPaceBody(AppLocalizations strings) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildVMAHeader(strings),
         const SizedBox(height: 32),
         Expanded(
-          child: VmaPaceTable(
-            entries: _paceCalculator.buildTable(
-              _vma!,
-              minPercent: _minPercent,
-              maxPercent: _maxPercent,
-              step: _step,
+          child: _wrapCenteredWidth(
+            VmaPaceTable(
+              entries: _paceCalculator.buildTable(
+                _vma!,
+                minPercent: _minPercent,
+                maxPercent: _maxPercent,
+                step: _step,
+                distanceMeters: _distanceMeters,
+              ),
+              onEditPercentages: _openTableSettingsDialog,
               distanceMeters: _distanceMeters,
+              onEditDistance: _openDistanceDialog,
             ),
-            onEditPercentages: _openTableSettingsDialog,
-            distanceMeters: _distanceMeters,
-            onEditDistance: _openDistanceDialog,
           ),
         ),
       ],
@@ -265,56 +276,60 @@ class _VmaHomePageState extends State<VmaHomePage> {
     final paceText = formatPacePerKm(adjustedSpeed, includeUnit: true);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildVMAHeader(strings),
         const SizedBox(height: 16),
-        Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      '${strings.intensity}: ${_timesPercent.toStringAsFixed(0)}%VMA',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const Spacer(),
-                    Text(
-                      '${strings.pacePerKm}: $paceText',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-                Slider(
-                  value: _timesPercent,
-                  min: 50,
-                  max: 120,
-                  divisions: 14,
-                  label: '${_timesPercent.toStringAsFixed(0)}%',
-                  onChanged: (value) {
-                    setState(() {
-                      _timesPercent = value;
-                    });
-                  },
-                ),
-              ],
+        _wrapCenteredWidth(
+          Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        '${strings.intensity}: ${_timesPercent.toStringAsFixed(0)}%VMA',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${strings.pacePerKm}: $paceText',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
+                  Slider(
+                    value: _timesPercent,
+                    min: 50,
+                    max: 120,
+                    divisions: 14,
+                    label: '${_timesPercent.toStringAsFixed(0)}%',
+                    onChanged: (value) {
+                      setState(() {
+                        _timesPercent = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
         const SizedBox(height: 12),
         Expanded(
-          child: VmaTimesTable(
-            speedKmh: adjustedSpeed,
-            minDistanceMeters: _timesMinDistance,
-            maxDistanceMeters: _timesMaxDistance,
-            minTimeSeconds: _timesMinSeconds,
-            maxTimeSeconds: _timesMaxSeconds,
-            onEditDistances: _openDistancesSettingDialog,
-            onEditTimes: _openTimesSettingsDialog,
+          child: _wrapCenteredWidth(
+            VmaTimesTable(
+              speedKmh: adjustedSpeed,
+              minDistanceMeters: _timesMinDistance,
+              maxDistanceMeters: _timesMaxDistance,
+              minTimeSeconds: _timesMinSeconds,
+              maxTimeSeconds: _timesMaxSeconds,
+              onEditDistances: _openDistancesSettingDialog,
+              onEditTimes: _openTimesSettingsDialog,
+            ),
           ),
         ),
       ],
@@ -340,6 +355,16 @@ class _VmaHomePageState extends State<VmaHomePage> {
           label: Text(_vma == null ? strings.setVma : strings.updateVma),
         ),
       ],
+    );
+  }
+
+  Widget _wrapCenteredWidth(Widget child, {double maxWidth = 900}) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: child,
+      ),
     );
   }
 }

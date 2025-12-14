@@ -67,8 +67,10 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
           child: ListView(
             padding: const EdgeInsets.all(24),
             children: [
-              Text(strings.language,
-                  style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                strings.language,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -109,7 +111,10 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                 ],
               ),
               const SizedBox(height: 24),
-              Text(strings.theme, style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                strings.theme,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 8,
@@ -231,9 +236,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                           setState(() => _apiKeyError = null);
                           if (widget.settings.intervalsApiKey != null) {
                             widget.onSettingsChanged(
-                              widget.settings.copyWith(
-                                intervalsApiKey: null,
-                              ),
+                              widget.settings.copyWith(intervalsApiKey: null),
                             );
                           }
                         },
@@ -260,7 +263,9 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                   contentPadding: EdgeInsets.zero,
                   dense: true,
                   leading: const Icon(Icons.verified_sharp),
-                  title: Text('${strings.appVersionLabel}: $version ($buildNumber)'),
+                  title: Text(
+                    '${strings.appVersionLabel}: $version ($buildNumber)',
+                  ),
                 );
               },
             ),
@@ -365,9 +370,7 @@ class _LanguageChip extends StatelessWidget {
       selected: selected,
       selectedColor: colors.primaryContainer,
       checkmarkColor: colors.onPrimaryContainer,
-      labelStyle: TextStyle(
-        color: selected ? colors.onPrimaryContainer : null,
-      ),
+      labelStyle: TextStyle(color: selected ? colors.onPrimaryContainer : null),
       side: BorderSide(
         color: selected ? colors.primary : colors.outlineVariant,
       ),
@@ -398,9 +401,7 @@ class _ThemeChip extends StatelessWidget {
       selected: selected,
       selectedColor: colors.primaryContainer,
       checkmarkColor: colors.onPrimaryContainer,
-      labelStyle: TextStyle(
-        color: selected ? colors.onPrimaryContainer : null,
-      ),
+      labelStyle: TextStyle(color: selected ? colors.onPrimaryContainer : null),
       side: BorderSide(
         color: selected ? colors.primary : colors.outlineVariant,
       ),

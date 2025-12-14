@@ -40,9 +40,9 @@ class _VmaAppState extends State<VmaApp> {
   Future<void> _logPackageInfo() async {
     try {
       final info = await PackageInfo.fromPlatform();
-      print("🚀 VMA Running App Started");
-      print("📦 Version: ${info.version}");
-      print("hammer Build: ${info.buildNumber}");
+      print('VMA Running app started');
+      print('Version: ${info.version}');
+      print('Build: ${info.buildNumber}');
     } catch (e) {
       print('App launch: failed to read package info: $e');
     }

@@ -152,18 +152,22 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
   }
 
   List<double> _buildDistances() {
-    final distances = presetDistances();
-    return distances
-        .where(
-          (d) => d >= widget.minDistanceMeters && d <= widget.maxDistanceMeters,
-        )
-        .toList();
+    return _filterRange(
+      presetDistances(),
+      widget.minDistanceMeters,
+      widget.maxDistanceMeters,
+    );
   }
 
   List<double> _buildTimes() {
-    final times = presetTimesSeconds();
-    return times
-        .where((t) => t >= widget.minTimeSeconds && t <= widget.maxTimeSeconds)
-        .toList();
+    return _filterRange(
+      presetTimesSeconds(),
+      widget.minTimeSeconds,
+      widget.maxTimeSeconds,
+    );
+  }
+
+  List<double> _filterRange(List<double> values, double min, double max) {
+    return values.where((value) => value >= min && value <= max).toList();
   }
 }

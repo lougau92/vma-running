@@ -83,23 +83,6 @@ class _VmaHomePageState extends State<VmaHomePage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final body = _loading
-        ? const Center(child: CircularProgressIndicator())
-        : Padding(
-            padding: const EdgeInsets.all(24),
-            child: _vma == null
-                ? Center(child: Text(strings.enterVmaPlaceholder))
-                : _tabIndex == 0
-                ? _buildPaceBody(strings)
-                : _tabIndex == 1
-                ? _buildTimesBody(strings)
-                : VmaTrainingPlan(
-                    userVma: _vma!,
-                    settings: widget.settings,
-                    onSettingsChanged: widget.onSettingsChanged,
-                  ),
-          );
-
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return DecoratedScaffold(
@@ -131,32 +114,63 @@ class _VmaHomePageState extends State<VmaHomePage> {
           ),
         ],
       ),
-      body: body,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: isDark
-            ? Theme.of(context).colorScheme.secondary
-            : Theme.of(context).colorScheme.surface,
-        selectedItemColor: Theme.of(context).colorScheme.primary,
-        unselectedItemColor: isDark
-            ? Colors.white70
-            : Theme.of(context).colorScheme.onSurface,
-        currentIndex: _tabIndex,
-        onTap: (idx) => setState(() => _tabIndex = idx),
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.analytics),
-            label: strings.intensityTab,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.timer),
-            label: strings.timesTab,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.fitness_center),
-            label: strings.trainingPlanTab,
-          ),
-        ],
-      ),
+      body: _buildPageBody(strings),
+      bottomNavigationBar: _buildBottomNavigation(strings, isDark),
+    );
+  }
+
+  Widget _buildPageBody(AppLocalizations strings) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    Widget content;
+    if (_vma == null) {
+      content = Center(child: Text(strings.enterVmaPlaceholder));
+    } else if (_tabIndex == 0) {
+      content = _buildPaceBody(strings);
+    } else if (_tabIndex == 1) {
+      content = _buildTimesBody(strings);
+    } else {
+      content = VmaTrainingPlan(
+        userVma: _vma!,
+        settings: widget.settings,
+        onSettingsChanged: widget.onSettingsChanged,
+      );
+    }
+
+    return Padding(padding: const EdgeInsets.all(24), child: content);
+  }
+
+  BottomNavigationBar _buildBottomNavigation(
+    AppLocalizations strings,
+    bool isDark,
+  ) {
+    final theme = Theme.of(context);
+    return BottomNavigationBar(
+      backgroundColor: isDark
+          ? theme.colorScheme.secondary
+          : theme.colorScheme.surface,
+      selectedItemColor: theme.colorScheme.primary,
+      unselectedItemColor: isDark
+          ? Colors.white70
+          : theme.colorScheme.onSurface,
+      currentIndex: _tabIndex,
+      onTap: (idx) => setState(() => _tabIndex = idx),
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.analytics),
+          label: strings.intensityTab,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.timer),
+          label: strings.timesTab,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.fitness_center),
+          label: strings.trainingPlanTab,
+        ),
+      ],
     );
   }
 

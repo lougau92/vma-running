@@ -35,6 +35,11 @@ class VmaTrainingPlan extends StatefulWidget {
 }
 
 class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
+  static const _configUrl =
+      'https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json';
+  static const _assetFallbackPath =
+      'assets/training_plans/training_example.json';
+
   int _selectedGroup = 0;
   late Future<TrainingPlanResult> _planFuture;
   String? _lastNoticeKey;
@@ -56,43 +61,20 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     super.dispose();
   }
 
-  void _refreshPlan() {
+  Future<void> _refreshPlan({bool forceRefresh = true}) async {
+    final nextPlan = loadTraining(forceRefresh: forceRefresh);
     setState(() {
       _lastNoticeKey = null;
-      _planFuture = loadTraining(forceRefresh: true);
+      _planFuture = nextPlan;
     });
+    await nextPlan;
   }
 
   Future<TrainingPlanResult> loadTraining({bool forceRefresh = false}) async {
-    const configUrl =
-        "https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json";
-    const assetFallbackPath = 'assets/training_plans/training_example.json';
-
     try {
-      final result = await widget.cacheManager.getFile(
-        configUrl,
-        forceRefresh: forceRefresh,
-      );
-
-      if (!result.fromCache) {
-        print('Plan loaded from network - fresh data');
-        return TrainingPlanResult(
-          plan: TrainingPlan.fromJson(jsonDecode(result.data)),
-        );
-      }
-
-      print('Plan loaded from cache (source: ${result.source})');
-      return TrainingPlanResult(
-        plan: TrainingPlan.fromJson(jsonDecode(result.data)),
-        noticeKey: forceRefresh ? 'trainingPlanUsedCache' : null,
-      );
+      return await _loadRemotePlan(forceRefresh);
     } catch (e) {
-      print('Failed to load remote training plan, falling back to asset: $e');
-      final bundled = await rootBundle.loadString(assetFallbackPath);
-      return TrainingPlanResult(
-        plan: TrainingPlan.fromJson(jsonDecode(bundled)),
-        noticeKey: 'trainingPlanUsedFallback',
-      );
+      return _loadFallbackPlan(e);
     }
   }
 
@@ -112,7 +94,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
           _notifyIfNeeded(result.noticeKey);
           return _buildPlanContent(result.plan, context);
         } else {
-          return Center(child: Text('No data available'));
+          return const Center(child: Text('No data available'));
         }
       },
     );
@@ -124,14 +106,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     final theme = Theme.of(context);
 
     return RefreshIndicator(
-      onRefresh: () async {
-        final future = loadTraining(forceRefresh: true);
-        setState(() {
-          _lastNoticeKey = null;
-          _planFuture = future;
-        });
-        await future;
-      },
+      onRefresh: _refreshPlan,
       child: Scrollbar(
         thumbVisibility: true,
         controller: _verticalController,
@@ -253,6 +228,35 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
     });
+  }
+
+  Future<TrainingPlanResult> _loadRemotePlan(bool forceRefresh) async {
+    final result = await widget.cacheManager.getFile(
+      _configUrl,
+      forceRefresh: forceRefresh,
+    );
+
+    print(
+      result.fromCache
+          ? 'Plan loaded from cache (source: ${result.source})'
+          : 'Plan loaded from network - fresh data',
+    );
+
+    return TrainingPlanResult(
+      plan: TrainingPlan.fromJson(jsonDecode(result.data)),
+      noticeKey: result.fromCache && forceRefresh
+          ? 'trainingPlanUsedCache'
+          : null,
+    );
+  }
+
+  Future<TrainingPlanResult> _loadFallbackPlan(Object error) async {
+    print('Failed to load remote training plan, falling back to asset: $error');
+    final bundled = await rootBundle.loadString(_assetFallbackPath);
+    return TrainingPlanResult(
+      plan: TrainingPlan.fromJson(jsonDecode(bundled)),
+      noticeKey: 'trainingPlanUsedFallback',
+    );
   }
 }
 

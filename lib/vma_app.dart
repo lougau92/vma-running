@@ -26,6 +26,7 @@ class _VmaAppState extends State<VmaApp> {
 
   Future<void> _loadSettings() async {
     final loaded = await _storage.load();
+    if (!mounted) return;
     setState(() {
       _settings = loaded;
       _loading = false;

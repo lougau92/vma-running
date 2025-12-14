@@ -37,10 +37,37 @@
   <script src="flutter_bootstrap.js" async></script>
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('service_worker.js')
-          .catch((e) => console.warn('SW registration failed', e));
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('service_worker.js').then(function(registration) {
+          
+          // 1. Detect if the SW is "waiting" (installed but waiting for user to close tab)
+          if (registration.waiting) {
+             // Optional: You could show a "New version available" toast here
+             // For now, we rely on the controllerchange logic below
+          }
+
+          // 2. Detect when the Service Worker updates
+          registration.addEventListener('updatefound', () => {
+            const newWorker = registration.installing;
+            
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // New version installed! 
+                // Since your SW calls skipWaiting(), it will activate immediately.
+                console.log('New version installed.');
+              }
+            });
+          });
+        });
+
+        // 3. FORCE PAGE RELOAD when the new Service Worker takes control
+        let refreshing;
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          if (refreshing) return;
+          refreshing = true;
+          console.log('Controller changed, reloading page...');
+          window.location.reload();
+        });
       });
     }
   </script>

@@ -2,18 +2,24 @@
 // Caches core shell assets and serves navigation requests from cache when offline.
 
 const CACHE_NAME = 'vma-running-cache-v1';
+
+// Respect the service worker scope so assets resolve correctly when served under a base href
+const scopeUrl = new URL(self.registration.scope);
+const basePath = scopeUrl.pathname.replace(/\/$/, '');
+const withBase = (path) => `${basePath}${path.startsWith('/') ? path : `/${path}`}`;
+
 const CORE_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/favicon.png',
-  '/icons/Icon-192.png',
-  '/icons/Icon-512.png',
-  '/flutter_bootstrap.js',
-  '/main.dart.js',
-  '/assets/AssetManifest.bin.json',
-  '/assets/FontManifest.json',
-  '/assets/assets/training_plans/training_example.json'
+  withBase('/'),
+  withBase('/index.html'),
+  withBase('/manifest.json'),
+  withBase('/favicon.png'),
+  withBase('/icons/Icon-192.png'),
+  withBase('/icons/Icon-512.png'),
+  withBase('/flutter_bootstrap.js'),
+  withBase('/main.dart.js'),
+  withBase('/assets/AssetManifest.bin.json'),
+  withBase('/assets/FontManifest.json'),
+  withBase('/assets/assets/training_plans/training_example.json')
 ];
 
 self.addEventListener('install', (event) => {
@@ -60,7 +66,7 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         } catch (error) {
           // 2. Offline? Return the cached index.html shell
-          const cachedShell = await caches.match('/index.html');
+          const cachedShell = await caches.match(withBase('/index.html'));
           return cachedShell;
         }
       })()

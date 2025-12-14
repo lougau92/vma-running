@@ -3,7 +3,7 @@ name: Deploy PWA to GitHub Pages
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 permissions:
   contents: write
@@ -20,8 +20,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: "18"
+          cache: "npm"
 
       - name: Install Node Dependencies
         run: npm ci
@@ -32,7 +32,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: 'stable'
+          channel: "stable"
 
       - name: Install Flutter Dependencies
         run: flutter pub get
@@ -53,10 +53,11 @@ jobs:
           BUILD_NAME: ${{ env.VERSION_NAME }}
           BUILD_NUMBER: ${{ github.run_number }}
 
-        # --- 3. BUILD FOR TESTING ---
-      - name: Build Web App (Test Version)
+        # --- 3. BUILD FOR TESTING & DEPLOY ---
+      - name: Build Web App (Deploy Version)
         run: |
           flutter build web --release \
+            --base-href "/vma-running/" \
             --build-name=${{ env.VERSION_NAME }} \
             --build-number=${{ github.run_number }}
 
@@ -70,19 +71,7 @@ jobs:
         env:
           SW_TEST_PORT: 8080
 
-      # --- 5. RE-BUILD FOR DEPLOY ---
-      - name: Build Web App (Deploy Version)
-        run: |
-          flutter build web --release \
-            --base-href "/vma-running/" \
-            --build-name=${{ env.VERSION_NAME }} \
-            --build-number=${{ github.run_number }}
-            
-      # This ensures your real users also get YOUR custom SW, not the default one.
-      - name: Remove Default SW for Deploy
-        run: rm build/web/flutter_service_worker.js
-
-      # --- 6. DEPLOY ---
+      # --- 5. DEPLOY ---
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:

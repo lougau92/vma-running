@@ -16,6 +16,7 @@ class TranslationsEn {
     'intensityTab': 'Intensity',
     'trainingPlanTab': 'Workout',
     'settingsTab': 'Settings',
+    'appVersionLabel': 'App version',
     'language': 'Language',
     'systemDefault': 'System default',
     'english': 'English',

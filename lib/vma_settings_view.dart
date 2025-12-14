@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 
@@ -19,12 +20,14 @@ class VmaSettingsView extends StatefulWidget {
 class _VmaSettingsViewState extends State<VmaSettingsView> {
   late TextEditingController _apiKeyController;
   late TextEditingController _athleteController;
+  late Future<PackageInfo> _packageInfoFuture;
   String? _apiKeyError;
   String? _athleteError;
 
   @override
   void initState() {
     super.initState();
+    _packageInfoFuture = PackageInfo.fromPlatform();
     _apiKeyController = TextEditingController(
       text: widget.settings.intervalsApiKey ?? '',
     );
@@ -58,170 +61,208 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
     final localeValue = widget.settings.localeCode ?? 'system';
     final themeValue = widget.settings.themeMode.name;
 
-    return ListView(
-      padding: const EdgeInsets.all(24),
+    return Column(
       children: [
-        Text(strings.language, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _LanguageChip(
-              label: strings.systemDefault,
-              value: 'system',
-              current: localeValue,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(localeCode: null),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.all(24),
+            children: [
+              Text(strings.language,
+                  style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _LanguageChip(
+                    label: strings.systemDefault,
+                    value: 'system',
+                    current: localeValue,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(localeCode: null),
+                    ),
+                  ),
+                  _LanguageChip(
+                    label: strings.english,
+                    value: 'en',
+                    current: localeValue,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(localeCode: 'en'),
+                    ),
+                  ),
+                  _LanguageChip(
+                    label: strings.french,
+                    value: 'fr',
+                    current: localeValue,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(localeCode: 'fr'),
+                    ),
+                  ),
+                  _LanguageChip(
+                    label: strings.dutch,
+                    value: 'nl',
+                    current: localeValue,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(localeCode: 'nl'),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            _LanguageChip(
-              label: strings.english,
-              value: 'en',
-              current: localeValue,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(localeCode: 'en'),
+              const SizedBox(height: 24),
+              Text(strings.theme, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _ThemeChip(
+                    label: strings.dark,
+                    value: ThemeMode.dark,
+                    current: widget.settings.themeMode,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(themeMode: ThemeMode.dark),
+                    ),
+                  ),
+                  _ThemeChip(
+                    label: strings.light,
+                    value: ThemeMode.light,
+                    current: widget.settings.themeMode,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(themeMode: ThemeMode.light),
+                    ),
+                  ),
+                  _ThemeChip(
+                    label: strings.systemDefault,
+                    value: ThemeMode.system,
+                    current: widget.settings.themeMode,
+                    onSelected: () => widget.onSettingsChanged(
+                      widget.settings.copyWith(themeMode: ThemeMode.system),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            _LanguageChip(
-              label: strings.french,
-              value: 'fr',
-              current: localeValue,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(localeCode: 'fr'),
-              ),
-            ),
-            _LanguageChip(
-              label: strings.dutch,
-              value: 'nl',
-              current: localeValue,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(localeCode: 'nl'),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        Text(strings.theme, style: Theme.of(context).textTheme.titleMedium),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            _ThemeChip(
-              label: strings.dark,
-              value: ThemeMode.dark,
-              current: widget.settings.themeMode,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(themeMode: ThemeMode.dark),
-              ),
-            ),
-            _ThemeChip(
-              label: strings.light,
-              value: ThemeMode.light,
-              current: widget.settings.themeMode,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(themeMode: ThemeMode.light),
-              ),
-            ),
-            _ThemeChip(
-              label: strings.systemDefault,
-              value: ThemeMode.system,
-              current: widget.settings.themeMode,
-              onSelected: () => widget.onSettingsChanged(
-                widget.settings.copyWith(themeMode: ThemeMode.system),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 24),
-        Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        strings.intervalsSectionTitle,
-                        style: Theme.of(context).textTheme.titleMedium,
+              const SizedBox(height: 24),
+              Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              strings.intervalsSectionTitle,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                          ),
+                          IconButton(
+                            tooltip: strings.intervalsApiKeyInfo,
+                            icon: const Icon(Icons.info_outline),
+                            onPressed: () =>
+                                _showIntervalsApiHelp(context, strings),
+                          ),
+                        ],
                       ),
-                    ),
-                    IconButton(
-                      tooltip: strings.intervalsApiKeyInfo,
-                      icon: const Icon(Icons.info_outline),
-                      onPressed: () => _showIntervalsApiHelp(context, strings),
-                    ),
-                  ],
+                      const SizedBox(height: 8),
+                      _CredentialField(
+                        controller: _athleteController,
+                        label: strings.intervalsAthleteIdLabel,
+                        hint: strings.intervalsAthleteIdHint,
+                        errorText: _athleteError,
+                        onChanged: (value) {
+                          final trimmed = value.trim();
+                          final nextValue = trimmed.isEmpty ? null : trimmed;
+                          if (trimmed.isNotEmpty &&
+                              !_isValidAthleteId(trimmed)) {
+                            setState(() {
+                              _athleteError = strings.intervalsAthleteIdInvalid;
+                            });
+                            return;
+                          }
+                          setState(() => _athleteError = null);
+                          if (nextValue != widget.settings.intervalsAthleteId) {
+                            widget.onSettingsChanged(
+                              widget.settings.copyWith(
+                                intervalsAthleteId: nextValue,
+                              ),
+                            );
+                          }
+                        },
+                        onClear: () {
+                          _athleteController.clear();
+                          setState(() => _athleteError = null);
+                          if (widget.settings.intervalsAthleteId != null) {
+                            widget.onSettingsChanged(
+                              widget.settings.copyWith(
+                                intervalsAthleteId: null,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 12),
+                      _CredentialField(
+                        controller: _apiKeyController,
+                        label: strings.intervalsApiKeyLabel,
+                        hint: strings.intervalsApiKeyHint,
+                        errorText: _apiKeyError,
+                        onChanged: (value) {
+                          final trimmed = value.trim();
+                          final nextKey = trimmed.isEmpty ? null : trimmed;
+                          if (trimmed.isNotEmpty && !_isValidApiKey(trimmed)) {
+                            setState(() {
+                              _apiKeyError = strings.intervalsApiKeyInvalid;
+                            });
+                            return;
+                          }
+                          setState(() => _apiKeyError = null);
+                          if (nextKey != widget.settings.intervalsApiKey) {
+                            widget.onSettingsChanged(
+                              widget.settings.copyWith(
+                                intervalsApiKey: nextKey,
+                              ),
+                            );
+                          }
+                        },
+                        onClear: () {
+                          _apiKeyController.clear();
+                          setState(() => _apiKeyError = null);
+                          if (widget.settings.intervalsApiKey != null) {
+                            widget.onSettingsChanged(
+                              widget.settings.copyWith(
+                                intervalsApiKey: null,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 8),
-                _CredentialField(
-                  controller: _athleteController,
-                  label: strings.intervalsAthleteIdLabel,
-                  hint: strings.intervalsAthleteIdHint,
-                  errorText: _athleteError,
-                  onChanged: (value) {
-                    final trimmed = value.trim();
-                    final nextValue = trimmed.isEmpty ? null : trimmed;
-                    if (trimmed.isNotEmpty && !_isValidAthleteId(trimmed)) {
-                      setState(() {
-                        _athleteError = strings.intervalsAthleteIdInvalid;
-                      });
-                      return;
-                    }
-                    setState(() => _athleteError = null);
-                    if (nextValue != widget.settings.intervalsAthleteId) {
-                      widget.onSettingsChanged(
-                        widget.settings.copyWith(intervalsAthleteId: nextValue),
-                      );
-                    }
-                  },
-                  onClear: () {
-                    _athleteController.clear();
-                    setState(() => _athleteError = null);
-                    if (widget.settings.intervalsAthleteId != null) {
-                      widget.onSettingsChanged(
-                        widget.settings.copyWith(intervalsAthleteId: null),
-                      );
-                    }
-                  },
-                ),
-                const SizedBox(height: 12),
-                _CredentialField(
-                  controller: _apiKeyController,
-                  label: strings.intervalsApiKeyLabel,
-                  hint: strings.intervalsApiKeyHint,
-                  errorText: _apiKeyError,
-                  onChanged: (value) {
-                    final trimmed = value.trim();
-                    final nextKey = trimmed.isEmpty ? null : trimmed;
-                    if (trimmed.isNotEmpty && !_isValidApiKey(trimmed)) {
-                      setState(() {
-                        _apiKeyError = strings.intervalsApiKeyInvalid;
-                      });
-                      return;
-                    }
-                    setState(() => _apiKeyError = null);
-                    if (nextKey != widget.settings.intervalsApiKey) {
-                      widget.onSettingsChanged(
-                        widget.settings.copyWith(intervalsApiKey: nextKey),
-                      );
-                    }
-                  },
-                  onClear: () {
-                    _apiKeyController.clear();
-                    setState(() => _apiKeyError = null);
-                    if (widget.settings.intervalsApiKey != null) {
-                      widget.onSettingsChanged(
-                        widget.settings.copyWith(intervalsApiKey: null),
-                      );
-                    }
-                  },
-                ),
-              ],
+              ),
+            ],
+          ),
+        ),
+        SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+            child: FutureBuilder<PackageInfo>(
+              future: _packageInfoFuture,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return const SizedBox.shrink();
+                final info = snapshot.data!;
+                final version = info.version;
+                final buildNumber = info.buildNumber;
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  dense: true,
+                  leading: const Icon(Icons.verified_sharp),
+                  title: Text('${strings.appVersionLabel}: $version ($buildNumber)'),
+                );
+              },
             ),
           ),
         ),
@@ -317,9 +358,19 @@ class _LanguageChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final selected = current == value;
     return ChoiceChip(
       label: Text(label),
-      selected: current == value,
+      selected: selected,
+      selectedColor: colors.primaryContainer,
+      checkmarkColor: colors.onPrimaryContainer,
+      labelStyle: TextStyle(
+        color: selected ? colors.onPrimaryContainer : null,
+      ),
+      side: BorderSide(
+        color: selected ? colors.primary : colors.outlineVariant,
+      ),
       onSelected: (_) => onSelected(),
     );
   }
@@ -340,9 +391,19 @@ class _ThemeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final selected = current == value;
     return ChoiceChip(
       label: Text(label),
-      selected: current == value,
+      selected: selected,
+      selectedColor: colors.primaryContainer,
+      checkmarkColor: colors.onPrimaryContainer,
+      labelStyle: TextStyle(
+        color: selected ? colors.onPrimaryContainer : null,
+      ),
+      side: BorderSide(
+        color: selected ? colors.primary : colors.outlineVariant,
+      ),
       onSelected: (_) => onSelected(),
     );
   }

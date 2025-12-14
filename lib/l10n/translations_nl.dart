@@ -16,6 +16,7 @@ class TranslationsNl {
     'intensityTab': 'Intensiteit',
     'trainingPlanTab': 'Training',
     'settingsTab': 'Instellingen',
+    'appVersionLabel': 'App-versie',
     'language': 'Taal',
     'systemDefault': 'Systeemtaal',
     'english': 'Engels',

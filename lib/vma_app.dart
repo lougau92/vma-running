@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'settings_storage.dart';
@@ -22,6 +25,7 @@ class _VmaAppState extends State<VmaApp> {
   void initState() {
     super.initState();
     _loadSettings();
+    _logPackageInfo();
   }
 
   Future<void> _loadSettings() async {
@@ -31,6 +35,17 @@ class _VmaAppState extends State<VmaApp> {
       _settings = loaded;
       _loading = false;
     });
+  }
+
+  Future<void> _logPackageInfo() async {
+    try {
+      final info = await PackageInfo.fromPlatform();
+      print("🚀 VMA Running App Started");
+      print("📦 Version: ${info.version}");
+      print("hammer Build: ${info.buildNumber}");
+    } catch (e) {
+      print('App launch: failed to read package info: $e');
+    }
   }
 
   Future<void> _updateSettings(AppSettings next) async {

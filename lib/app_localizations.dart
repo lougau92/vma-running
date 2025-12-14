@@ -62,6 +62,7 @@ class AppLocalizations {
   String get intensityTab => _t('intensityTab');
   String get trainingPlanTab => _t('trainingPlanTab');
   String get settingsTab => _t('settingsTab');
+  String get appVersionLabel => _t('appVersionLabel');
   String get language => _t('language');
   String get systemDefault => _t('systemDefault');
   String get english => _t('english');

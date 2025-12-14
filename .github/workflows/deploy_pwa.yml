@@ -70,6 +70,7 @@ jobs:
         run: node tool/sw-offline-test.mjs
         env:
           SW_TEST_PORT: 8080
+          BASE_HREF: "/vma-running/"
 
       # --- 5. DEPLOY ---
       - name: Deploy to gh-pages branch

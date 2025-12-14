@@ -2,22 +2,23 @@
 import { chromium } from 'playwright';
 import { join } from 'path';
 import { spawn } from 'child_process';
-import { createServer, Socket } from 'net'; // Used to check if port is ready
-import { existsSync, symlinkSync } from 'fs';
+import { createServer, Socket } from 'net';
+import { existsSync, symlinkSync, unlinkSync, rmSync } from 'fs'; // Added cleanup imports
 import treeKill from 'tree-kill';
 
 const root = join(process.cwd(), 'build', 'web');
-const host = '127.0.0.1'; // Explicit IPv4 to avoid IPv6-only localhost resolution issues in CI
+const host = '127.0.0.1';
 
-// Honor build base path (e.g., /vma-running/) so asset URLs resolve in tests
+// 1. Detect Base Path
+// Defaults to '/vma-running/' if not set in env
 const rawBasePath = process.env.BASE_PATH || process.env.BASE_HREF || '/vma-running/';
 const normalizedBasePath = rawBasePath.replace(/\/+$/, '').replace(/^\/+/, '');
 const basePath = normalizedBasePath ? `/${normalizedBasePath}` : '';
+const mountDir = normalizedBasePath ? join(root, normalizedBasePath) : null;
 
-// 1. Cross-platform spawn command
+// 2. Cross-platform spawn
 const npmCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 
-// Function to get a random free port
 const getFreePort = async () => {
   return new Promise((resolve, reject) => {
     const srv = createServer();
@@ -29,11 +30,13 @@ const getFreePort = async () => {
   });
 };
 
-if (normalizedBasePath) {
-  const mountDir = join(root, normalizedBasePath);
-  if (!existsSync(mountDir)) {
-    // Create a symlink so requests to /<basePath>/* resolve to the built assets
+// 3. Create Symlink (The "Mock" Subdirectory)
+if (mountDir && !existsSync(mountDir)) {
+  console.log(`Creating symlink for testing: ${mountDir} -> ${root}`);
+  try {
     symlinkSync(root, mountDir, process.platform === 'win32' ? 'junction' : 'dir');
+  } catch (e) {
+    console.warn('Warning: Could not create symlink. Test might fail if base-href is required.', e);
   }
 }
 
@@ -42,22 +45,35 @@ const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], {
   stdio: 'inherit',
 });
 
-function stopServer() {
+function cleanup() {
+  // KILL SERVER
   if (server && server.pid) {
     treeKill(server.pid, 'SIGKILL', (err) => {
       if (err) console.error('Failed to kill server:', err);
     });
   }
+
+  // REMOVE SYMLINK (CRITICAL FOR DEPLOY)
+  if (mountDir && existsSync(mountDir)) {
+    console.log('Cleaning up symlink...');
+    try {
+      // unlinkSync works for symlinks, but on Windows junctions sometimes act like dirs
+      // rmSync is safer for recursive cleanup if needed, but unlink usually suffices
+      unlinkSync(mountDir);
+    } catch (e) {
+      // Fallback if unlink fails (e.g. treated as directory)
+      try { rmSync(mountDir, { recursive: true, force: true }); } catch (e2) { }
+    }
+  }
 }
 
-// Ensure server stops if the process is manually terminated
-process.on('SIGINT', () => { stopServer(); process.exit(); });
-process.on('SIGTERM', () => { stopServer(); process.exit(); });
+// Ensure cleanup happens on exit
+process.on('SIGINT', () => { cleanup(); process.exit(); });
+process.on('SIGTERM', () => { cleanup(); process.exit(); });
 
-// 2. Helper to wait for server port instead of hardcoded 800ms
 const waitForServer = async (port) => {
   const retryInterval = 100;
-  const maxRetries = 50; // Wait up to 5 seconds
+  const maxRetries = 50;
   for (let i = 0; i < maxRetries; i++) {
     try {
       await new Promise((resolve, reject) => {
@@ -68,7 +84,7 @@ const waitForServer = async (port) => {
         });
         socket.on('error', (err) => reject(err));
       });
-      return; // Connection successful
+      return;
     } catch (e) {
       await new Promise((r) => setTimeout(r, retryInterval));
     }
@@ -77,63 +93,56 @@ const waitForServer = async (port) => {
 };
 
 (async () => {
-  console.log('Waiting for server...');
+  try {
+    console.log('Waiting for server...');
+    console.log(`Starting server on port: ${port}`);
+    await waitForServer(port);
 
-  console.log(`Starting server on port: ${port}`);
+    const browser = await chromium.launch({ headless: true });
+    // IMPORTANT: Base URL includes the path now!
+    const context = await browser.newContext({ baseURL: `http://${host}:${port}${basePath}` });
+    const page = await context.newPage();
 
-  await waitForServer(port);
+    const consoleErrors = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
 
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ baseURL: `http://${host}:${port}${basePath}` });
-  const page = await context.newPage();
+    // Navigate to relative root (which is now /vma-running/ because of baseURL)
+    await page.goto('./', { waitUntil: 'domcontentloaded' });
 
-  const consoleErrors = [];
-  page.on('console', (msg) => {
-    if (msg.type() === 'error') consoleErrors.push(msg.text());
-  });
+    await page.waitForFunction(() => navigator.serviceWorker?.ready);
 
-  // 3. Robust Navigation
-  await page.goto('/', { waitUntil: 'domcontentloaded' }); // 'networkidle' can be flaky with SWs
+    console.log('Going offline...');
+    await context.setOffline(true);
 
-  // Wait for Service Worker activation
-  await page.waitForFunction(() => navigator.serviceWorker?.ready);
+    const cachedOk = await page.evaluate(async () => {
+      try {
+        const res = await fetch('assets/assets/training_plans/training_example.json');
+        return res.ok;
+      } catch (e) {
+        return false;
+      }
+    });
 
-  // 4. Replaced waitForTimeout(500)
-  // Instead of waiting blindly, we try to ensure the specific resource is cached
-  // or simply proceed if your SW caches on 'install/activate'. 
-  // If you must wait for the cache to populate, try waiting for a specific console log 
-  // from your SW or a specific network state.
-
-  console.log('Going offline...');
-  await context.setOffline(true);
-
-  const cachedOk = await page.evaluate(async () => {
-    try {
-      const res = await fetch('assets/assets/training_plans/training_example.json');
-      return res.ok;
-    } catch (e) {
-      return false;
+    if (!cachedOk) {
+      throw new Error('Cached training plan not available offline');
     }
-  });
 
-  if (!cachedOk) {
-    throw new Error('Cached training plan not available offline');
+    const fontErrors = consoleErrors.filter((msg) =>
+      msg.toLowerCase().includes('font') && msg.toLowerCase().includes('failed'),
+    );
+    if (fontErrors.length > 0) {
+      throw new Error('Font errors observed offline: ' + fontErrors.join(' | '));
+    }
+
+    console.log('Test Passed!');
+    await context.setOffline(false);
+    await browser.close();
+  } catch (err) {
+    console.error('Test Failed:', err);
+    process.exitCode = 1;
+  } finally {
+    cleanup(); // Always run cleanup even if test fails
   }
-
-  // Filter errors (same as your logic)
-  const fontErrors = consoleErrors.filter((msg) =>
-    msg.toLowerCase().includes('font') && msg.toLowerCase().includes('failed'),
-  );
-  if (fontErrors.length > 0) {
-    throw new Error('Font errors observed offline: ' + fontErrors.join(' | '));
-  }
-
-  console.log('Test Passed!');
-  await context.setOffline(false);
-  await browser.close();
-  stopServer();
-})().catch((err) => {
-  stopServer();
-  console.error(err);
-  process.exit(1);
-});
+})();

@@ -15,9 +15,26 @@ class TranslationsEn {
     'timesTab': 'Times',
     'intensityTab': 'Intensity',
     'trainingPlanTab': 'Workout',
+    'communicationsTab': 'Messages',
     'challengeTab': 'Challenge',
     'settingsTab': 'Settings',
     'challengeTitle': 'Team race challenge',
+    'communicationsTitle': 'Club communications',
+    'communicationsPasswordPrompt':
+        'Enter the club password to decrypt these messages.',
+    'communicationsPasswordHint': 'Password hint',
+    'communicationsPasswordLabel': 'Password',
+    'communicationsPasswordPlaceholder': 'Shared password',
+    'communicationsUnlock': 'Unlock messages',
+    'communicationsPrivacyNote':
+        'The password only lives on your device; nothing is stored.',
+    'communicationsInvalidPassword':
+        'Incorrect password or the bundle is corrupted.',
+    'communicationsLoadError': 'Error loading communications',
+    'communicationsUsedCache':
+        'Couldn\'t reach server, showing cached communications.',
+    'communicationsUsedFallback':
+        'Offline mode: showing bundled communications instead.',
     'appVersionLabel': 'App version',
     'language': 'Language',
     'systemDefault': 'System default',
@@ -97,5 +114,6 @@ class TranslationsEn {
     'challengeUsedCache': 'Couldn\'t reach server, showing cached challenge.',
     'challengeUsedFallback':
         'Offline mode: showing bundled challenge table instead.',
+    'noData': 'No data available',
   };
 }

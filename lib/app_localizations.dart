@@ -62,8 +62,23 @@ class AppLocalizations {
   String get intensityTab => _t('intensityTab');
   String get trainingPlanTab => _t('trainingPlanTab');
   String get challengeTab => _t('challengeTab');
+  String get communicationsTab => _t('communicationsTab');
   String get settingsTab => _t('settingsTab');
   String get challengeTitle => _t('challengeTitle');
+  String get communicationsTitle => _t('communicationsTitle');
+  String get communicationsPasswordPrompt =>
+      _t('communicationsPasswordPrompt');
+  String get communicationsPasswordHint => _t('communicationsPasswordHint');
+  String get communicationsPasswordLabel => _t('communicationsPasswordLabel');
+  String get communicationsPasswordPlaceholder =>
+      _t('communicationsPasswordPlaceholder');
+  String get communicationsUnlock => _t('communicationsUnlock');
+  String get communicationsPrivacyNote => _t('communicationsPrivacyNote');
+  String get communicationsInvalidPassword =>
+      _t('communicationsInvalidPassword');
+  String get communicationsLoadError => _t('communicationsLoadError');
+  String get communicationsUsedCache => _t('communicationsUsedCache');
+  String get communicationsUsedFallback => _t('communicationsUsedFallback');
   String get appVersionLabel => _t('appVersionLabel');
   String get language => _t('language');
   String get systemDefault => _t('systemDefault');
@@ -136,6 +151,7 @@ class AppLocalizations {
   String get trainingPlanUsedFallback => _t('trainingPlanUsedFallback');
   String get challengeUsedCache => _t('challengeUsedCache');
   String get challengeUsedFallback => _t('challengeUsedFallback');
+  String get noData => _t('noData');
 }
 
 extension DynamicStrings on AppLocalizations {

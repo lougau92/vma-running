@@ -36,6 +36,7 @@ dependencies:
 
   shared_preferences: ^2.3.2
   package_info_plus: ^8.0.2
+  cryptography: ^2.7.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -72,6 +73,7 @@ flutter:
     - assets/enjambee_img/logo-header-minimized.png
     - assets/training_plans/
     - assets/enjambee_challenge/
+    - assets/communications/
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

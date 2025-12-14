@@ -7,6 +7,7 @@ import 'presets.dart';
 import 'time_utils.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
+import 'club_communications_page.dart';
 import 'vma_settings_dialog.dart';
 import 'remote_asset_loader.dart';
 import 'vma_storage.dart';
@@ -127,7 +128,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final requiresVma = _tabIndex != 3;
+    final requiresVma = _tabIndex <= 2;
     if (_vma == null && requiresVma) {
       return Center(child: Text(strings.enterVmaPlaceholder));
     }
@@ -141,6 +142,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
         onSettingsChanged: widget.onSettingsChanged,
         loader: _remoteLoader,
       ),
+      3 => ClubCommunicationsPage(loader: _remoteLoader),
       _ => _buildChallengeBody(),
     };
 
@@ -183,6 +185,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
         BottomNavigationBarItem(
           icon: const Icon(Icons.fitness_center),
           label: strings.trainingPlanTab,
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.campaign_outlined),
+          label: strings.communicationsTab,
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.emoji_events),

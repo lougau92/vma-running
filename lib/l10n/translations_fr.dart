@@ -15,6 +15,7 @@ class TranslationsFr {
     'timesTab': 'Chronos',
     'intensityTab': 'Intensité',
     'trainingPlanTab': 'Entrainement',
+    'communicationsTab': 'Infos club',
     'settingsTab': 'Réglages',
     'appVersionLabel': 'Version de l\'appli',
     'language': 'Langue',
@@ -98,5 +99,22 @@ class TranslationsFr {
     'challengeUsedCache':
         'Impossible de joindre le serveur, classement en cache affiché.',
     'challengeUsedFallback': 'Mode hors ligne : classement intégré affiché.',
+    'communicationsTitle': 'Communications du club',
+    'communicationsPasswordPrompt':
+        'Entrez le mot de passe pour decrypter les messages.',
+    'communicationsPasswordHint': 'Indice mot de passe',
+    'communicationsPasswordLabel': 'Mot de passe',
+    'communicationsPasswordPlaceholder': 'Mot de passe partage',
+    'communicationsUnlock': 'Deverrouiller les messages',
+    'communicationsPrivacyNote':
+        'Le mot de passe ne sera stocké pas sur votre appareil.',
+    'communicationsInvalidPassword':
+        'Mot de passe incorrect ou donnees corrompues.',
+    'communicationsLoadError': 'Erreur de chargement des communications',
+    'communicationsUsedCache':
+        'Serveur indisponible, communications en cache affichees.',
+    'communicationsUsedFallback':
+        'Mode hors ligne : communications integrees affichees.',
+    'noData': 'Aucune donnee disponible',
   };
 }

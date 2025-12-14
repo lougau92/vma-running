@@ -15,6 +15,7 @@ class TranslationsNl {
     'timesTab': 'Tijden',
     'intensityTab': 'Intensiteit',
     'trainingPlanTab': 'Training',
+    'communicationsTab': 'Berichten',
     'settingsTab': 'Instellingen',
     'appVersionLabel': 'App-versie',
     'language': 'Taal',
@@ -99,5 +100,22 @@ class TranslationsNl {
     'challengeUsedCache': 'Server niet bereikbaar, gecachte challenge getoond.',
     'challengeUsedFallback':
         'Offline modus: ingebouwde challenge tabel getoond.',
+    'communicationsTitle': 'Clubberichten',
+    'communicationsPasswordPrompt':
+        'Voer het clubwachtwoord in om berichten te ontsleutelen.',
+    'communicationsPasswordHint': 'Wachtwoordhint',
+    'communicationsPasswordLabel': 'Wachtwoord',
+    'communicationsPasswordPlaceholder': 'Gedeeld wachtwoord',
+    'communicationsUnlock': 'Berichten ontgrendelen',
+    'communicationsPrivacyNote':
+        'Wachtwoord blijft op je toestel; niets wordt opgeslagen.',
+    'communicationsInvalidPassword':
+        'Onjuist wachtwoord of beschadigd berichtpakket.',
+    'communicationsLoadError': 'Fout bij laden van berichten',
+    'communicationsUsedCache':
+        'Server niet bereikbaar, berichten uit cache getoond.',
+    'communicationsUsedFallback':
+        'Offline: ingebouwde berichten worden getoond.',
+    'noData': 'Geen gegevens beschikbaar',
   };
 }

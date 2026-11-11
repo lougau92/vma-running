@@ -1,0 +1,25 @@
+name: Version bump per commit
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  version-bump:
+    name: Version bump per commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require a pubspec version change in every commit
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python3 tool/check_commit_versions.py "$BASE_SHA" "$HEAD_SHA"

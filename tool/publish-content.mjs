@@ -9,6 +9,7 @@ export const sources = Object.freeze({
   club_communications: 'assets/communications/messages.json',
   challenge_classement: 'assets/enjambee_challenge/classement_challenge_enjambee_2025_12_10_2025.csv',
 });
+const defaultProject = 'vma-training';
 
 export function validateContent(id, content) {
   if (!content.trim() || Buffer.byteLength(content) > 1_000_000) {
@@ -108,8 +109,7 @@ async function main() {
     return;
   }
   if (values.write && values['dry-run']) throw new Error('Choose --write or --dry-run.');
-  const config = JSON.parse(await readFile(path.join(root, 'firebase.json'), 'utf8'));
-  const project = values.project ?? config.flutter?.platforms?.dart?.['lib/firebase_options.dart']?.projectId;
+  const project = values.project ?? defaultProject;
   const ids = values.only === undefined ? Object.keys(sources) : values.only.split(',');
   const documents = await loadContent(ids);
   commitBody(project, documents);

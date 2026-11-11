@@ -108,6 +108,7 @@ class TranslationsEn {
     'exportToClipboard': 'Export to Clipboard',
     'exportToGarmin': 'Export to Garmin',
     'exportToGarminComingSoon': 'Garmin export will use your API key soon.',
+    'refreshContent': 'Refresh content',
     'trainingPlanUsedCache': 'Couldn\'t reach server, showing cached plan.',
     'trainingPlanUsedFallback':
         'Offline mode: showing bundled training plan instead.',

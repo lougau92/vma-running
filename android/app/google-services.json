@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "125928416256",
+    "project_id": "vma-training",
+    "storage_bucket": "vma-training.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:125928416256:android:a551c6273f2af91d6c24e5",
+        "android_client_info": {
+          "package_name": "com.example.vma_running"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-5VQcmOq0utzwJDVA0sYEVkPZdrYorfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -90,6 +90,7 @@ class TranslationsFr {
     'exportToClipboard': 'Exporter vers le presse-papiers',
     'exportToGarmin': 'Exporter vers Garmin',
     'exportToGarminComingSoon': 'L export Garmin utilisera cette cle bientot.',
+    'refreshContent': 'Actualiser le contenu',
     'trainingPlanUsedCache':
         'Impossible de joindre le serveur, plan en cache affiché.',
     'trainingPlanUsedFallback':

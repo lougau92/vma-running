@@ -1,0 +1,28 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "vma-training",
+          "configurations": {
+            "android": "1:125928416256:android:a551c6273f2af91d6c24e5",
+            "ios": "1:125928416256:ios:ca9aea6bef7d5f5a6c24e5",
+            "web": "1:125928416256:web:41e3872788ef4e9d6c24e5"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "vma-training",
+          "appId": "1:125928416256:android:a551c6273f2af91d6c24e5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "europe-west4",
+    "rules": "firestore.rules"
+  }
+}

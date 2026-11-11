@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cryptography/cryptography.dart';
 import 'app_localizations.dart';
+import 'content_refresh_button.dart' show ContentRefreshButton, refreshContent;
 import 'remote_asset_loader.dart';
 
 class ClubCommunicationsPage extends StatefulWidget {
@@ -11,18 +12,19 @@ class ClubCommunicationsPage extends StatefulWidget {
   final RemoteAssetLoader loader;
 
   @override
-  State<ClubCommunicationsPage> createState() =>
-      _ClubCommunicationsPageState();
+  State<ClubCommunicationsPage> createState() => _ClubCommunicationsPageState();
 }
 
 class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
-  static const _remoteUrl =
-      'https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/communications/messages.json';
+  static const _documentPath = 'app_documents/club_communications';
   static const _assetPath = 'assets/communications/messages.json';
   static String? _sessionPassword;
   static List<_Message>? _sessionMessages;
+  static String? _sessionContent;
 
-  late Future<_CommsResult> _future;
+  late Stream<_CommsResult> _stream;
+  String? _payloadContent;
+  _EncryptedPayload? _activePayload;
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   String? _cachedPassword;
@@ -36,8 +38,7 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
   void initState() {
     super.initState();
     _cachedPassword = _sessionPassword;
-    _messages = _sessionMessages;
-    _future = _load();
+    _stream = _watchText().map(_commsResult);
   }
 
   @override
@@ -46,40 +47,47 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
     super.dispose();
   }
 
-  Future<_CommsResult> _load({bool forceRefresh = false}) async {
-    final result = await widget.loader.loadText(
-      remoteUrl: _remoteUrl,
-      assetPath: _assetPath,
-      forceRefresh: forceRefresh,
-    );
+  _EncryptedPayload _parsePayload(String text) =>
+      _EncryptedPayload.fromJson(jsonDecode(text));
 
-    final payload = _EncryptedPayload.fromJson(jsonDecode(result.data));
-    return _CommsResult(
-      payload: payload,
-      noticeKey: _noticeKeyFor(result, forceRefresh),
-    );
-  }
-
-  Future<void> _refresh({bool forceRefresh = true}) async {
-    final next = _load(forceRefresh: forceRefresh);
-    setState(() {
-      _future = next;
-      _messages = null;
-      _errorText = null;
-      _lastNoticeKey = null;
+  _CommsResult _commsResult(RemoteLoadResult result) {
+    if (_payloadContent != result.data) {
+      _activePayload = _parsePayload(result.data);
+      _payloadContent = result.data;
+      _messages = _sessionContent == result.data ? _sessionMessages : null;
       _autoTried = false;
-    });
-    await next;
+      _unlocking = false;
+      _errorText = null;
+    }
+    return _CommsResult(
+      payload: _activePayload!,
+      noticeKey: _noticeKeyFor(result),
+      refreshing: result.refreshing,
+    );
   }
+
+  Stream<RemoteLoadResult> _watchText() => widget.loader.watchText(
+    documentPath: _documentPath,
+    assetPath: _assetPath,
+    validate: _parsePayload,
+  );
+
+  Future<void> _refresh() => refreshContent(_watchText(), (stream) {
+    setState(() {
+      _lastNoticeKey = null;
+      _stream = stream.map(_commsResult);
+    });
+  });
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
 
-    return FutureBuilder<_CommsResult>(
-      future: _future,
+    return StreamBuilder<_CommsResult>(
+      stream: _stream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (!snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasError) {
@@ -110,7 +118,13 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
             physics: const AlwaysScrollableScrollPhysics(),
             children: [
-              _buildHeader(strings, data.payload),
+              _buildHeader(
+                strings,
+                data.payload,
+                refreshing:
+                    snapshot.connectionState == ConnectionState.waiting ||
+                    data.refreshing,
+              ),
               const SizedBox(height: 12),
               if (_messages == null) _buildPasswordCard(strings, data.payload),
               if (_messages != null && _messages!.isEmpty) ...[
@@ -128,14 +142,25 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
     );
   }
 
-  Widget _buildHeader(AppLocalizations strings, _EncryptedPayload payload) {
+  Widget _buildHeader(
+    AppLocalizations strings,
+    _EncryptedPayload payload, {
+    required bool refreshing,
+  }) {
     final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          strings.communicationsTitle,
-          style: theme.textTheme.titleLarge,
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                strings.communicationsTitle,
+                style: theme.textTheme.titleLarge,
+              ),
+            ),
+            ContentRefreshButton(refreshing: refreshing, onRefresh: _refresh),
+          ],
         ),
         const SizedBox(height: 4),
         Text(
@@ -179,9 +204,8 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
                   tooltip: _obscurePassword
                       ? strings.communicationsPasswordLabel
                       : strings.communicationsUnlock,
-                  onPressed: () => setState(
-                    () => _obscurePassword = !_obscurePassword,
-                  ),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
                 ),
               ),
               onSubmitted: (value) => _attemptUnlock(payload, value),
@@ -192,10 +216,7 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
               child: ElevatedButton.icon(
                 onPressed: _unlocking
                     ? null
-                    : () => _attemptUnlock(
-                          payload,
-                          _passwordController.text,
-                        ),
+                    : () => _attemptUnlock(payload, _passwordController.text),
                 icon: const Icon(Icons.lock_open),
                 label: Text(strings.communicationsUnlock),
               ),
@@ -229,32 +250,20 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
                   ),
                 ),
                 if (message.publishedAt != null)
-                  Text(
-                    message.publishedAt!,
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text(message.publishedAt!, style: theme.textTheme.bodySmall),
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              message.summary,
-              style: theme.textTheme.bodyMedium,
-            ),
+            Text(message.summary, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 8),
-            Text(
-              message.body,
-              style: theme.textTheme.bodySmall,
-            ),
+            Text(message.body, style: theme.textTheme.bodySmall),
           ],
         ),
       ),
     );
   }
 
-  void _attemptUnlock(
-    _EncryptedPayload payload,
-    String password,
-  ) async {
+  void _attemptUnlock(_EncryptedPayload payload, String password) async {
     final strings = AppLocalizations.of(context);
     final trimmed = password.trim();
     if (trimmed.isEmpty) {
@@ -270,7 +279,7 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
 
     try {
       final messages = await payload.decrypt(trimmed);
-      if (!mounted) return;
+      if (!mounted || !identical(payload, _activePayload)) return;
       setState(() {
         _messages = messages;
         _unlocking = false;
@@ -278,10 +287,11 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
         _cachedPassword = trimmed;
         _sessionPassword = trimmed;
         _sessionMessages = messages;
+        _sessionContent = _payloadContent;
         _autoTried = true;
       });
     } catch (_) {
-      if (!mounted) return;
+      if (!mounted || !identical(payload, _activePayload)) return;
       setState(() {
         _errorText = strings.communicationsInvalidPassword;
         _unlocking = false;
@@ -306,8 +316,9 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
     });
   }
 
-  String? _noticeKeyFor(RemoteLoadResult result, bool forceRefresh) {
-    if (result.origin == RemoteLoadOrigin.cache && forceRefresh) {
+  String? _noticeKeyFor(RemoteLoadResult result) {
+    if (result.refreshing || result.error == null) return null;
+    if (result.origin == RemoteLoadOrigin.cache) {
       return 'communicationsUsedCache';
     }
     if (result.origin == RemoteLoadOrigin.asset) {
@@ -320,15 +331,16 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
     if (_cachedPassword == null || _messages != null) return;
     try {
       final unlocked = await payload.decrypt(_cachedPassword!);
-      if (!mounted) return;
+      if (!mounted || !identical(payload, _activePayload)) return;
       setState(() {
         _messages = unlocked;
         _errorText = null;
         _sessionMessages = unlocked;
+        _sessionContent = _payloadContent;
         _sessionPassword = _cachedPassword;
       });
     } catch (_) {
-      if (!mounted) return;
+      if (!mounted || !identical(payload, _activePayload)) return;
       setState(() {
         _cachedPassword = null;
         _sessionPassword = null;
@@ -339,10 +351,15 @@ class _ClubCommunicationsPageState extends State<ClubCommunicationsPage> {
 }
 
 class _CommsResult {
-  const _CommsResult({required this.payload, this.noticeKey});
+  const _CommsResult({
+    required this.payload,
+    this.noticeKey,
+    this.refreshing = false,
+  });
 
   final _EncryptedPayload payload;
   final String? noticeKey;
+  final bool refreshing;
 }
 
 class _EncryptedPayload {
@@ -364,9 +381,10 @@ class _EncryptedPayload {
         passwordHint: json['passwordHint'] as String?,
         kdf: _KdfConfig.fromJson(json['kdf'] as Map<String, dynamic>),
         messages: rawMessages
-            .map((item) => _EncryptedMessage.fromJson(
-                  item as Map<String, dynamic>,
-                ))
+            .map(
+              (item) =>
+                  _EncryptedMessage.fromJson(item as Map<String, dynamic>),
+            )
             .toList(growable: false),
       );
     }
@@ -378,9 +396,10 @@ class _EncryptedPayload {
       passwordHint: json['passwordHint'] as String?,
       legacyKeyCheck: json['keyCheck'] as String?,
       legacyMessages: rawMessages
-          .map((item) => _LegacyEncryptedMessage.fromJson(
-                item as Map<String, dynamic>,
-              ))
+          .map(
+            (item) =>
+                _LegacyEncryptedMessage.fromJson(item as Map<String, dynamic>),
+          )
           .toList(growable: false),
       messages: const [],
     );
@@ -443,23 +462,13 @@ class _EncryptedMessage {
   final String tag;
   final String? publishedAt;
 
-  Future<_Message> decrypt(
-    SecretKey key,
-    Cipher algorithm,
-  ) async {
+  Future<_Message> decrypt(SecretKey key, Cipher algorithm) async {
     final nonce = base64.decode(this.nonce);
     final cipherBytes = base64.decode(cipher);
     final tagBytes = base64.decode(tag);
-    final secretBox = SecretBox(
-      cipherBytes,
-      nonce: nonce,
-      mac: Mac(tagBytes),
-    );
+    final secretBox = SecretBox(cipherBytes, nonce: nonce, mac: Mac(tagBytes));
 
-    final clear = await algorithm.decrypt(
-      secretBox,
-      secretKey: key,
-    );
+    final clear = await algorithm.decrypt(secretBox, secretKey: key);
     final decoded =
         jsonDecode(utf8.decode(clear)) as Map<String, dynamic>? ?? {};
     final title = decoded['title'] as String? ?? '';

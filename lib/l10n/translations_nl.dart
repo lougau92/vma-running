@@ -91,6 +91,7 @@ class TranslationsNl {
     'exportToGarmin': 'Exporteren naar Garmin',
     'exportToGarminComingSoon':
         'Garmin-export gebruikt deze sleutel binnenkort.',
+    'refreshContent': 'Inhoud vernieuwen',
     'trainingPlanUsedCache':
         'Server niet bereikbaar, plan uit cache wordt getoond.',
     'trainingPlanUsedFallback':

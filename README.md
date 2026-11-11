@@ -6,7 +6,7 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 - VMA input with persistence (stored via `SharedPreferences`); guided prompt on first launch.
 - Intensity tab: pace table across customizable %VMA and a configurable reference distance.
 - Times tab: predicted splits for distance or time ranges with adjustable intensity slider.
-- Training plan tab: loads an interval plan from GitHub with disk/memory caching and shows reps, pace targets, and recoveries by group.
+- Training plan tab: loads an interval plan from Firestore with local caching and shows reps, pace targets, and recoveries by group.
 - Export: clipboard copy or Garmin (Intervals.icu) export flow that stores your Intervals.icu athlete ID and API key locally.
 - Settings: language (EN/FR/NL), theme (light/dark/system), default distance/time ranges, and Intervals.icu credentials.
 - Offline-first: ships a service worker that caches the app shell so core features load without network; training plan data reuses cached responses if offline.
@@ -15,6 +15,122 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 1) Install Flutter (Dart 3.9+ / Flutter 3.24+ recommended).  
 2) Fetch deps: `flutter pub get`  
 3) Run: `flutter run -d chrome` (or any connected device)
+
+## Firebase configuration
+
+VMA content uses the `vma-training` Firebase project on web, Android, and iOS.
+Firebase initializes before the first remote content read, using the public
+platform options in `lib/firebase_options.dart`. Backend initialization or
+sign-in failures keep cached/bundled content and pace calculations usable.
+To regenerate them after signing in with `firebase login`, run:
+
+```sh
+"$HOME/.pub-cache/bin/flutterfire" configure --project=vma-training --platforms=android,ios,web
+```
+
+If `flutterfire` is not on your PATH, the full path above works. Alternatively,
+add `export PATH="$PATH:$HOME/.pub-cache/bin"` to your shell configuration.
+Web, Android (`com.example.vma_running`), and iOS
+(`com.example.flutterApplication1`) are configured using the existing app IDs.
+Restart `flutter run -d chrome` for web, or select a connected Android/iOS device
+with `flutter devices` and `flutter run -d <device-id>`. Android needs the Android
+SDK command-line tools and accepted licenses; iOS needs macOS and Xcode.
+
+Content lives in the `app_documents` collection: `training_plan`,
+`club_communications`, and `challenge_classement`. Each document has a `content`
+string containing its JSON or CSV payload. Enable Cloud Firestore and create its
+default database in Firebase Console, then create the documents and configure
+Firestore rules for the intended readers; client writes are not needed by VMA.
+Firebase client options are public configuration, not admin credentials.
+Before a remote content read, VMA reuses a persisted Firebase session or signs in
+anonymously. This happens without a login screen and works on web, Android, and
+iOS. Concurrent reads share one sign-in attempt; failures retain the existing
+cached/bundled fallback and can be retried on refresh. Enable the Anonymous
+provider in Firebase Authentication for `vma-training`.
+
+`firestore.rules` requires an authenticated Firebase session for individual reads
+of the three content documents. Client writes, collection listing, and all other
+paths are denied. Anonymous sessions can be obtained by anyone; this controls
+session access rather than club membership. Supabase feedback sessions are
+independent.
+
+Deploy these rules with:
+
+```sh
+firebase deploy --only firestore:rules --project=vma-training
+```
+Feedback uses its separate Supabase backend described below.
+
+### Content loading, retries, and refresh
+
+- Opening any of the three content screens immediately shows the last downloaded
+  version (memory or device/browser storage), or the bundled file on a first run.
+  A server read then updates the visible content in the background.
+- Each refresh allows at most **3 attempts**, with delays of **500 ms** and
+  **1 second** after transient Firebase errors (`unavailable`,
+  `deadline-exceeded`, `aborted`, or `network-request-failed`). Permission,
+  configuration, and missing-content errors are not retried.
+- The busy indicator stops after **12 seconds**, keeping local content visible
+  and explaining when cached/bundled data is being used. No further app retry
+  starts beyond that budget. Firebase has its own transport retry behavior.
+- A Dart timeout cannot cancel a Firebase request. Any unfinished read remains
+  shared by subsequent refreshes; if it succeeds late, the open screen and local
+  cache update automatically. This prevents overlapping reads after a timeout.
+- Use the visible refresh button on desktop/mobile or pull down on mobile.
+  Refreshing keeps the displayed content in place. Reopening a content screen
+  also checks the server. There is no periodic polling or cache expiry: saved
+  content stays available offline; after all attempts fail, refresh or reopen
+  the screen to try again.
+- Firebase anonymous sessions persist and are reused. A failed sign-in can retry
+  under the same policy. Local cache storage failures do not discard a successful
+  server response. Club communications remain encrypted in persistent storage;
+  decrypted messages stay in memory and are refreshed with the encrypted payload.
+  The plaintext `raw_messages.json` source is excluded from the app bundle.
+
+### Troubleshooting remote content
+
+In a debug run, a fallback also logs `Remote content load failed (...)` with
+only the Firebase plugin and error code. No token, document content, or raw
+exception message is logged. For example, `firebase_auth/network-request-failed`
+indicates the sign-in request failed, while `cloud_firestore/permission-denied`
+indicates Firestore rejected the read. Expand the `@firebase/firestore` warning
+in Chrome DevTools to see any browser transport error. A fallback alone does
+not mean the documents are absent; the app also uses bundled files when offline.
+
+## Publishing content to Firestore
+
+Use Node 24 and `npm ci`, then sign in once with `firebase login` (or
+`npm exec -- firebase login`). The publisher reuses that CLI login; no service
+account key or token is added to the repository. The Firebase CLI Node library is
+pinned because the authentication adapter uses its internal APIs.
+
+Preview the bundled files and target project without authentication or network:
+
+```sh
+npm run content:publish
+```
+
+Publish all three documents, or only the training plan:
+
+```sh
+npm run content:publish -- --write
+npm run content:publish -- --write --only training_plan
+```
+
+`--dry-run` is also accepted explicitly. The project defaults to `vma-training`; `--project PROJECT_ID` overrides it.
+The script resolves source files relative to the repository, validates all
+selected files before authenticating, and stores their original UTF-8 text in
+`app_documents/<id>.content` in the `(default)` database. It uploads
+`training_plan`, `club_communications` (encrypted `messages.json`, never the raw
+message file), and `challenge_classement` using one atomic commit. Existing
+`content` values are replaced; other fields are preserved. Files must be at most
+1,000,000 UTF-8 bytes each. Failed requests are not automatically retried.
+
+Create the default Firestore database once in Firebase Console before publishing.
+The publisher does not create databases or deploy access rules. Uploading with
+an administrator login does not grant the app permission to read: configure
+Firestore rules for the intended readers separately. Run `npm run test:content`
+to check validation and publishing behavior without touching a live database.
 
 ## Intervals.icu (Garmin) export
 1) In the app, go to Settings → Intervals.icu connection.
@@ -41,7 +157,7 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
    - Starts a local server, waits for the service worker, goes offline, checks the cached training plan, and asserts no font error spam.
 
 ## Training plan data
-- Default source: see `configUrl` in `lib/vma_training_plan.dart` (currently points to GitHub). The loader caches responses in a temp `github_cache` folder and falls back to stale data if offline. Update this URL to a raw JSON endpoint you control.
+- Default source: Firestore document `app_documents/training_plan`, with the plan JSON stored in a string field named `content`. The loader shows cached data or the bundled example immediately, then revalidates against the server with the bounded policy above.
 - Local example: `assets/training_plans/training_example.json` shows the schema. Each plan includes `warmup`, `cooldown`, `remarks`, and `groups` with `blocks` of interval `sets` (reps, distance or duration, `%VMA`, recovery, and recovery type).
 
 ## Localization & theming
@@ -56,7 +172,7 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 - Logos live under `assets/enjambee_img/`; training plans under `assets/training_plans/`. Add new assets and list them in `pubspec.yaml`.
 
 ## Troubleshooting
-- Training plan not loading: ensure network access to the configured URL or point `configUrl` to a reachable/raw JSON. Clear cached plans via `AdvancedGitHubCacheManager.clearCache()` if you need to force a refresh.
+- Training plan not loading: check Firebase initialization, the `app_documents/training_plan` document and its `content` string, and the Firestore rules for the intended reader. A failed remote read uses cached or bundled data.
 - Pace tables empty: set your VMA from the top banner; the app will prompt on first use.
 
 ## User feedback

@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anonymous Firebase sessions may fetch only these app documents.
+    // Club communications are published as their encrypted payload.
+    match /app_documents/{id} {
+      allow get: if request.auth != null && id in [
+        'training_plan',
+        'club_communications',
+        'challenge_classement'
+      ];
+      allow list, write: if false;
+    }
+  }
+}

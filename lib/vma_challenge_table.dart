@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
+import 'content_refresh_button.dart' show ContentRefreshButton, refreshContent;
 import 'interactive_header.dart';
 import 'remote_asset_loader.dart';
 
@@ -15,13 +16,12 @@ class VmaChallengeTable extends StatefulWidget {
 }
 
 class _VmaChallengeTableState extends State<VmaChallengeTable> {
-  static const _remoteUrl =
-      'https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/enjambee_challenge/classement_challenge_enjambee_2025_12_10_2025.csv';
+  static const _documentPath = 'app_documents/challenge_classement';
   static const _assetPath =
       'assets/enjambee_challenge/classement_challenge_enjambee_2025_12_10_2025.csv';
   static const double _maxColumnWidth = 130;
 
-  late Future<_ChallengeResult> _future;
+  late Stream<_ChallengeResult> _stream;
   final ScrollController _verticalController = ScrollController();
   final ScrollController _horizontalController = ScrollController();
   String? _lastNoticeKey;
@@ -32,7 +32,7 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
   @override
   void initState() {
     super.initState();
-    _future = _load();
+    _stream = _watchText().map(_challengeResult);
   }
 
   @override
@@ -42,17 +42,16 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
     super.dispose();
   }
 
-  Future<_ChallengeResult> _load({bool forceRefresh = false}) async {
-    final response = await widget.loader.loadText(
-      remoteUrl: _remoteUrl,
-      assetPath: _assetPath,
-      forceRefresh: forceRefresh,
-    );
+  _ChallengeResult _challengeResult(RemoteLoadResult response) {
+    _sortedRows = null;
+    _sortColumnIndex = null;
+    _sortAscending = true;
     final parsed = _parseCsv(response.data);
     return _ChallengeResult(
       headers: parsed.headers,
       rows: parsed.rows,
-      noticeKey: _noticeKeyFor(response, forceRefresh),
+      noticeKey: _noticeKeyFor(response),
+      refreshing: response.refreshing,
     );
   }
 
@@ -62,11 +61,12 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
     final theme = Theme.of(context);
 
     return RefreshIndicator(
-      onRefresh: () => _refresh(forceRefresh: true),
-      child: FutureBuilder<_ChallengeResult>(
-        future: _future,
+      onRefresh: _refresh,
+      child: StreamBuilder<_ChallengeResult>(
+        stream: _stream,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (!snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
@@ -86,10 +86,22 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  strings.challengeTitle,
-                  style: theme.textTheme.titleLarge,
-                  textAlign: TextAlign.center,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        strings.challengeTitle,
+                        style: theme.textTheme.titleLarge,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ContentRefreshButton(
+                      refreshing:
+                          snapshot.connectionState == ConnectionState.waiting ||
+                          result.refreshing,
+                      onRefresh: _refresh,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 Expanded(child: _buildTable(result)),
@@ -116,6 +128,7 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
       child: SingleChildScrollView(
         controller: _verticalController,
         scrollDirection: Axis.vertical,
+        physics: const AlwaysScrollableScrollPhysics(),
         child: SingleChildScrollView(
           controller: _horizontalController,
           scrollDirection: Axis.horizontal,
@@ -159,17 +172,18 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
     );
   }
 
-  Future<void> _refresh({bool forceRefresh = false}) async {
-    final next = _load(forceRefresh: forceRefresh);
+  Stream<RemoteLoadResult> _watchText() => widget.loader.watchText(
+    documentPath: _documentPath,
+    assetPath: _assetPath,
+    validate: _parseCsv,
+  );
+
+  Future<void> _refresh() => refreshContent(_watchText(), (stream) {
     setState(() {
-      _future = next;
       _lastNoticeKey = null;
-      _sortedRows = null;
-      _sortColumnIndex = null;
-      _sortAscending = true;
+      _stream = stream.map(_challengeResult);
     });
-    await next;
-  }
+  });
 
   _ParsedCsv _parseCsv(String data) {
     final lines = const LineSplitter().convert(data).where((l) => l.isNotEmpty);
@@ -195,8 +209,9 @@ class _VmaChallengeTableState extends State<VmaChallengeTable> {
     });
   }
 
-  String? _noticeKeyFor(RemoteLoadResult result, bool forceRefresh) {
-    if (result.origin == RemoteLoadOrigin.cache && forceRefresh) {
+  String? _noticeKeyFor(RemoteLoadResult result) {
+    if (result.refreshing || result.error == null) return null;
+    if (result.origin == RemoteLoadOrigin.cache) {
       return 'challengeUsedCache';
     }
     if (result.origin == RemoteLoadOrigin.asset) {
@@ -293,9 +308,11 @@ class _ChallengeResult {
     required this.headers,
     required this.rows,
     this.noticeKey,
+    this.refreshing = false,
   });
 
   final List<String> headers;
   final List<List<String>> rows;
   final String? noticeKey;
+  final bool refreshing;
 }

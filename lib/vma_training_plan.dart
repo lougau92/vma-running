@@ -1,18 +1,25 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:vma_running/remote_asset_loader.dart';
 import 'app_localizations.dart';
+import 'content_refresh_button.dart' show ContentRefreshButton, refreshContent;
 import 'app_settings.dart';
 import 'plan_exporter.dart';
 import 'time_utils.dart';
 import 'training_plan.dart';
 
 class TrainingPlanResult {
-  const TrainingPlanResult({required this.plan, this.noticeKey});
+  const TrainingPlanResult({
+    required this.plan,
+    this.noticeKey,
+    this.refreshing = false,
+  });
 
   final TrainingPlan plan;
   final String? noticeKey;
+  final bool refreshing;
 }
 
 class VmaTrainingPlan extends StatefulWidget {
@@ -34,13 +41,12 @@ class VmaTrainingPlan extends StatefulWidget {
 }
 
 class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
-  static const _configUrl =
-      'https://raw.githubusercontent.com/lougau92/vma-running/refs/heads/main/assets/training_plans/training_example.json';
+  static const _documentPath = 'app_documents/training_plan';
   static const _assetFallbackPath =
       'assets/training_plans/training_example.json';
 
   int _selectedGroup = 0;
-  late Future<TrainingPlanResult> _planFuture;
+  late Stream<TrainingPlanResult> _planStream;
   String? _lastNoticeKey;
   final List<PlanExporter> _exporters = [
     ClipboardPlanExporter(),
@@ -51,7 +57,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   @override
   void initState() {
     super.initState();
-    _planFuture = loadTraining();
+    _planStream = _watchText().map(_trainingResult);
   }
 
   @override
@@ -60,35 +66,41 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     super.dispose();
   }
 
-  Future<void> _refreshPlan({bool forceRefresh = true}) async {
-    final nextPlan = loadTraining(forceRefresh: forceRefresh);
+  Stream<RemoteLoadResult> _watchText() => widget.loader.watchText(
+    documentPath: _documentPath,
+    assetPath: _assetFallbackPath,
+    validate: _parsePlan,
+  );
+
+  Future<void> _refreshPlan() => refreshContent(_watchText(), (stream) {
     setState(() {
       _lastNoticeKey = null;
-      _planFuture = nextPlan;
+      _planStream = stream.map(_trainingResult);
     });
-    await nextPlan;
+  });
+
+  TrainingPlan _parsePlan(String text) {
+    final plan = TrainingPlan.fromJson(jsonDecode(text));
+    if (plan.groups.isEmpty) throw const FormatException('Plan has no groups');
+    return plan;
   }
 
-  Future<TrainingPlanResult> loadTraining({bool forceRefresh = false}) async {
-    final result = await widget.loader.loadText(
-      remoteUrl: _configUrl,
-      assetPath: _assetFallbackPath,
-      forceRefresh: forceRefresh,
-    );
-
-    _logSource(result);
+  TrainingPlanResult _trainingResult(RemoteLoadResult result) {
+    if (!result.refreshing) _logSource(result);
     return TrainingPlanResult(
-      plan: TrainingPlan.fromJson(jsonDecode(result.data)),
-      noticeKey: _noticeKeyForOrigin(result, forceRefresh),
+      plan: _parsePlan(result.data),
+      noticeKey: _noticeKeyForOrigin(result),
+      refreshing: result.refreshing,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<TrainingPlanResult>(
-      future: _planFuture,
+    return StreamBuilder<TrainingPlanResult>(
+      stream: _planStream,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (!snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(
@@ -97,7 +109,13 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
         } else if (snapshot.hasData) {
           final result = snapshot.data!;
           _notifyIfNeeded(result.noticeKey);
-          return _buildPlanContent(result.plan, context);
+          return _buildPlanContent(
+            result.plan,
+            context,
+            refreshing:
+                snapshot.connectionState == ConnectionState.waiting ||
+                result.refreshing,
+          );
         } else {
           return const Center(child: Text('No data available'));
         }
@@ -105,8 +123,13 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     );
   }
 
-  Widget _buildPlanContent(TrainingPlan plan, BuildContext context) {
-    final group = plan.groups[_selectedGroup];
+  Widget _buildPlanContent(
+    TrainingPlan plan,
+    BuildContext context, {
+    required bool refreshing,
+  }) {
+    final selectedGroup = _selectedGroup.clamp(0, plan.groups.length - 1);
+    final group = plan.groups[selectedGroup];
     final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -126,17 +149,23 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       Text(
                         strings.trainingPlanTab,
                         style: theme.textTheme.titleMedium,
                       ),
-                      const Spacer(),
+                      ContentRefreshButton(
+                        refreshing: refreshing,
+                        onRefresh: _refreshPlan,
+                      ),
                       ToggleButtons(
                         isSelected: List.generate(
                           plan.groups.length,
-                          (i) => i == _selectedGroup,
+                          (i) => i == selectedGroup,
                         ),
                         onPressed: (index) =>
                             setState(() => _selectedGroup = index),
@@ -191,7 +220,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
 
     final data = PlanExportData(
       plan: plan,
-      group: plan.groups[_selectedGroup],
+      group: plan.groups[_selectedGroup.clamp(0, plan.groups.length - 1)],
       userVma: widget.userVma,
       strings: strings,
       settings: widget.settings,
@@ -229,7 +258,6 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       if (!mounted) return;
       final strings = AppLocalizations.of(context);
       final message = strings[noticeKey];
-      if (message == null) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
@@ -237,21 +265,25 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   }
 
   void _logSource(RemoteLoadResult result) {
+    if (!kDebugMode) return;
     switch (result.origin) {
       case RemoteLoadOrigin.network:
-        print('Plan loaded from network - fresh data');
+        debugPrint('Plan loaded from Firestore');
         break;
       case RemoteLoadOrigin.cache:
-        print('Plan loaded from cache (source: ${result.source})');
+        debugPrint('Plan loaded from local cache');
         break;
       case RemoteLoadOrigin.asset:
-        print('Failed to load remote training plan, falling back to asset');
+        debugPrint(
+          'Failed to load remote training plan, falling back to asset',
+        );
         break;
     }
   }
 
-  String? _noticeKeyForOrigin(RemoteLoadResult result, bool forceRefresh) {
-    if (result.origin == RemoteLoadOrigin.cache && forceRefresh) {
+  String? _noticeKeyForOrigin(RemoteLoadResult result) {
+    if (result.refreshing || result.error == null) return null;
+    if (result.origin == RemoteLoadOrigin.cache) {
       return 'trainingPlanUsedCache';
     }
     if (result.origin == RemoteLoadOrigin.asset) {

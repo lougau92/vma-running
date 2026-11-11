@@ -2,8 +2,9 @@ name: Deploy PWA to GitHub Pages
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -38,28 +39,36 @@ jobs:
         run: flutter pub get
 
       # --- 2. VERSION MANAGEMENT ---
-      - name: Extract Version from Tag
-        id: extract_version
+      - name: Read version from pubspec.yaml
+        id: app_version
         run: |
-          # Converts 'refs/tags/v1.0.2' -> '1.0.2'
-          VERSION=${GITHUB_REF#refs/tags/v}
-          echo "VERSION_NAME=$VERSION" >> $GITHUB_ENV
-          echo "Detected Release Version: $VERSION"
+          python3 - <<'PYCODE'
+          import os, re
+          from pathlib import Path
+          text = Path('pubspec.yaml').read_text()
+          match = re.search(r'(?m)^version:\s*([0-9]+\.[0-9]+\.[0-9]+)(?:\+([0-9]+))?\s*$', text)
+          if not match:
+              raise SystemExit('Expected pubspec.yaml version in MAJOR.MINOR.PATCH+BUILD format.')
+          version_name = match[1]
+          build_number = match[2] or '1'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'version_name={version_name}\nbuild_number={build_number}\n')
+          print(f'Using app version {version_name}+{build_number} from pubspec.yaml')
+          PYCODE
 
       - name: Stamp Service Worker Version
         run: node tool/inject-sw-version.mjs
         env:
-          # Uses the tag version (1.0.2) and the build run number (45)
-          BUILD_NAME: ${{ env.VERSION_NAME }}
-          BUILD_NUMBER: ${{ github.run_number }}
+          BUILD_NAME: ${{ steps.app_version.outputs.version_name }}
+          BUILD_NUMBER: ${{ steps.app_version.outputs.build_number }}
 
       # --- SINGLE BUILD ---
       - name: Build Web App
         run: |
           flutter build web --release \
             --base-href "/vma-running/" \
-            --build-name=${{ env.VERSION_NAME }} \
-            --build-number=${{ github.run_number }}
+            --build-name=${{ steps.app_version.outputs.version_name }} \
+            --build-number=${{ steps.app_version.outputs.build_number }}
 
       # Remove Flutter's generated SW to force using ours
       - name: Remove Default Service Worker

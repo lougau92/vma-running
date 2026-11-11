@@ -1,8 +1,13 @@
 {
   "name": "vma-running-tools",
   "devDependencies": {
+    "firebase-tools": "15.35.0",
     "http-server": "^14.1.1",
     "playwright": "^1.57.0",
     "tree-kill": "^1.2.2"
+  },
+  "scripts": {
+    "content:publish": "node tool/publish-content.mjs",
+    "test:content": "node --test tool/publish-content.test.mjs"
   }
 }

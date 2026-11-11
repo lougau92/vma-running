@@ -50,3 +50,12 @@ app.*.map.json
 node_modules/
 
 .vscode
+
+# Feedback CLI cache and Python helpers
+.tools/
+__pycache__/
+supabase/.temp/
+
+# Local shared-package development and CI checkouts
+**/pubspec_overrides.yaml
+.dependencies/

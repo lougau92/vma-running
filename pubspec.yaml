@@ -28,6 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  app_feedback:
+    git:
+      url: https://github.com/lougau92/app-feedback.git
+      ref: f23625d25e84267f048f6195c91ac6736b6b8d8f
   flutter:
     sdk: flutter
 
@@ -69,6 +73,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
+    - assets/feedback.json
     - assets/enjambee_img/logo-enjambee-shape.png
     - assets/enjambee_img/logo-header-minimized.png
     - assets/training_plans/

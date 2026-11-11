@@ -1,5 +1,9 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async' show unawaited;
+
+import 'package:app_feedback/app_feedback.dart'
+    show FeedbackSender, SupabaseFeedbackSender, UnavailableFeedbackSender;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -8,9 +12,12 @@ import 'app_settings.dart';
 import 'settings_storage.dart';
 import 'theme.dart';
 import 'vma_home.dart';
+import 'feedback_setup.dart';
 
 class VmaApp extends StatefulWidget {
-  const VmaApp({super.key});
+  const VmaApp({super.key, this.feedbackSender});
+
+  final FeedbackSender? feedbackSender;
 
   @override
   State<VmaApp> createState() => _VmaAppState();
@@ -20,6 +27,7 @@ class _VmaAppState extends State<VmaApp> {
   final SettingsStorage _storage = SettingsStorage();
   AppSettings _settings = const AppSettings();
   bool _loading = true;
+  FeedbackSender _feedbackSender = const UnavailableFeedbackSender();
 
   @override
   void initState() {
@@ -30,11 +38,26 @@ class _VmaAppState extends State<VmaApp> {
 
   Future<void> _loadSettings() async {
     final loaded = await _storage.load();
-    if (!mounted) return;
+    final feedback = widget.feedbackSender ?? await loadFeedbackSender();
+    if (!mounted) {
+      _closeFeedback(feedback);
+      return;
+    }
     setState(() {
       _settings = loaded;
+      _feedbackSender = feedback;
       _loading = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _closeFeedback(_feedbackSender);
+    super.dispose();
+  }
+
+  void _closeFeedback(FeedbackSender sender) {
+    if (sender is SupabaseFeedbackSender) unawaited(sender.dispose());
   }
 
   Future<void> _logPackageInfo() async {
@@ -77,6 +100,7 @@ class _VmaAppState extends State<VmaApp> {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       home: VmaHomePage(
+        feedbackSender: _feedbackSender,
         settings: _settings,
         onSettingsChanged: _updateSettings,
       ),

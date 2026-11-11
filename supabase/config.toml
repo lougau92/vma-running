@@ -1,0 +1,6 @@
+# Only this setting is managed here. CLI 3+ leaves undeclared remote settings alone.
+# Account-free feedback sessions still have insert-only access under table RLS.
+project_id = "vma-running-feedback"
+
+[auth]
+enable_anonymous_sign_ins = true

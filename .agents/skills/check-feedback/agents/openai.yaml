@@ -1,0 +1,4 @@
+interface:
+  display_name: "Check user feedback"
+  short_description: "Read recent app feedback without exposing keys"
+  default_prompt: "Use $check-feedback to review the latest user feedback for this repository."

@@ -35,6 +35,36 @@ jobs:
         with:
           channel: "stable"
 
+      - name: Read pinned feedback dependency
+        id: feedback
+        run: |
+          python3 - <<'PYCODE'
+          import os, re
+          from pathlib import Path
+          text = Path('pubspec.yaml').read_text()
+          match = re.search(r'(?m)^  app_feedback:\n    git:\n      url: https://github.com/([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)\.git\n      ref: ([0-9a-f]{40})\s*$', text)
+          if not match:
+              raise SystemExit('Expected a GitHub feedback dependency pinned to a full commit SHA.')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'repository={match[1]}\nref={match[2]}\n')
+          PYCODE
+
+      - name: Checkout shared feedback package
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.feedback.outputs.repository }}
+          ref: ${{ steps.feedback.outputs.ref }}
+          path: .dependencies/app-feedback
+          ssh-key: ${{ secrets.APP_FEEDBACK_DEPLOY_KEY }}
+          persist-credentials: false
+
+      - name: Use shared feedback checkout
+        run: |
+          python3 - <<'PYCODE'
+          from pathlib import Path
+          Path('pubspec_overrides.yaml').write_text('dependency_overrides:\n  app_feedback:\n    path: .dependencies/app-feedback\n')
+          PYCODE
+
       - name: Install Flutter Dependencies
         run: flutter pub get
 

@@ -1,3 +1,5 @@
+import 'package:app_feedback/app_feedback.dart'
+    show FeedbackButton, FeedbackSender, UnavailableFeedbackSender;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -23,8 +25,10 @@ class VmaHomePage extends StatefulWidget {
     super.key,
     required this.settings,
     required this.onSettingsChanged,
+    this.feedbackSender = const UnavailableFeedbackSender(),
   });
 
+  final FeedbackSender feedbackSender;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
 
@@ -98,10 +102,13 @@ class _VmaHomePageState extends State<VmaHomePage> {
               height: 32,
             ),
             const SizedBox(width: 8),
-            Text(strings.appTitle),
+            Expanded(
+              child: Text(strings.appTitle, overflow: TextOverflow.ellipsis),
+            ),
           ],
         ),
         actions: [
+          FeedbackButton(sender: widget.feedbackSender),
           IconButton(
             icon: const Icon(Icons.settings),
             tooltip: strings.settingsTab,
@@ -109,6 +116,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => VmaSettingsPage(
+                    feedbackSender: widget.feedbackSender,
                     settings: widget.settings,
                     onSettingsChanged: widget.onSettingsChanged,
                   ),

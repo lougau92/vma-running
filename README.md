@@ -58,3 +58,32 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 ## Troubleshooting
 - Training plan not loading: ensure network access to the configured URL or point `configUrl` to a reachable/raw JSON. Clear cached plans via `AdvancedGitHubCacheManager.clearCache()` if you need to force a refresh.
 - Pace tables empty: set your VMA from the top banner; the app will prompt on first use.
+
+## User feedback
+
+The home app bar and settings page include a feedback button. The form follows
+the app language (EN/FR/NL) and submits only the entered message, category, and
+optional reply email. It uses the standalone `app_feedback` Git dependency,
+pinned to a reviewed commit in `pubspec.yaml`. The ignored local
+`pubspec_overrides.yaml` points to `../app-feedback`, so shared changes appear
+without copying. Run `flutter pub get` after changing dependency configuration.
+Clean CI uses the pinned remote revision; publish the shared repository and add
+a read-only `APP_FEEDBACK_DEPLOY_KEY` Actions secret for its private checkout.
+Never paste that key into source or chat.
+
+`assets/feedback.json` contains intentionally public Supabase client settings;
+never use secret or service-role keys there. An anonymous session is created
+only on first feedback submission, independently of the app's Firebase setup.
+Feedback needs a network connection; the rest of the app remains usable offline.
+The shared backend stores this app's submissions under `app_id = vma-running`;
+clients can insert their own feedback and cannot read the inbox.
+
+Agents can review only this inbox with
+`dart run app_feedback:feedback` using the
+non-secret root `feedback.config.json` and the existing Supabase CLI login.
+The skill documents setup and date filtering without exposing admin keys.
+
+Account-free submission requires anonymous sign-ins to be enabled on the shared
+Supabase project. `supabase/config.toml` manages only that flag; use CLI 3+
+`config diff` to review it before any authorized `config push`. All other remote
+auth settings are undeclared and preserved.

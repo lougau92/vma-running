@@ -1,3 +1,5 @@
+import 'package:app_feedback/app_feedback.dart'
+    show FeedbackButton, FeedbackSender, UnavailableFeedbackSender;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -9,8 +11,10 @@ class VmaSettingsPage extends StatelessWidget {
     super.key,
     required this.settings,
     required this.onSettingsChanged,
+    this.feedbackSender = const UnavailableFeedbackSender(),
   });
 
+  final FeedbackSender feedbackSender;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
 
@@ -18,7 +22,10 @@ class VmaSettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return DecoratedScaffold(
-      appBar: AppBar(title: Text(strings.settingsTab)),
+      appBar: AppBar(
+        title: Text(strings.settingsTab),
+        actions: [FeedbackButton(sender: feedbackSender)],
+      ),
       body: VmaSettingsView(
         settings: settings,
         onSettingsChanged: onSettingsChanged,

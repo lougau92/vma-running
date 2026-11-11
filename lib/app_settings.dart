@@ -3,8 +3,8 @@ import 'theme.dart';
 
 class AppSettings {
   const AppSettings({
-    this.localeCode,
-    this.themeMode = ThemeMode.dark,
+    this.localeCode = 'fr',
+    this.themeMode = ThemeMode.light,
     this.themeId = AppThemes.defaultId,
     this.timesMinSeconds,
     this.timesMaxSeconds,

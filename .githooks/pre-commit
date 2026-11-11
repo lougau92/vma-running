@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+
+python3 - <<'PY'
+import re
+import subprocess
+import sys
+
+
+def version_at(*revision):
+    try:
+        text = subprocess.check_output(
+            ["git", "show", *revision], text=True, stderr=subprocess.DEVNULL
+        )
+    except subprocess.CalledProcessError:
+        return None
+    match = re.search(r"(?m)^version:\s*([^\s#]+)", text)
+    return match.group(1) if match else None
+
+
+previous = version_at("HEAD:pubspec.yaml")
+staged = version_at(":pubspec.yaml")
+if staged is None:
+    print("Version check: stage pubspec.yaml with a valid version field.", file=sys.stderr)
+    raise SystemExit(1)
+if previous is not None and staged == previous:
+    print(
+        f"Version bump required: pubspec.yaml is still {staged}. "
+        "Update and stage a new version before committing.",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
+
+print(f"Version check passed: {previous or '(initial commit)'} -> {staged}")
+PY

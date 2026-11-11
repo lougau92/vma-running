@@ -16,7 +16,12 @@ class SettingsStorage {
 
   Future<AppSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
-    final locale = prefs.getString(_localeKey);
+    final storedLocale = prefs.getString(_localeKey);
+    final locale = storedLocale == null
+        ? 'fr'
+        : storedLocale == 'system'
+        ? null
+        : storedLocale;
     final themeString = prefs.getString(_themeKey);
     final themeMode = _parseTheme(themeString);
     final themeId = _parseThemeId(prefs.getString(_themeIdKey));
@@ -35,11 +40,7 @@ class SettingsStorage {
 
   Future<void> save(AppSettings settings) async {
     final prefs = await SharedPreferences.getInstance();
-    if (settings.localeCode == null) {
-      await prefs.remove(_localeKey);
-    } else {
-      await prefs.setString(_localeKey, settings.localeCode!);
-    }
+    await prefs.setString(_localeKey, settings.localeCode ?? 'system');
     await prefs.setString(_themeKey, settings.themeMode.name);
     await prefs.setString(_themeIdKey, settings.themeId);
     _writeNullableDouble(prefs, _timesMinSecondsKey, settings.timesMinSeconds);
@@ -73,8 +74,9 @@ class SettingsStorage {
       case 'system':
         return ThemeMode.system;
       case 'dark':
-      default:
         return ThemeMode.dark;
+      default:
+        return ThemeMode.light;
     }
   }
 

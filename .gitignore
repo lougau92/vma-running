@@ -59,3 +59,6 @@ supabase/.temp/
 # Local shared-package development and CI checkouts
 **/pubspec_overrides.yaml
 .dependencies/
+
+# Generated local DevTools settings
+/devtools_options.yaml

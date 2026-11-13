@@ -18,7 +18,6 @@ class TranslationsFr {
         "Utilisez un point ou une virgule pour les décimales.",
     "calculatorNeedsVma": "Définissez votre VMA pour calculer l’intensité.",
     "calculatorInvalid": "Saisissez une valeur positive valide.",
-    'appTitle': 'Entraînement VMA',
     'noVma': 'Aucune VMA enregistrée',
     'enterVmaPlaceholder': 'Saisissez votre VMA pour voir les allures.',
     'yourVma': 'VMA : {value} km/h',

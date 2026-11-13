@@ -17,7 +17,6 @@ class TranslationsEn {
     "calculatorNumberHelp": "Decimals can use a dot or comma.",
     "calculatorNeedsVma": "Set your VMA to calculate intensity.",
     "calculatorInvalid": "Enter a valid positive value.",
-    'appTitle': 'VMA Training',
     'noVma': 'No VMA saved yet',
     'enterVmaPlaceholder': 'Enter your VMA to see pace targets.',
     'yourVma': 'VMA: {value} km/h',

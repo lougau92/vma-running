@@ -17,7 +17,6 @@ class TranslationsNl {
     "calculatorNumberHelp": "Gebruik een punt of komma voor decimalen.",
     "calculatorNeedsVma": "Stel je VMA in om de intensiteit te berekenen.",
     "calculatorInvalid": "Voer een geldige positieve waarde in.",
-    'appTitle': 'VMA Training',
     'noVma': 'Geen VMA opgeslagen',
     'enterVmaPlaceholder': 'Voer je VMA in om tempos te zien.',
     'yourVma': 'VMA: {value} km/u',

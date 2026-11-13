@@ -92,7 +92,6 @@ class _VmaAppState extends State<VmaApp> {
     final appTheme = AppThemes.resolve(_settings.themeId);
 
     return MaterialApp(
-      onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
       theme: appTheme.light,
       darkTheme: appTheme.dark,
       themeMode: _settings.themeMode,

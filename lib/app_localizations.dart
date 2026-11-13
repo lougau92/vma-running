@@ -47,7 +47,6 @@ class AppLocalizations {
       _localizedValues[locale.languageCode]?[key] ??
       _localizedValues['en']![key]!;
 
-  String get appTitle => _t('appTitle');
   String get noVma => _t('noVma');
   String get enterVmaPlaceholder => _t('enterVmaPlaceholder');
   String get setVma => _t('setVma');

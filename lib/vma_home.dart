@@ -144,17 +144,9 @@ class _VmaHomePageState extends State<VmaHomePage> {
       id: 'home',
       child: DecoratedScaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Image.asset(
-                'assets/enjambee_img/logo-header-minimized.png',
-                height: 32,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(strings.appTitle, overflow: TextOverflow.ellipsis),
-              ),
-            ],
+          title: Image.asset(
+            'assets/enjambee_img/logo-header-minimized.png',
+            height: 32,
           ),
           actions: [
             FeedbackButton(sender: widget.feedbackSender),

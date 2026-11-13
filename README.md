@@ -203,6 +203,8 @@ pinned to a reviewed commit in `pubspec.yaml`. The ignored local
 without copying. Run `flutter pub get` after changing dependency configuration.
 Clean CI uses the pinned remote revision; publish the shared repository and add
 a read-only `APP_FEEDBACK_DEPLOY_KEY` Actions secret for its private checkout.
+For existing Supabase projects, apply `supabase/add_ui_feedback_category.sql`
+before sending feedback with the new UI/UX category.
 Never paste that key into source or chat.
 
 `assets/feedback.json` contains intentionally public Supabase client settings;

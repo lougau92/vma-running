@@ -25,6 +25,7 @@ import 'vma_times_settings_dialog.dart';
 import 'vma_times_table.dart';
 import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
+import 'widgets/vma_celebration_overlay.dart';
 
 enum _HomePage {
   intensity('intensity'),
@@ -68,6 +69,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
   final _paceCalculator = VmaPaceCalculator();
   late final RemoteAssetLoader _remoteLoader;
   _HomePage _selectedPage = _HomePage.intensity;
+  double _horizontalDrag = 0;
+  OverlayEntry? _celebrationEntry;
 
   List<_HomePage> get _pages => [
     _HomePage.intensity,
@@ -90,6 +93,37 @@ class _VmaHomePageState extends State<VmaHomePage> {
   double _timesMinSeconds = presetTimesSeconds().first;
   double _timesMaxSeconds = presetTimesSeconds().last;
   double _timesPercent = 100;
+
+  @override
+  void dispose() {
+    _celebrationEntry?.remove();
+    super.dispose();
+  }
+
+  void _setVma(double value) {
+    final improved = _vma != null && value > _vma!;
+    setState(() => _vma = value);
+    if (improved) _celebrateVmaImprovement();
+  }
+
+  void _celebrateVmaImprovement() {
+    _celebrationEntry?.remove();
+    late OverlayEntry entry;
+    entry = OverlayEntry(
+      builder: (_) => Positioned.fill(
+        child: VmaCelebrationOverlay(
+          onComplete: () {
+            if (identical(_celebrationEntry, entry)) {
+              entry.remove();
+              _celebrationEntry = null;
+            }
+          },
+        ),
+      ),
+    );
+    _celebrationEntry = entry;
+    Overlay.of(context, rootOverlay: true).insert(entry);
+  }
 
   @override
   void didUpdateWidget(covariant VmaHomePage oldWidget) {
@@ -130,9 +164,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
       initialValue: _vma,
     );
 
-    if (selected != null && mounted) {
-      setState(() => _vma = selected);
-    }
+    if (selected != null && mounted) _setVma(selected);
   }
 
   @override
@@ -160,7 +192,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
                     builder: (_) => VmaSettingsPage(
                       feedbackSender: widget.feedbackSender,
                       settings: widget.settings,
-                      onVmaChanged: (value) => setState(() => _vma = value),
+                      onVmaChanged: _setVma,
                       onSettingsChanged: widget.onSettingsChanged,
                     ),
                   ),
@@ -206,17 +238,30 @@ class _VmaHomePageState extends State<VmaHomePage> {
     final hasVmaHeader =
         _selectedPage == _HomePage.intensity ||
         _selectedPage == _HomePage.times;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(24, hasVmaHeader ? 8 : 24, 24, 24),
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: FeedbackContextScope(
-            id: _selectedPage.contextId,
-            isScreen: true,
-            data: _pageContextState,
-            child: content,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onHorizontalDragStart: (_) => _horizontalDrag = 0,
+      onHorizontalDragUpdate: (details) => _horizontalDrag += details.delta.dx,
+      onHorizontalDragEnd: (_) {
+        if (_horizontalDrag.abs() < 70) return;
+        final index = _pages.indexOf(_selectedPage);
+        final next = _horizontalDrag < 0 ? index + 1 : index - 1;
+        if (next >= 0 && next < _pages.length) {
+          setState(() => _selectedPage = _pages[next]);
+        }
+      },
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(24, hasVmaHeader ? 8 : 24, 24, 24),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: FeedbackContextScope(
+              id: _selectedPage.contextId,
+              isScreen: true,
+              data: _pageContextState,
+              child: content,
+            ),
           ),
         ),
       ),

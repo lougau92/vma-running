@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
-import '../running/running.dart'
-    show RunningSplit, isPositiveFinite, formatPacePerKm, formatRunningDuration;
+import '../app_localizations.dart' show AppLocalizations;
+import '../running/running.dart' show isPositiveFinite, parseRunningValue;
 import 'running_calculator_draft.dart';
 
 class RunningCalculatorPage extends StatelessWidget {
@@ -22,7 +21,6 @@ class RunningCalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final result = draft.calculate(vma);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -53,40 +51,38 @@ class RunningCalculatorPage extends StatelessWidget {
                 spacing: 12,
                 runSpacing: 12,
                 children: [
-                  for (var i = 0; i < 2; i++)
-                    SizedBox(width: width, child: _input(context, i)),
+                  for (var index = 0; index < 4; index++)
+                    SizedBox(width: width, child: _tile(context, index)),
                 ],
               );
             },
           ),
-          const SizedBox(height: 20),
-          Text(
-            strings['calculatorResults'],
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: 8),
-          if (result == null)
+          if (draft.calculate(vma) == null) ...[
+            const SizedBox(height: 12),
             Text(
               strings['calculatorIncomplete'],
               key: const ValueKey('calculator-incomplete'),
-            )
-          else
-            _results(context, result),
+            ),
+          ],
           const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  Widget _input(BuildContext context, int index) {
+  Widget _tile(BuildContext context, int index) {
     final strings = AppLocalizations.of(context);
-    final measure = index == 0 ? draft.first : draft.second;
-    final other = index == 0 ? draft.second : draft.first;
-    final text = index == 0 ? draft.firstText : draft.secondText;
-    final duration =
-        measure == RunningMeasure.time || measure == RunningMeasure.pace;
+    final measure = draft.measureAt(index);
+    final isInput = draft.isInput(index);
+    final value = draft.displayValueAt(index, vma);
+    final otherMeasures = [
+      for (var other = 0; other < 4; other++)
+        if (other != index) draft.measureAt(other),
+    ];
     final invalid =
-        text.isNotEmpty && parseRunningValue(measure, text, vma: vma) == null;
+        isInput &&
+        value.isNotEmpty &&
+        parseRunningValue(measure, value, vma: vma) == null;
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
@@ -94,106 +90,156 @@ class RunningCalculatorPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DropdownButtonFormField<RunningMeasure>(
-              key: ValueKey('calculator-measure-$index-${measure.name}'),
-              initialValue: measure,
-              isExpanded: true,
-              decoration: InputDecoration(
-                labelText:
-                    strings[index == 0
-                        ? 'calculatorFirst'
-                        : 'calculatorSecond'],
-              ),
-              items: [
-                for (final option in RunningMeasure.values)
-                  if (option.quantity != other.quantity)
-                    DropdownMenuItem(
-                      value: option,
-                      child: Text(_label(strings, option)),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<RunningMeasure>(
+                    key: ValueKey('calculator-measure-$index-${measure.name}'),
+                    initialValue: measure,
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                      labelText: strings['calculatorType'],
                     ),
+                    items: [
+                      for (final option in RunningMeasure.values)
+                        if (!otherMeasures.contains(option))
+                          DropdownMenuItem(
+                            value: option,
+                            child: Text(_label(strings, option)),
+                          ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) onChanged(draft.select(index, value));
+                    },
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Tooltip(
+                  message:
+                      strings[isInput
+                          ? 'calculatorInput'
+                          : 'calculatorCalculated'],
+                  child: Icon(
+                    isInput ? Icons.edit_outlined : Icons.functions,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
               ],
-              onChanged: (value) {
-                if (value != null) onChanged(draft.select(index, value));
-              },
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              key: ValueKey('calculator-value-$index-${measure.name}'),
-              initialValue: text,
-              keyboardType: duration
-                  ? TextInputType.datetime
-                  : const TextInputType.numberWithOptions(decimal: true),
-              textInputAction: TextInputAction.done,
-              decoration: InputDecoration(
-                labelText: _label(strings, measure),
-                helperText:
-                    strings[duration
-                        ? 'calculatorDurationHelp'
-                        : 'calculatorNumberHelp'],
-                helperMaxLines: 4,
-                errorText: invalid
-                    ? strings[measure == RunningMeasure.intensity &&
-                              !isPositiveFinite(vma)
-                          ? 'calculatorNeedsVma'
-                          : 'calculatorInvalid']
-                    : null,
-                errorMaxLines: 2,
-              ),
-              onChanged: (value) => onChanged(draft.edit(index, value)),
+            const SizedBox(height: 12),
+            _CalculatorValueField(
+              key: ValueKey('calculator-value-$index'),
+              measure: measure,
+              value: value,
+              isInput: isInput,
+              invalid: invalid,
+              vmaMissing:
+                  measure == RunningMeasure.intensity && !isPositiveFinite(vma),
+              onActivate: () => onChanged(draft.activate(index, value)),
+              onChanged: (text) => onChanged(draft.edit(index, text)),
             ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _results(BuildContext context, RunningSplit result) {
+class _CalculatorValueField extends StatefulWidget {
+  const _CalculatorValueField({
+    super.key,
+    required this.measure,
+    required this.value,
+    required this.isInput,
+    required this.invalid,
+    required this.vmaMissing,
+    required this.onActivate,
+    required this.onChanged,
+  });
+
+  final RunningMeasure measure;
+  final String value;
+  final bool isInput;
+  final bool invalid;
+  final bool vmaMissing;
+  final VoidCallback onActivate;
+  final ValueChanged<String> onChanged;
+
+  @override
+  State<_CalculatorValueField> createState() => _CalculatorValueFieldState();
+}
+
+class _CalculatorValueFieldState extends State<_CalculatorValueField> {
+  final FocusNode _focusNode = FocusNode();
+  late final TextEditingController _controller = TextEditingController(
+    text: widget.value,
+  );
+
+  @override
+  void didUpdateWidget(covariant _CalculatorValueField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.measure != widget.measure ||
+        (!widget.isInput && oldWidget.value != widget.value) ||
+        (oldWidget.isInput && !widget.isInput)) {
+      _controller.value = TextEditingValue(
+        text: widget.value,
+        selection: TextSelection.collapsed(offset: widget.value.length),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _activate() {
+    widget.onActivate();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _focusNode.requestFocus();
+      _controller.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: _controller.text.length,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final intensity = result.speed.percentOfVma(vma);
-    final values = {
-      RunningMeasure.distance: _number(result.distanceKm),
-      RunningMeasure.time: formatRunningDuration(result.seconds),
-      RunningMeasure.speed: _number(result.speed.kmh),
-      RunningMeasure.pace: formatPacePerKm(result.speed),
-      RunningMeasure.intensity: intensity == null ? '—' : _number(intensity),
-    };
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final width = constraints.maxWidth >= 400
-            ? (constraints.maxWidth - 12) / 2
-            : constraints.maxWidth;
-        return Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            for (final entry in values.entries)
-              SizedBox(
-                width: width,
-                child: Card(
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(_label(strings, entry.key)),
-                        const SizedBox(height: 4),
-                        SelectableText(
-                          entry.value,
-                          key: ValueKey('calculator-result-${entry.key.name}'),
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        if (entry.key == RunningMeasure.intensity &&
-                            !isPositiveFinite(vma))
-                          Text(strings['calculatorNeedsVma']),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
+    final duration =
+        widget.measure == RunningMeasure.time ||
+        widget.measure == RunningMeasure.pace;
+    return TextFormField(
+      controller: _controller,
+      focusNode: _focusNode,
+      readOnly: !widget.isInput,
+      onTap: widget.isInput ? null : _activate,
+      keyboardType: duration
+          ? TextInputType.datetime
+          : const TextInputType.numberWithOptions(decimal: true),
+      textInputAction: TextInputAction.done,
+      decoration: InputDecoration(
+        labelText: _label(strings, widget.measure),
+        helperText:
+            strings[widget.isInput
+                ? duration
+                      ? 'calculatorDurationHelp'
+                      : 'calculatorNumberHelp'
+                : 'calculatorTapToEdit'],
+        helperMaxLines: 4,
+        errorText: widget.invalid
+            ? strings[widget.vmaMissing
+                  ? 'calculatorNeedsVma'
+                  : 'calculatorInvalid']
+            : null,
+        errorMaxLines: 2,
+        suffixIcon: widget.isInput ? null : const Icon(Icons.edit_outlined),
+      ),
+      onChanged: widget.isInput ? widget.onChanged : null,
     );
   }
 }
@@ -206,7 +252,3 @@ String _label(AppLocalizations strings, RunningMeasure measure) =>
       RunningMeasure.pace => 'calculatorPace',
       RunningMeasure.intensity => 'calculatorIntensity',
     }];
-
-String _number(double value) => value < 0.01 || value >= 1e9
-    ? value.toStringAsExponential(2)
-    : value.toStringAsFixed(2);

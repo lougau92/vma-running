@@ -2,7 +2,11 @@ class TranslationsNl {
   static const Map<String, String> values = {
     "calculatorTab": "Rekenhulp",
     "calculatorHelp":
-        "Kies twee bekende waarden. De andere waarden worden tijdens het typen berekend.",
+        "Kies vier waarden om te tonen. Vul twee onafhankelijke waarden in; tik op een berekende waarde om een invoer te vervangen.",
+    "calculatorType": "Type",
+    "calculatorInput": "Invoer",
+    "calculatorCalculated": "Berekend",
+    "calculatorTapToEdit": "Tik om een invoer te vervangen",
     "calculatorFirst": "Bekende waarde 1",
     "calculatorSecond": "Bekende waarde 2",
     "calculatorDistance": "Afstand (km)",
@@ -11,7 +15,7 @@ class TranslationsNl {
     "calculatorIntensity": "Intensiteit (% VMA)",
     "calculatorResults": "Resultaten",
     "calculatorIncomplete":
-        "Voer twee positieve waarden in om de resultaten te berekenen.",
+        "Vul twee geldige waarden van verschillende grootheden in om de andere te berekenen.",
     "calculatorDurationHelp":
         "Tijd: mm:ss of u:mm:ss. Tempo: min:sec. Een los getal betekent seconden.",
     "calculatorNumberHelp": "Gebruik een punt of komma voor decimalen.",

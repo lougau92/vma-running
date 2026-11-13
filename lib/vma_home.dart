@@ -272,8 +272,11 @@ class _VmaHomePageState extends State<VmaHomePage> {
     if (_selectedPage.requiresVma || _selectedPage == _HomePage.calculator)
       'vmaKmh': _vma,
     if (_selectedPage == _HomePage.calculator) ...{
-      'firstMeasure': _calculatorDraft.first.name,
-      'secondMeasure': _calculatorDraft.second.name,
+      'measures': [
+        for (var index = 0; index < 4; index++)
+          _calculatorDraft.measureAt(index).name,
+      ],
+      'inputIndices': _calculatorDraft.inputIndices,
     },
     if (_selectedPage == _HomePage.intensity) ...{
       'minPercent': _minPercent,

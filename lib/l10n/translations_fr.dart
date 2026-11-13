@@ -2,7 +2,11 @@ class TranslationsFr {
   static const Map<String, String> values = {
     "calculatorTab": "Calculateur",
     "calculatorHelp":
-        "Choisissez deux valeurs connues. Les autres valeurs sont calculées pendant la saisie.",
+        "Choisissez quatre mesures à afficher. Saisissez deux valeurs indépendantes ; touchez une valeur calculée pour remplacer une entrée.",
+    "calculatorType": "Type",
+    "calculatorInput": "Entrée",
+    "calculatorCalculated": "Calculée",
+    "calculatorTapToEdit": "Touchez pour remplacer une entrée",
     "calculatorFirst": "Valeur connue 1",
     "calculatorSecond": "Valeur connue 2",
     "calculatorDistance": "Distance (km)",
@@ -11,7 +15,7 @@ class TranslationsFr {
     "calculatorIntensity": "Intensité (% VMA)",
     "calculatorResults": "Résultats",
     "calculatorIncomplete":
-        "Saisissez deux valeurs positives pour calculer les résultats.",
+        "Saisissez deux valeurs valides de quantités différentes pour calculer les autres.",
     "calculatorDurationHelp":
         "Temps : mm:ss ou h:mm:ss. Allure : min:sec. Un nombre seul indique des secondes.",
     "calculatorNumberHelp":

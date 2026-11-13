@@ -102,6 +102,12 @@ void main() {
         if (kind == 0) {
           await tester.tap(find.text('Group 2'));
           await tester.pump();
+          expect(
+            tester
+                .widget<SegmentedButton<int>>(find.byType(SegmentedButton<int>))
+                .selected,
+            {1},
+          );
         }
         loader.updates.add(
           RemoteLoadResult(

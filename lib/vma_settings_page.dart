@@ -15,12 +15,14 @@ class VmaSettingsPage extends StatelessWidget {
     super.key,
     required this.settings,
     required this.onSettingsChanged,
+    this.onVmaChanged,
     this.feedbackSender = const UnavailableFeedbackSender(),
   });
 
   final FeedbackSender feedbackSender;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
+  final ValueChanged<double>? onVmaChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,7 @@ class VmaSettingsPage extends StatelessWidget {
         body: VmaSettingsView(
           settings: settings,
           onSettingsChanged: onSettingsChanged,
+          onVmaChanged: onVmaChanged,
         ),
       ),
     );

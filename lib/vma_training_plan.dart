@@ -177,24 +177,21 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
                           refreshing: refreshing,
                           onRefresh: _refreshPlan,
                         ),
-                        ToggleButtons(
-                          isSelected: List.generate(
-                            plan.groups.length,
-                            (i) => i == selectedGroup,
-                          ),
-                          onPressed: (index) =>
-                              setState(() => _selectedGroup = index),
-                          children: plan.groups
-                              .map(
-                                (g) => Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                  ),
-                                  child: Text(g.title),
+                        if (plan.groups.length > 1)
+                          SegmentedButton<int>(
+                            segments: [
+                              for (var i = 0; i < plan.groups.length; i++)
+                                ButtonSegment(
+                                  value: i,
+                                  label: Text(plan.groups[i].title),
                                 ),
-                              )
-                              .toList(),
-                        ),
+                            ],
+                            selected: {selectedGroup},
+                            showSelectedIcon: false,
+                            onSelectionChanged: (selection) => setState(
+                              () => _selectedGroup = selection.single,
+                            ),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 16),
@@ -337,6 +334,10 @@ class _BlocksCard extends StatelessWidget {
       id: 'intervals',
       data: {'blockCount': group.blocks.length},
       child: Card(
+        color: theme.brightness == Brightness.light
+            ? Colors.white
+            : theme.colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
@@ -412,6 +413,10 @@ class _SectionCard extends StatelessWidget {
     return FeedbackContextScope(
       id: contextId,
       child: Card(
+        color: theme.brightness == Brightness.light
+            ? Colors.white
+            : theme.colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(

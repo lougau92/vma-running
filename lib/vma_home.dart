@@ -168,6 +168,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
                     builder: (_) => VmaSettingsPage(
                       feedbackSender: widget.feedbackSender,
                       settings: widget.settings,
+                      onVmaChanged: (value) => setState(() => _vma = value),
                       onSettingsChanged: widget.onSettingsChanged,
                     ),
                   ),
@@ -417,9 +418,9 @@ class _VmaHomePageState extends State<VmaHomePage> {
                   ),
                   Slider(
                     value: _timesPercent,
-                    min: 50,
+                    min: 60,
                     max: 120,
-                    divisions: 14,
+                    divisions: 12,
                     label: '${_timesPercent.toStringAsFixed(0)}%',
                     onChanged: (value) {
                       setState(() {
@@ -451,18 +452,11 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   Widget _buildVMAHeader(AppLocalizations strings) {
-    return Tooltip(
-      message: strings.updateVma,
-      child: TextButton.icon(
-        key: const ValueKey('vma-edit'),
-        onPressed: _promptForVma,
-        style: TextButton.styleFrom(
-          minimumSize: const Size(48, 48),
-          textStyle: Theme.of(context).textTheme.titleSmall,
-        ),
-        iconAlignment: IconAlignment.end,
-        icon: const Icon(Icons.edit_outlined, size: 18),
-        label: Text(strings.yourVma(_vma!)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        strings.yourVma(_vma!),
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }

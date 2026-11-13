@@ -190,6 +190,43 @@ void main() {
     },
   );
 
+  testWidgets('VMA settings update targets and persist after reopening', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_app(_Loader(), const FeatureFlags()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('vma-edit')), findsNothing);
+    expect(find.byIcon(Icons.edit_outlined), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.timer));
+    await tester.pumpAndSettle();
+    await tester.drag(find.byType(Slider), const Offset(-1000, 0));
+    await tester.pumpAndSettle();
+    expect(find.text('Intensity: 60%VMA'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('vma-edit')));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '20,5');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+    expect(find.text('VMA: 20.50 km/h'), findsOneWidget);
+    expect((await SharedPreferences.getInstance()).getDouble('user_vma'), 20.5);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('VMA: 20.50 km/h'), findsOneWidget);
+    expect(
+      tester.widget<VmaTimesTable>(find.byType(VmaTimesTable)).speed!.kmh,
+      closeTo(12.3, 0.000001),
+    );
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    expect(find.text('VMA: 20.50 km/h'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'release defaults retain clipboard export and settings without integration controls',
     (tester) async {

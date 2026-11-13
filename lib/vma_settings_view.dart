@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
+import 'vma_storage.dart';
 
 class VmaSettingsView extends StatefulWidget {
   const VmaSettingsView({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
+    this.onVmaChanged,
   });
 
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
+  final ValueChanged<double>? onVmaChanged;
 
   @override
   State<VmaSettingsView> createState() => _VmaSettingsViewState();
@@ -19,11 +22,26 @@ class VmaSettingsView extends StatefulWidget {
 
 class _VmaSettingsViewState extends State<VmaSettingsView> {
   late final Future<PackageInfo> _packageInfoFuture;
+  final _vmaStorage = VmaStorage();
+  double? _vma;
 
   @override
   void initState() {
     super.initState();
     _packageInfoFuture = PackageInfo.fromPlatform();
+    _loadVma();
+  }
+
+  Future<void> _loadVma() async {
+    final value = await _vmaStorage.load();
+    if (mounted) setState(() => _vma = value);
+  }
+
+  Future<void> _editVma() async {
+    final value = await _vmaStorage.promptForVma(context, initialValue: _vma);
+    if (value == null || !mounted) return;
+    setState(() => _vma = value);
+    widget.onVmaChanged?.call(value);
   }
 
   @override
@@ -37,6 +55,18 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
           child: ListView(
             padding: const EdgeInsets.all(24),
             children: [
+              Material(
+                type: MaterialType.transparency,
+                child: ListTile(
+                  key: const ValueKey('vma-edit'),
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(strings.updateVma),
+                  subtitle: _vma == null ? null : Text(strings.yourVma(_vma!)),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: _editVma,
+                ),
+              ),
+              const SizedBox(height: 24),
               Text(
                 strings.language,
                 style: Theme.of(context).textTheme.titleMedium,

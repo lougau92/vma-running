@@ -11,6 +11,8 @@ class NumberRangePickerDialog extends StatefulWidget {
     required this.initialMin,
     required this.initialMax,
     required this.formatValue,
+    required this.parseValueInput,
+    this.inputKeyboardType,
   });
 
   final String title;
@@ -18,6 +20,8 @@ class NumberRangePickerDialog extends StatefulWidget {
   final double initialMin;
   final double initialMax;
   final String Function(double) formatValue;
+  final double? Function(String input, double currentValue) parseValueInput;
+  final TextInputType? inputKeyboardType;
 
   @override
   State<NumberRangePickerDialog> createState() =>
@@ -33,6 +37,27 @@ class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
   late double _min = widget.initialMin;
   late double _max = widget.initialMax;
   bool _invalid = false;
+
+  int? _indexForInput(String input, int currentIndex) {
+    final trimmed = input.trim().toLowerCase();
+    final exactIndex = _values.indexWhere(
+      (value) => widget.formatValue(value).trim().toLowerCase() == trimmed,
+    );
+    if (exactIndex >= 0) return exactIndex;
+
+    final value = widget.parseValueInput(input, _values[currentIndex]);
+    if (value == null || value < _values.first || value > _values.last) {
+      return null;
+    }
+    var nearestIndex = 0;
+    for (var index = 1; index < _values.length; index++) {
+      if ((_values[index] - value).abs() <
+          (_values[nearestIndex] - value).abs()) {
+        nearestIndex = index;
+      }
+    }
+    return nearestIndex;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +79,8 @@ class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
                     initialIndex: _values.indexOf(widget.initialMin),
                     itemCount: _values.length,
                     formatItem: (index) => widget.formatValue(_values[index]),
+                    parseInput: _indexForInput,
+                    inputKeyboardType: widget.inputKeyboardType,
                     onChanged: (index) => setState(() {
                       _min = _values[index];
                       _invalid = false;
@@ -68,6 +95,8 @@ class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
                     initialIndex: _values.indexOf(widget.initialMax),
                     itemCount: _values.length,
                     formatItem: (index) => widget.formatValue(_values[index]),
+                    parseInput: _indexForInput,
+                    inputKeyboardType: widget.inputKeyboardType,
                     onChanged: (index) => setState(() {
                       _max = _values[index];
                       _invalid = false;

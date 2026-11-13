@@ -57,6 +57,15 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
                     initialIndex: _initial ~/ 100 - widget.minWhole,
                     itemCount: widget.maxWhole - widget.minWhole + 1,
                     formatItem: (index) => '${index + widget.minWhole}',
+                    parseInput: (input, _) {
+                      final value = int.tryParse(input.trim());
+                      if (value == null ||
+                          value < widget.minWhole ||
+                          value > widget.maxWhole) {
+                        return null;
+                      }
+                      return value - widget.minWhole;
+                    },
                     onChanged: (index) =>
                         setState(() => _whole = index + widget.minWhole),
                   ),
@@ -69,6 +78,12 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
                     initialIndex: _initial % 100,
                     itemCount: 100,
                     formatItem: (index) => index.toString().padLeft(2, '0'),
+                    parseInput: (input, _) {
+                      final value = int.tryParse(input.trim());
+                      return value != null && value >= 0 && value < 100
+                          ? value
+                          : null;
+                    },
                     onChanged: (index) => setState(() => _fraction = index),
                   ),
                 ),

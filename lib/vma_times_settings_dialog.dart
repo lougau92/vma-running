@@ -30,6 +30,14 @@ Future<DistanceRange?> showDistancesSettingsDialog(
       initialMin: initialMin,
       initialMax: initialMax,
       formatValue: strings.distanceShort,
+      parseValueInput: (input, currentValue) {
+        final bareNumber = double.tryParse(input.trim().replaceAll(',', '.'));
+        if (bareNumber != null && currentValue >= 1000) {
+          final meters = bareNumber * 1000;
+          return meters.isFinite ? meters : null;
+        }
+        return parseDistanceInput(input);
+      },
     ),
   );
   return selected == null
@@ -51,6 +59,8 @@ Future<TimeRange?> showTimesSettingsDialog(
       initialMin: initialMinSeconds,
       initialMax: initialMaxSeconds,
       formatValue: (seconds) => formatElapsed(seconds.toInt()),
+      parseValueInput: (input, _) => parseRunningDuration(input),
+      inputKeyboardType: TextInputType.text,
     ),
   );
   return selected == null

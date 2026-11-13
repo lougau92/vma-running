@@ -45,6 +45,23 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
 
   int _index(double value) => _values.indexOf(value);
 
+  int? _indexForInput(String input, int _) {
+    final value = double.tryParse(
+      input.trim().replaceAll('%', '').replaceAll(',', '.'),
+    );
+    if (value == null || value < _values.first || value > _values.last) {
+      return null;
+    }
+    var nearestIndex = 0;
+    for (var index = 1; index < _values.length; index++) {
+      if ((_values[index] - value).abs() <
+          (_values[nearestIndex] - value).abs()) {
+        nearestIndex = index;
+      }
+    }
+    return nearestIndex;
+  }
+
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
@@ -65,6 +82,7 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
                     initialIndex: _index(_min),
                     itemCount: _values.length,
                     formatItem: (i) => _formatPercent(_values[i]),
+                    parseInput: _indexForInput,
                     onChanged: (i) => setState(() {
                       _min = _values[i];
                       _error = null;
@@ -79,6 +97,7 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
                     initialIndex: _index(_max),
                     itemCount: _values.length,
                     formatItem: (i) => _formatPercent(_values[i]),
+                    parseInput: _indexForInput,
                     onChanged: (i) => setState(() {
                       _max = _values[i];
                       _error = null;
@@ -93,6 +112,7 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
               initialIndex: _index(_step),
               itemCount: _values.length,
               formatItem: (i) => _formatPercent(_values[i]),
+              parseInput: _indexForInput,
               onChanged: (i) => setState(() {
                 _step = _values[i];
                 _error = null;

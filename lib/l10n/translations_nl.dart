@@ -3,7 +3,7 @@ class TranslationsNl {
     'appTitle': 'VMA Training',
     'noVma': 'Geen VMA opgeslagen',
     'enterVmaPlaceholder': 'Voer je VMA in om tempos te zien.',
-    'yourVma': 'Je VMA: {value} km/u',
+    'yourVma': 'VMA: {value} km/u',
     'setVma': 'VMA instellen',
     'updateVma': 'VMA bijwerken',
     'intensity': 'Intensiteit',

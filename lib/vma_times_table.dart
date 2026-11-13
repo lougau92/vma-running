@@ -1,3 +1,4 @@
+import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'interactive_header.dart';
@@ -90,29 +91,33 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
       _distanceFirst ? timeColumn : distanceColumn,
     ];
 
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: _verticalController,
-      child: SingleChildScrollView(
+    return FeedbackContextScope(
+      id: 'times-table',
+      data: {'mode': _distanceFirst ? 'distance-first' : 'time-first'},
+      child: Scrollbar(
+        thumbVisibility: true,
         controller: _verticalController,
-        scrollDirection: Axis.vertical,
         child: SingleChildScrollView(
-          controller: _horizontalController,
-          scrollDirection: Axis.horizontal,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 320),
-            child: DataTable(
-              columnSpacing: 16,
-              columns: columns,
-              rows: data
-                  .map(
-                    (value) => DataRow(
-                      cells: _distanceFirst
-                          ? _buildDistanceRow(value, speedMs, strings)
-                          : _buildTimeRow(value, speedMs, strings),
-                    ),
-                  )
-                  .toList(),
+          controller: _verticalController,
+          scrollDirection: Axis.vertical,
+          child: SingleChildScrollView(
+            controller: _horizontalController,
+            scrollDirection: Axis.horizontal,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 320),
+              child: DataTable(
+                columnSpacing: 16,
+                columns: columns,
+                rows: data
+                    .map(
+                      (value) => DataRow(
+                        cells: _distanceFirst
+                            ? _buildDistanceRow(value, speedMs, strings)
+                            : _buildTimeRow(value, speedMs, strings),
+                      ),
+                    )
+                    .toList(),
+              ),
             ),
           ),
         ),

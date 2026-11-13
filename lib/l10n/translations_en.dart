@@ -3,7 +3,7 @@ class TranslationsEn {
     'appTitle': 'VMA Training',
     'noVma': 'No VMA saved yet',
     'enterVmaPlaceholder': 'Enter your VMA to see pace targets.',
-    'yourVma': 'Your VMA: {value} km/h',
+    'yourVma': 'VMA: {value} km/h',
     'setVma': 'Set VMA',
     'updateVma': 'Update VMA',
     'intensity': 'Intensity',

@@ -102,6 +102,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(sender.sent.single.message, 'Un retour de test.');
       expect(sender.sent.single.category, 'Bug report');
+      expect(sender.sent.single.origin, 'settings');
+      expect(sender.sent.single.uiContext!.screen, 'settings');
       expect(find.text('Avis envoyé.'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },

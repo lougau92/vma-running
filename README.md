@@ -191,7 +191,13 @@ in device storage, unused.
 
 The home app bar and settings page include a feedback button. The form follows
 the app language (EN/FR/NL) and submits only the entered message, category, and
-optional reply email. It uses the standalone `app_feedback` Git dependency,
+optional reply email, plus an automatic snapshot of the active UI taken before
+the form opens. It records route/dialog context, app version, locale/theme,
+viewport/text scale, active navigation, visible controls, table dimensions and
+scroll positions. Reusable screen/section scopes add the displayed VMA/ranges,
+Times table mode, selected workout group and cache/network source. The opening
+snapshot is preserved during edits and retries. Inputs, document text, browser
+URLs, passwords and screenshots are excluded. It uses the standalone `app_feedback` Git dependency,
 pinned to a reviewed commit in `pubspec.yaml`. The ignored local
 `pubspec_overrides.yaml` points to `../app-feedback`, so shared changes appear
 without copying. Run `flutter pub get` after changing dependency configuration.

@@ -3,7 +3,11 @@
 import 'dart:async' show unawaited;
 
 import 'package:app_feedback/app_feedback.dart'
-    show FeedbackSender, SupabaseFeedbackSender, UnavailableFeedbackSender;
+    show
+        FeedbackSender,
+        SupabaseFeedbackSender,
+        UnavailableFeedbackSender,
+        FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -27,6 +31,7 @@ class _VmaAppState extends State<VmaApp> {
   final SettingsStorage _storage = SettingsStorage();
   AppSettings _settings = const AppSettings();
   bool _loading = true;
+  PackageInfo? _packageInfo;
   FeedbackSender _feedbackSender = const UnavailableFeedbackSender();
 
   @override
@@ -66,6 +71,7 @@ class _VmaAppState extends State<VmaApp> {
       print('VMA Running app started');
       print('Version: ${info.version}');
       print('Build: ${info.buildNumber}');
+      if (mounted) setState(() => _packageInfo = info);
     } catch (e) {
       print('App launch: failed to read package info: $e');
     }
@@ -99,6 +105,14 @@ class _VmaAppState extends State<VmaApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) => FeedbackContextScope(
+        id: 'application',
+        data: {
+          'version': _packageInfo?.version,
+          'build': _packageInfo?.buildNumber,
+        },
+        child: child ?? const SizedBox.shrink(),
+      ),
       home: VmaHomePage(
         feedbackSender: _feedbackSender,
         settings: _settings,

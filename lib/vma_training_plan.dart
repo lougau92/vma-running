@@ -1,3 +1,4 @@
+import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ class TrainingPlanResult {
     required this.plan,
     this.noticeKey,
     this.refreshing = false,
+    required this.origin,
   });
 
+  final RemoteLoadOrigin origin;
   final TrainingPlan plan;
   final String? noticeKey;
   final bool refreshing;
@@ -88,6 +91,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       plan: _parsePlan(result.data),
       noticeKey: _noticeKeyForOrigin(result),
       refreshing: result.refreshing,
+      origin: result.origin,
     );
   }
 
@@ -106,12 +110,19 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
         } else if (snapshot.hasData) {
           final result = snapshot.data!;
           _notifyIfNeeded(result.noticeKey);
-          return _buildPlanContent(
-            result.plan,
-            context,
-            refreshing:
-                snapshot.connectionState == ConnectionState.waiting ||
-                result.refreshing,
+          return FeedbackContextScope(
+            id: 'workout-content',
+            data: {
+              'source': result.origin.name,
+              'refreshing': result.refreshing,
+            },
+            child: _buildPlanContent(
+              result.plan,
+              context,
+              refreshing:
+                  snapshot.connectionState == ConnectionState.waiting ||
+                  result.refreshing,
+            ),
           );
         } else {
           return const Center(child: Text('No data available'));
@@ -130,77 +141,97 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
     final strings = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
-    return RefreshIndicator(
-      onRefresh: _refreshPlan,
-      child: Scrollbar(
-        thumbVisibility: true,
-        controller: _verticalController,
-        child: SingleChildScrollView(
+    return FeedbackContextScope(
+      id: 'workout',
+      data: {
+        'selectedGroup': selectedGroup,
+        'groupCount': plan.groups.length,
+        'refreshing': refreshing,
+      },
+      child: RefreshIndicator(
+        onRefresh: _refreshPlan,
+        child: Scrollbar(
+          thumbVisibility: true,
           controller: _verticalController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 320),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 8,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      Text(
-                        strings.trainingPlanTab,
-                        style: theme.textTheme.titleMedium,
-                      ),
-                      ContentRefreshButton(
-                        refreshing: refreshing,
-                        onRefresh: _refreshPlan,
-                      ),
-                      ToggleButtons(
-                        isSelected: List.generate(
-                          plan.groups.length,
-                          (i) => i == selectedGroup,
+          child: SingleChildScrollView(
+            controller: _verticalController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 320),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Wrap(
+                      spacing: 12,
+                      runSpacing: 8,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(
+                          strings.trainingPlanTab,
+                          style: theme.textTheme.titleMedium,
                         ),
-                        onPressed: (index) =>
-                            setState(() => _selectedGroup = index),
-                        children: plan.groups
-                            .map(
-                              (g) => Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
+                        ContentRefreshButton(
+                          refreshing: refreshing,
+                          onRefresh: _refreshPlan,
+                        ),
+                        ToggleButtons(
+                          isSelected: List.generate(
+                            plan.groups.length,
+                            (i) => i == selectedGroup,
+                          ),
+                          onPressed: (index) =>
+                              setState(() => _selectedGroup = index),
+                          children: plan.groups
+                              .map(
+                                (g) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                  ),
+                                  child: Text(g.title),
                                 ),
-                                child: Text(g.title),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _SectionCard(title: strings.preSession, items: [plan.warmup]),
-                  const SizedBox(height: 12),
-                  _BlocksCard(
-                    group: group,
-                    strings: strings,
-                    vma: widget.userVma,
-                  ),
-                  const SizedBox(height: 12),
-                  _SectionCard(title: strings.cooldown, items: [plan.cooldown]),
-                  const SizedBox(height: 12),
-                  _SectionCard(title: strings.remarks, items: [plan.remarks]),
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: OutlinedButton.icon(
-                      onPressed: () => _exportPlan(plan),
-                      icon: const Icon(Icons.ios_share_rounded, size: 18),
-                      label: Text(strings.export),
+                              )
+                              .toList(),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    _SectionCard(
+                      contextId: 'warmup',
+                      title: strings.preSession,
+                      items: [plan.warmup],
+                    ),
+                    const SizedBox(height: 12),
+                    _BlocksCard(
+                      group: group,
+                      strings: strings,
+                      vma: widget.userVma,
+                    ),
+                    const SizedBox(height: 12),
+                    _SectionCard(
+                      contextId: 'cooldown',
+                      title: strings.cooldown,
+                      items: [plan.cooldown],
+                    ),
+                    const SizedBox(height: 12),
+                    _SectionCard(
+                      contextId: 'notes',
+                      title: strings.remarks,
+                      items: [plan.remarks],
+                    ),
+                    const SizedBox(height: 16),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: OutlinedButton.icon(
+                        onPressed: () => _exportPlan(plan),
+                        icon: const Icon(Icons.ios_share_rounded, size: 18),
+                        label: Text(strings.export),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -302,18 +333,22 @@ class _BlocksCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(strings.sessionContent, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            ...group.blocks.map(
-              (block) => _BlockView(block: block, strings: strings, vma: vma),
-            ),
-          ],
+    return FeedbackContextScope(
+      id: 'intervals',
+      data: {'blockCount': group.blocks.length},
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(strings.sessionContent, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ...group.blocks.map(
+                (block) => _BlockView(block: block, strings: strings, vma: vma),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -361,29 +396,37 @@ class _BlockView extends StatelessWidget {
 }
 
 class _SectionCard extends StatelessWidget {
-  const _SectionCard({required this.title, required this.items});
+  const _SectionCard({
+    required this.contextId,
+    required this.title,
+    required this.items,
+  });
 
+  final String contextId;
   final String title;
   final List<String> items;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: theme.textTheme.titleMedium),
-            const SizedBox(height: 8),
-            ...items.map(
-              (line) => Padding(
-                padding: const EdgeInsets.only(bottom: 6),
-                child: Text(line),
+    return FeedbackContextScope(
+      id: contextId,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 8),
+              ...items.map(
+                (line) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Text(line),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

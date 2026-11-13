@@ -1,5 +1,9 @@
 import 'package:app_feedback/app_feedback.dart'
-    show FeedbackButton, FeedbackSender, UnavailableFeedbackSender;
+    show
+        FeedbackButton,
+        FeedbackSender,
+        UnavailableFeedbackSender,
+        FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -22,11 +26,14 @@ import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
 
 enum _HomePage {
-  intensity,
-  times,
-  trainingPlan,
-  communications,
-  rankings;
+  intensity('intensity'),
+  times('times'),
+  trainingPlan('training-plan'),
+  communications('club-communications'),
+  rankings('club-rankings');
+
+  const _HomePage(this.contextId);
+  final String contextId;
 
   bool get requiresVma => switch (this) {
     intensity || times || trainingPlan => true,
@@ -129,41 +136,45 @@ class _VmaHomePageState extends State<VmaHomePage> {
     final strings = AppLocalizations.of(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return DecoratedScaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/enjambee_img/logo-header-minimized.png',
-              height: 32,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(strings.appTitle, overflow: TextOverflow.ellipsis),
+    return FeedbackContextScope(
+      id: 'home',
+      child: DecoratedScaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/enjambee_img/logo-header-minimized.png',
+                height: 32,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(strings.appTitle, overflow: TextOverflow.ellipsis),
+              ),
+            ],
+          ),
+          actions: [
+            FeedbackButton(sender: widget.feedbackSender),
+            IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: strings.settingsTab,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    settings: const RouteSettings(name: '/settings'),
+                    builder: (_) => VmaSettingsPage(
+                      feedbackSender: widget.feedbackSender,
+                      settings: widget.settings,
+                      onSettingsChanged: widget.onSettingsChanged,
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
-        actions: [
-          FeedbackButton(sender: widget.feedbackSender),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: strings.settingsTab,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => VmaSettingsPage(
-                    feedbackSender: widget.feedbackSender,
-                    settings: widget.settings,
-                    onSettingsChanged: widget.onSettingsChanged,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+        body: _buildPageBody(strings),
+        bottomNavigationBar: _buildBottomNavigation(strings, isDark),
       ),
-      body: _buildPageBody(strings),
-      bottomNavigationBar: _buildBottomNavigation(strings, isDark),
     );
   }
 
@@ -189,17 +200,42 @@ class _VmaHomePageState extends State<VmaHomePage> {
       _HomePage.rankings => _buildChallengeBody(),
     };
 
+    final hasVmaHeader =
+        _selectedPage == _HomePage.intensity ||
+        _selectedPage == _HomePage.times;
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: EdgeInsets.fromLTRB(24, hasVmaHeader ? 8 : 24, 24, 24),
       child: Align(
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 900),
-          child: content,
+          child: FeedbackContextScope(
+            id: _selectedPage.contextId,
+            isScreen: true,
+            data: _pageContextState,
+            child: content,
+          ),
         ),
       ),
     );
   }
+
+  Map<String, Object?> get _pageContextState => {
+    if (_selectedPage.requiresVma) 'vmaKmh': _vma,
+    if (_selectedPage == _HomePage.intensity) ...{
+      'minPercent': _minPercent,
+      'maxPercent': _maxPercent,
+      'stepPercent': _step,
+      'distanceMeters': _distanceMeters,
+    },
+    if (_selectedPage == _HomePage.times) ...{
+      'intensityPercent': _timesPercent,
+      'minDistanceMeters': _timesMinDistance,
+      'maxDistanceMeters': _timesMaxDistance,
+      'minSeconds': _timesMinSeconds,
+      'maxSeconds': _timesMaxSeconds,
+    },
+  };
 
   BottomNavigationBar _buildBottomNavigation(
     AppLocalizations strings,
@@ -306,7 +342,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildVMAHeader(strings),
-        const SizedBox(height: 32),
+        const SizedBox(height: 8),
         Expanded(
           child: _wrapCenteredWidth(
             VmaPaceTable(
@@ -335,22 +371,24 @@ class _VmaHomePageState extends State<VmaHomePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _buildVMAHeader(strings),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         _wrapCenteredWidth(
           Card(
             margin: EdgeInsets.zero,
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Row(
+                  Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    spacing: 12,
+                    runSpacing: 4,
                     children: [
                       Text(
                         '${strings.intensity}: ${_timesPercent.toStringAsFixed(0)}%VMA',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      const Spacer(),
                       Text(
                         '${strings.pacePerKm}: $paceText',
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -393,24 +431,19 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   Widget _buildVMAHeader(AppLocalizations strings) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Flexible(
-          child: Text(
-            _vma == null ? strings.noVma : strings.yourVma(_vma!),
-            style: Theme.of(context).textTheme.headlineSmall,
-            textAlign: TextAlign.center,
-          ),
+    return Tooltip(
+      message: strings.updateVma,
+      child: TextButton.icon(
+        key: const ValueKey('vma-edit'),
+        onPressed: _promptForVma,
+        style: TextButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          textStyle: Theme.of(context).textTheme.titleSmall,
         ),
-        const SizedBox(width: 12),
-        ElevatedButton.icon(
-          onPressed: _promptForVma,
-          icon: const Icon(Icons.directions_run),
-          label: Text(_vma == null ? strings.setVma : strings.updateVma),
-        ),
-      ],
+        iconAlignment: IconAlignment.end,
+        icon: const Icon(Icons.edit_outlined, size: 18),
+        label: Text(strings.yourVma(_vma!)),
+      ),
     );
   }
 

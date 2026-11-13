@@ -3,7 +3,7 @@ class TranslationsFr {
     'appTitle': 'Entraînement VMA',
     'noVma': 'Aucune VMA enregistrée',
     'enterVmaPlaceholder': 'Saisissez votre VMA pour voir les allures.',
-    'yourVma': 'Votre VMA : {value} km/h',
+    'yourVma': 'VMA : {value} km/h',
     'setVma': 'Définir la VMA',
     'updateVma': 'Mettre à jour la VMA',
     'intensity': 'Intensité',

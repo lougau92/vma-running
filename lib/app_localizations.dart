@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'distance_extensions.dart';
+import 'running/running_distance_labels.dart';
 import 'l10n/translations_en.dart';
 import 'l10n/translations_fr.dart';
 import 'l10n/translations_nl.dart';

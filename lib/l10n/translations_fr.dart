@@ -1,5 +1,23 @@
 class TranslationsFr {
   static const Map<String, String> values = {
+    "calculatorTab": "Calculateur",
+    "calculatorHelp":
+        "Choisissez deux valeurs connues. Les autres valeurs sont calculées pendant la saisie.",
+    "calculatorFirst": "Valeur connue 1",
+    "calculatorSecond": "Valeur connue 2",
+    "calculatorDistance": "Distance (km)",
+    "calculatorTime": "Temps (h:mm:ss)",
+    "calculatorPace": "Allure (min:sec/km)",
+    "calculatorIntensity": "Intensité (% VMA)",
+    "calculatorResults": "Résultats",
+    "calculatorIncomplete":
+        "Saisissez deux valeurs positives pour calculer les résultats.",
+    "calculatorDurationHelp":
+        "Temps : mm:ss ou h:mm:ss. Allure : min:sec. Un nombre seul indique des secondes.",
+    "calculatorNumberHelp":
+        "Utilisez un point ou une virgule pour les décimales.",
+    "calculatorNeedsVma": "Définissez votre VMA pour calculer l’intensité.",
+    "calculatorInvalid": "Saisissez une valeur positive valide.",
     'appTitle': 'Entraînement VMA',
     'noVma': 'Aucune VMA enregistrée',
     'enterVmaPlaceholder': 'Saisissez votre VMA pour voir les allures.',

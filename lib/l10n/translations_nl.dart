@@ -1,5 +1,22 @@
 class TranslationsNl {
   static const Map<String, String> values = {
+    "calculatorTab": "Rekenhulp",
+    "calculatorHelp":
+        "Kies twee bekende waarden. De andere waarden worden tijdens het typen berekend.",
+    "calculatorFirst": "Bekende waarde 1",
+    "calculatorSecond": "Bekende waarde 2",
+    "calculatorDistance": "Afstand (km)",
+    "calculatorTime": "Tijd (u:mm:ss)",
+    "calculatorPace": "Tempo (min:sec/km)",
+    "calculatorIntensity": "Intensiteit (% VMA)",
+    "calculatorResults": "Resultaten",
+    "calculatorIncomplete":
+        "Voer twee positieve waarden in om de resultaten te berekenen.",
+    "calculatorDurationHelp":
+        "Tijd: mm:ss of u:mm:ss. Tempo: min:sec. Een los getal betekent seconden.",
+    "calculatorNumberHelp": "Gebruik een punt of komma voor decimalen.",
+    "calculatorNeedsVma": "Stel je VMA in om de intensiteit te berekenen.",
+    "calculatorInvalid": "Voer een geldige positieve waarde in.",
     'appTitle': 'VMA Training',
     'noVma': 'Geen VMA opgeslagen',
     'enterVmaPlaceholder': 'Voer je VMA in om tempos te zien.',

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'interactive_header.dart';
 import 'presets.dart';
-import 'time_utils.dart';
+import 'running/running.dart' show RunningSpeed, formatRunningDuration;
 
 class VmaTimesTable extends StatefulWidget {
   const VmaTimesTable({
     super.key,
-    required this.speedKmh,
+    required this.speed,
     required this.minDistanceMeters,
     required this.maxDistanceMeters,
     required this.minTimeSeconds,
@@ -17,7 +17,7 @@ class VmaTimesTable extends StatefulWidget {
     required this.onEditTimes,
   });
 
-  final double speedKmh;
+  final RunningSpeed? speed;
   final double minDistanceMeters;
   final double maxDistanceMeters;
   final double minTimeSeconds;
@@ -45,7 +45,6 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     final data = _distanceFirst ? _buildDistances() : _buildTimes();
-    final speedMs = widget.speedKmh * 1000 / 3600;
 
     final distanceHeader = SizedBox(
       width: 170,
@@ -109,13 +108,7 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
                 columnSpacing: 16,
                 columns: columns,
                 rows: data
-                    .map(
-                      (value) => DataRow(
-                        cells: _distanceFirst
-                            ? _buildDistanceRow(value, speedMs, strings)
-                            : _buildTimeRow(value, speedMs, strings),
-                      ),
-                    )
+                    .map((value) => DataRow(cells: _buildRow(value, strings)))
                     .toList(),
               ),
             ),
@@ -125,35 +118,20 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     );
   }
 
-  List<DataCell> _buildDistanceRow(
-    double distanceMeters,
-    double speedMs,
-    AppLocalizations strings,
-  ) {
-    final distanceCell = DataCell(Text(strings.distanceShort(distanceMeters)));
-    final timeCell = DataCell(
-      Text(_formatDistanceTime(speedMs, distanceMeters)),
+  List<DataCell> _buildRow(double value, AppLocalizations strings) {
+    final split = _distanceFirst
+        ? widget.speed?.forDistance(value)
+        : widget.speed?.forDuration(value);
+    final meters = _distanceFirst ? value : split?.distanceMeters;
+    final seconds = _distanceFirst ? split?.seconds : value;
+    final distanceCell = DataCell(
+      Text(meters == null ? '-' : strings.distanceShort(meters)),
     );
+    final timeCell = DataCell(Text(formatRunningDuration(seconds)));
     const spacer = DataCell(SizedBox.shrink());
-    return [spacer, distanceCell, timeCell];
-  }
-
-  List<DataCell> _buildTimeRow(
-    double seconds,
-    double speedMs,
-    AppLocalizations strings,
-  ) {
-    final timeCell = DataCell(Text(formatElapsed(seconds.toInt())));
-    final distance = speedMs * seconds;
-    final distanceCell = DataCell(Text(strings.distanceShort(distance)));
-    const spacer = DataCell(SizedBox.shrink());
-    return [spacer, timeCell, distanceCell];
-  }
-
-  String _formatDistanceTime(double speedMs, double distanceMeters) {
-    if (speedMs <= 0 || distanceMeters <= 0) return '-';
-    final speedKmh = speedMs * 3.6;
-    return formatTimeForDistance(speedKmh, distanceMeters);
+    return _distanceFirst
+        ? [spacer, distanceCell, timeCell]
+        : [spacer, timeCell, distanceCell];
   }
 
   List<double> _buildDistances() {

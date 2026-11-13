@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'presets.dart';
-import 'time_utils.dart';
+import 'running/running.dart';
 
 class DistanceRange {
   const DistanceRange({required this.min, required this.max});

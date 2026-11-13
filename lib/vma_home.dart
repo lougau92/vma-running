@@ -7,11 +7,12 @@ import 'package:app_feedback/app_feedback.dart'
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
+import 'calculator/running_calculator_draft.dart' show RunningCalculatorDraft;
+import 'calculator/running_calculator_page.dart' show RunningCalculatorPage;
 import 'feature_flags.dart';
 import 'decorated_scaffold.dart';
-import 'distance_extensions.dart';
 import 'presets.dart';
-import 'time_utils.dart';
+import 'running/running.dart';
 import 'vma_distance_dialog.dart';
 import 'vma_pace.dart';
 import 'club_communications_page.dart';
@@ -29,6 +30,7 @@ enum _HomePage {
   intensity('intensity'),
   times('times'),
   trainingPlan('training-plan'),
+  calculator('calculator'),
   communications('club-communications'),
   rankings('club-rankings');
 
@@ -37,7 +39,7 @@ enum _HomePage {
 
   bool get requiresVma => switch (this) {
     intensity || times || trainingPlan => true,
-    communications || rankings => false,
+    calculator || communications || rankings => false,
   };
 }
 
@@ -71,10 +73,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
     _HomePage.intensity,
     _HomePage.times,
     _HomePage.trainingPlan,
+    _HomePage.calculator,
     if (widget.features.clubCommunications) _HomePage.communications,
     if (widget.features.clubRankings) _HomePage.rankings,
   ];
 
+  RunningCalculatorDraft _calculatorDraft = const RunningCalculatorDraft();
   double? _vma;
   bool _loading = true;
   double _minPercent = 60;
@@ -196,6 +200,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
         onSettingsChanged: widget.onSettingsChanged,
         loader: _remoteLoader,
       ),
+      _HomePage.calculator => RunningCalculatorPage(
+        draft: _calculatorDraft,
+        vma: _vma,
+        onEditVma: _promptForVma,
+        onChanged: (draft) => setState(() => _calculatorDraft = draft),
+      ),
       _HomePage.communications => ClubCommunicationsPage(loader: _remoteLoader),
       _HomePage.rankings => _buildChallengeBody(),
     };
@@ -221,7 +231,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   Map<String, Object?> get _pageContextState => {
-    if (_selectedPage.requiresVma) 'vmaKmh': _vma,
+    if (_selectedPage.requiresVma || _selectedPage == _HomePage.calculator)
+      'vmaKmh': _vma,
+    if (_selectedPage == _HomePage.calculator) ...{
+      'firstMeasure': _calculatorDraft.first.name,
+      'secondMeasure': _calculatorDraft.second.name,
+    },
     if (_selectedPage == _HomePage.intensity) ...{
       'minPercent': _minPercent,
       'maxPercent': _maxPercent,
@@ -243,6 +258,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
   ) {
     final theme = Theme.of(context);
     return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
       backgroundColor: isDark
           ? theme.colorScheme.secondary
           : theme.colorScheme.surface,
@@ -259,6 +275,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
           _HomePage.trainingPlan => (
             Icons.fitness_center,
             strings.trainingPlanTab,
+          ),
+          _HomePage.calculator => (
+            Icons.calculate_outlined,
+            strings['calculatorTab'],
           ),
           _HomePage.communications => (
             Icons.campaign_outlined,
@@ -364,8 +384,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   Widget _buildTimesBody(AppLocalizations strings) {
-    final adjustedSpeed = _vma! * _timesPercent / 100;
-    final paceText = formatPacePerKm(adjustedSpeed, includeUnit: true);
+    final speed = RunningSpeed.fromVma(_vma, _timesPercent);
+    final paceText = formatPacePerKm(speed, includeUnit: true);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -416,7 +436,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
         Expanded(
           child: _wrapCenteredWidth(
             VmaTimesTable(
-              speedKmh: adjustedSpeed,
+              speed: speed,
               minDistanceMeters: _timesMinDistance,
               maxDistanceMeters: _timesMaxDistance,
               minTimeSeconds: _timesMinSeconds,

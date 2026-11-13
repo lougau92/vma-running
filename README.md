@@ -236,3 +236,39 @@ updates when presentation changes. This describes the current window, not
 whether the app is installed elsewhere; fullscreen alone does not prove PWA
 installation. Device classification is best-effort when browsers spoof their
 platform. Raw user agent strings are not collected.
+
+### Live running calculator
+
+The Calculator tab derives distance (km), elapsed time, speed (km/h), pace
+(min:sec/km), and VMA percentage from two independent known quantities.
+Choose distance + time, distance + speed/pace/intensity, or time +
+speed/pace/intensity in either order. VMA percentage uses the saved VMA, which
+can be edited from the calculator. General speed/pace calculations also work
+without a VMA.
+
+Decimal commas and dots are accepted. Time accepts `mm:ss`, `h:mm:ss`, or bare
+seconds; pace accepts `min:sec` or bare seconds per km. Results update while
+typing and disappear for incomplete or invalid inputs. Input pairs persist
+when switching tabs during the current app session. Feedback records the
+chosen measure types; typed calculator input is excluded from UI capture.
+
+### Shared running calculations
+
+`lib/running/running.dart` exposes the Dart-only backbone used by
+the calculator, VMA intensity table, Times table, and workout display/export.
+`RunningSpeed` converts km/h, seconds per km, and VMA percentage; it creates a
+`RunningSplit` for either a distance or duration. Internally, distances are
+meters and times are seconds. Invalid, nonfinite, or unrepresentable values
+return `null`. Results retain full precision until display formatting.
+
+Calculator field handling and input-pair selection stay in
+`lib/calculator/running_calculator_draft.dart`. Table presets and row selection
+stay with the tables. Shared duration parsing and pace/duration formatting live
+in `lib/running/running_time.dart`, so the screens and clipboard export use the
+same rounding and clock notation.
+
+Distance constants, parsing, and numeric formatting live in
+`lib/running/running_distance.dart` and are exported by the same backbone entry
+point. Localized labels and the `BuildContext` extension live in
+`running_distance_labels.dart`, a separate Flutter adapter, keeping the core
+independent of Flutter and application localization.

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_localizations.dart';
-import 'time_utils.dart';
+import 'running/running.dart';
 import 'training_plan.dart';
 
 class PlanExportData {
@@ -89,8 +89,8 @@ String formatSetLine(IntervalSet set, double vma, AppLocalizations strings) {
       : set.durationSeconds != null
       ? formatElapsed(set.durationSeconds!.toInt())
       : '';
-  final adjustedSpeed = vma * set.vmaPercent / 100;
-  final pace = formatPacePerKm(adjustedSpeed, includeUnit: true);
+  final speed = RunningSpeed.fromVma(vma, set.vmaPercent);
+  final pace = formatPacePerKm(speed, includeUnit: true);
   final recov =
       '${formatElapsed(set.recoverySeconds.toInt())} ${recoveryLabel(set.recoveryType, strings)}';
   return '$reps $load @ $pace | $recov';

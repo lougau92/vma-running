@@ -1,5 +1,22 @@
 class TranslationsEn {
   static const Map<String, String> values = {
+    "calculatorTab": "Calculator",
+    "calculatorHelp":
+        "Choose two known values. The other values update as you type.",
+    "calculatorFirst": "Known value 1",
+    "calculatorSecond": "Known value 2",
+    "calculatorDistance": "Distance (km)",
+    "calculatorTime": "Time (h:mm:ss)",
+    "calculatorPace": "Pace (min:sec/km)",
+    "calculatorIntensity": "Intensity (% VMA)",
+    "calculatorResults": "Results",
+    "calculatorIncomplete":
+        "Enter two positive values to calculate the results.",
+    "calculatorDurationHelp":
+        "Use mm:ss or h:mm:ss for time, min:sec for pace. A bare number means seconds.",
+    "calculatorNumberHelp": "Decimals can use a dot or comma.",
+    "calculatorNeedsVma": "Set your VMA to calculate intensity.",
+    "calculatorInvalid": "Enter a valid positive value.",
     'appTitle': 'VMA Training',
     'noVma': 'No VMA saved yet',
     'enterVmaPlaceholder': 'Enter your VMA to see pace targets.',

@@ -8,7 +8,7 @@ import 'app_localizations.dart';
 import 'content_refresh_button.dart' show ContentRefreshButton, refreshContent;
 import 'app_settings.dart';
 import 'plan_exporter.dart';
-import 'time_utils.dart';
+import 'running/running.dart';
 import 'training_plan.dart';
 
 class TrainingPlanResult {

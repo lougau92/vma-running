@@ -59,6 +59,7 @@ void main() {
         Icons.analytics: 'intensity',
         Icons.timer: 'times',
         Icons.fitness_center: 'training-plan',
+        Icons.calculate_outlined: 'calculator',
         Icons.campaign_outlined: 'club-communications',
         Icons.emoji_events: 'club-rankings',
       };
@@ -85,7 +86,7 @@ void main() {
         expect(navigation['selected'], tabs.values.toList().indexOf(tab.value));
         expect(sender.sent.last.message, 'Un avis de test.');
       }
-      expect(sender.sent, hasLength(5));
+      expect(sender.sent, hasLength(6));
       expect(tester.takeException(), isNull);
     },
   );

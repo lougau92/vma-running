@@ -101,7 +101,7 @@ void main() {
           );
           expect(
             nav.items.length,
-            3 + (communications ? 1 : 0) + (rankings ? 1 : 0),
+            4 + (communications ? 1 : 0) + (rankings ? 1 : 0),
           );
           expect(
             find.byIcon(Icons.campaign_outlined),
@@ -170,7 +170,7 @@ void main() {
         tester
             .widget<BottomNavigationBar>(find.byType(BottomNavigationBar))
             .currentIndex,
-        3,
+        4,
       );
       await tester.pumpWidget(
         _app(

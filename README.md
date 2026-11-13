@@ -221,3 +221,18 @@ Account-free submission requires anonymous sign-ins to be enabled on the shared
 Supabase project. `supabase/config.toml` manages only that flag; use CLI 3+
 `config diff` to review it before any authorized `config push`. All other remote
 auth settings are undeclared and preserved.
+
+### Runtime environment and mobile refresh
+
+The app detects device class independently of window size. Android and iOS
+(including iPadOS desktop-site mode) use pull-to-refresh on the training plan,
+rankings, and club communications; their refresh buttons are hidden. Desktop
+browsers and desktop PWAs keep the button, even in a narrow window.
+
+Feedback context includes platform, mobile/desktop class, web/native runtime,
+and the current browser display mode. Web presentation comes from the
+[`display-mode`](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/display-mode) media query with the iOS `navigator.standalone` fallback and
+updates when presentation changes. This describes the current window, not
+whether the app is installed elsewhere; fullscreen alone does not prove PWA
+installation. Device classification is best-effort when browsers spoof their
+platform. Raw user agent strings are not collected.

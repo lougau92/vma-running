@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'app_localizations.dart' show AppLocalizations;
 import 'remote_asset_loader.dart' show RemoteLoadResult;
+import 'runtime/runtime_environment_host.dart' show readRuntimeEnvironment;
 
 class ContentRefreshButton extends StatelessWidget {
   const ContentRefreshButton({
@@ -16,16 +17,21 @@ class ContentRefreshButton extends StatelessWidget {
   final Future<void> Function() onRefresh;
 
   @override
-  Widget build(BuildContext context) => IconButton(
-    tooltip: AppLocalizations.of(context)['refreshContent'],
-    onPressed: refreshing ? null : onRefresh,
-    icon: refreshing
-        ? const SizedBox.square(
-            dimension: 20,
-            child: CircularProgressIndicator(strokeWidth: 2),
-          )
-        : const Icon(Icons.refresh),
-  );
+  Widget build(BuildContext context) {
+    if (readRuntimeEnvironment().isMobile) {
+      return const SizedBox.shrink();
+    }
+    return IconButton(
+      tooltip: AppLocalizations.of(context)['refreshContent'],
+      onPressed: refreshing ? null : onRefresh,
+      icon: refreshing
+          ? const SizedBox.square(
+              dimension: 20,
+              child: CircularProgressIndicator(strokeWidth: 2),
+            )
+          : const Icon(Icons.refresh),
+    );
+  }
 }
 
 /// Ends pull-to-refresh at the first settled result, retaining late updates.

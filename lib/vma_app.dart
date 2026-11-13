@@ -14,6 +14,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'settings_storage.dart';
+import 'runtime/runtime_environment_host.dart' show RuntimeEnvironmentHost;
 import 'theme.dart';
 import 'vma_home.dart';
 import 'feedback_setup.dart';
@@ -111,7 +112,7 @@ class _VmaAppState extends State<VmaApp> {
           'version': _packageInfo?.version,
           'build': _packageInfo?.buildNumber,
         },
-        child: child ?? const SizedBox.shrink(),
+        child: RuntimeEnvironmentHost(child: child ?? const SizedBox.shrink()),
       ),
       home: VmaHomePage(
         feedbackSender: _feedbackSender,

@@ -170,6 +170,59 @@ void main() {
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
       },
+      variant: TargetPlatformVariant({TargetPlatform.linux}),
     );
+    for (final platform in [TargetPlatform.android, TargetPlatform.iOS]) {
+      testWidgets(
+        '$kind hides mobile refresh on $platform and retains pull-to-refresh',
+        (tester) async {
+          // A tablet-sized viewport still uses mobile interaction.
+          await tester.binding.setSurfaceSize(const Size(1024, 900));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+          final loader = _Loader();
+          await tester.pumpWidget(
+            MaterialApp(
+              locale: const Locale('en'),
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: Scaffold(body: _screen(kind, loader)),
+            ),
+          );
+          loader.updates.add(
+            RemoteLoadResult(
+              data: _data(kind, 'Saved content'),
+              origin: RemoteLoadOrigin.cache,
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.byTooltip('Refresh content'), findsNothing);
+          await tester.drag(
+            find.byType(Scrollable).first,
+            const Offset(0, 400),
+          );
+          await tester.pump();
+          await tester.pump(const Duration(seconds: 1));
+          expect(loader.refreshes, 1);
+          loader.refreshed.add(
+            RemoteLoadResult(
+              data: _data(kind, 'Recovered content'),
+              origin: RemoteLoadOrigin.network,
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.textContaining('Recovered content'), findsOneWidget);
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox());
+          unawaited(loader.updates.close());
+          unawaited(loader.refreshed.close());
+        },
+        variant: TargetPlatformVariant({platform}),
+      );
+    }
   }
 }

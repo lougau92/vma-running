@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_localizations.dart';
+import 'widgets/number_picker_dialog.dart';
 
 /// Handles loading, saving, and prompting for the user's VMA value.
 class VmaStorage {
@@ -22,47 +23,15 @@ class VmaStorage {
     SharedPreferences? prefs,
   }) async {
     final strings = AppLocalizations.of(context);
-    final controller = TextEditingController(
-      text: initialValue != null ? initialValue.toStringAsFixed(2) : '',
-    );
-    String? validationError;
-
+    final value = initialValue != null && initialValue.isFinite
+        ? initialValue.clamp(1.0, 99.99)
+        : 18.0;
     final selected = await showDialog<double>(
       context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setStateDialog) => AlertDialog(
-          title: Text(strings.enterVmaTitle),
-          content: TextField(
-            controller: controller,
-            autofocus: true,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(
-              labelText: strings.vmaLabel,
-              errorText: validationError,
-            ),
-            onChanged: (_) {
-              if (validationError != null) {
-                setStateDialog(() => validationError = null);
-              }
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                final parsed = double.tryParse(
-                  controller.text.replaceAll(',', '.'),
-                );
-                if (parsed == null) {
-                  setStateDialog(() => validationError = strings.enterNumber);
-                  return;
-                }
-                Navigator.of(dialogContext).pop(parsed);
-              },
-              child: Text(strings.save),
-            ),
-          ],
-        ),
+      builder: (_) => NumberPickerDialog(
+        title: strings.enterVmaTitle,
+        initialValue: value,
+        formatValue: strings.yourVma,
       ),
     );
 

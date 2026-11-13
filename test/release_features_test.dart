@@ -1,5 +1,6 @@
 import 'dart:convert' show jsonEncode;
 
+import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -208,7 +209,21 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('vma-edit')));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextField), '20,5');
+    final whole = tester.widget<CupertinoPicker>(
+      find.descendant(
+        of: find.byKey(const ValueKey('number-whole-picker')),
+        matching: find.byType(CupertinoPicker),
+      ),
+    );
+    whole.scrollController!.jumpToItem(19);
+    final fraction = tester.widget<CupertinoPicker>(
+      find.descendant(
+        of: find.byKey(const ValueKey('number-fraction-picker')),
+        matching: find.byType(CupertinoPicker),
+      ),
+    );
+    fraction.scrollController!.jumpToItem(50);
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
     expect(find.text('VMA: 20.50 km/h'), findsOneWidget);

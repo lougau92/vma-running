@@ -13,8 +13,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: d7b1419889d7076e61a721b6fc9239800790c3a1
-      resolved-ref: d7b1419889d7076e61a721b6fc9239800790c3a1
+      ref: 0d278c33b2e03c24ba6c32229116b92e5c1b0a48
+      resolved-ref: 0d278c33b2e03c24ba6c32229116b92e5c1b0a48
       url: "https://github.com/lougau92/app-feedback.git"
     source: git
     version: "0.2.0"

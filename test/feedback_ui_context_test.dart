@@ -84,6 +84,7 @@ void main() {
     await tester.drag(find.byType(Slider), const Offset(-60, 0));
     await tester.pumpAndSettle();
     var snapshot = await _send(tester, sender);
+    expect(snapshot['truncated'], isFalse);
     final scopes = (snapshot['scopes'] as List).cast<Map>();
     expect(
       (scopes.singleWhere((s) => s['id'] == 'times-table')['state']
@@ -104,6 +105,7 @@ void main() {
     snapshot = await _send(tester, sender);
     final workoutScopes = (snapshot['scopes'] as List).cast<Map>();
     expect(snapshot['screen'], 'training-plan');
+    expect(snapshot['truncated'], isFalse);
     expect(
       workoutScopes.map((s) => s['id']),
       containsAll(['warmup', 'intervals', 'cooldown', 'notes']),

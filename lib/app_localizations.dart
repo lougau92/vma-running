@@ -66,8 +66,7 @@ class AppLocalizations {
   String get settingsTab => _t('settingsTab');
   String get challengeTitle => _t('challengeTitle');
   String get communicationsTitle => _t('communicationsTitle');
-  String get communicationsPasswordPrompt =>
-      _t('communicationsPasswordPrompt');
+  String get communicationsPasswordPrompt => _t('communicationsPasswordPrompt');
   String get communicationsPasswordHint => _t('communicationsPasswordHint');
   String get communicationsPasswordLabel => _t('communicationsPasswordLabel');
   String get communicationsPasswordPlaceholder =>
@@ -88,21 +87,6 @@ class AppLocalizations {
   String get theme => _t('theme');
   String get dark => _t('dark');
   String get light => _t('light');
-  String get intervalsApiKeyLabel => _t('intervalsApiKeyLabel');
-  String get intervalsApiKeyHint => _t('intervalsApiKeyHint');
-  String get intervalsApiKeyInstructions => _t('intervalsApiKeyInstructions');
-  String get intervalsApiKeyInstructionsTitle =>
-      _t('intervalsApiKeyInstructionsTitle');
-  String get intervalsApiKeyInfo => _t('intervalsApiKeyInfo');
-  String get intervalsSectionTitle => _t('intervalsSectionTitle');
-  String get intervalsAthleteIdLabel => _t('intervalsAthleteIdLabel');
-  String get intervalsAthleteIdHint => _t('intervalsAthleteIdHint');
-  String get intervalsAthleteIdInvalid => _t('intervalsAthleteIdInvalid');
-  String get intervalsApiKeyInvalid => _t('intervalsApiKeyInvalid');
-  String get intervalsApiKeyPromptTitle => _t('intervalsApiKeyPromptTitle');
-  String get enterIntervalsApiKey => _t('enterIntervalsApiKey');
-  String get intervalsApiKeySaved => _t('intervalsApiKeySaved');
-  String get intervalsApiKeyClear => _t('intervalsApiKeyClear');
   String get timeRange => _t('timeRange');
   String get settingsComingSoon => _t('settingsComingSoon');
   String get adjustIntensity => _t('adjustIntensity');
@@ -145,8 +129,6 @@ class AppLocalizations {
   String get export => _t('export');
   String get exportSuccess => _t('exportSuccess');
   String get exportToClipboard => _t('exportToClipboard');
-  String get exportToGarmin => _t('exportToGarmin');
-  String get exportToGarminComingSoon => _t('exportToGarminComingSoon');
   String get trainingPlanUsedCache => _t('trainingPlanUsedCache');
   String get trainingPlanUsedFallback => _t('trainingPlanUsedFallback');
   String get challengeUsedCache => _t('challengeUsedCache');

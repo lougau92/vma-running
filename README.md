@@ -7,8 +7,8 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 - Intensity tab: pace table across customizable %VMA and a configurable reference distance.
 - Times tab: predicted splits for distance or time ranges with adjustable intensity slider.
 - Training plan tab: loads an interval plan from Firestore with local caching and shows reps, pace targets, and recoveries by group.
-- Export: clipboard copy or Garmin (Intervals.icu) export flow that stores your Intervals.icu athlete ID and API key locally.
-- Settings: language (EN/FR/NL), theme (light/dark/system), default distance/time ranges, and Intervals.icu credentials.
+- Export: copy the selected training-plan group to the clipboard.
+- Settings: language (EN/FR/NL), theme (light/dark/system), and default distance/time ranges.
 - Offline-first: ships a service worker that caches the app shell so core features load without network; training plan data reuses cached responses if offline.
 
 ## Quick start
@@ -132,13 +132,25 @@ an administrator login does not grant the app permission to read: configure
 Firestore rules for the intended readers separately. Run `npm run test:content`
 to check validation and publishing behavior without touching a live database.
 
-## Intervals.icu (Garmin) export
-1) In the app, go to Settings → Intervals.icu connection.
-2) Open the info icon to see the setup steps. You’ll need:
-   - Athlete ID in the format `i12345` (from your Intervals.icu URL, e.g., `i434321`).
-   - API key from Intervals.icu (looks like `5l59eeg3l2t649230use6y568`).
-3) Save both fields. You can clear either field with the inline clear icon.
-4) Export a workout to Garmin; if a credential is missing, the app will prompt you to fill it.
+## Release feature flags
+
+Club communications and club rankings are disabled by default. Build-time flags
+control both navigation and page creation: disabled pages do not load their data.
+These are release switches, not user preferences or access controls. To enable
+one or both in a development run or a custom build:
+
+```sh
+flutter run -d chrome --dart-define=ENABLE_CLUB_COMMUNICATIONS=true --dart-define=ENABLE_CLUB_RANKINGS=true
+```
+
+The same flags work with `flutter build web`. The main deployment uses the
+defaults (both disabled). Navigation uses stable page identifiers, so flags do
+not change which page an existing tab selection represents.
+
+The previous Intervals.icu/Garmin integration is preserved on the local
+`feature/intervals-icu` branch. Main contains clipboard export only and no longer
+reads or writes Intervals.icu credentials. Previously saved credentials remain
+in device storage, unused.
 
 ## Service worker offline/online switch test
 1) Run web build: `flutter run -d chrome` (or `flutter build web && npx serve build/web`).
@@ -166,7 +178,7 @@ to check validation and publishing behavior without touching a live database.
 
 ## Persistence & settings
 - VMA value is stored in `lib/vma_storage.dart`.
-- App preferences (locale, theme, times/distances bounds, Intervals.icu athlete ID + API key) are handled in `lib/settings_storage.dart` and edited via the settings page.
+- App preferences (locale, theme, times/distances bounds) are handled in `lib/settings_storage.dart` and edited via the settings page.
 
 ## Assets
 - Logos live under `assets/enjambee_img/`; training plans under `assets/training_plans/`. Add new assets and list them in `pubspec.yaml`.

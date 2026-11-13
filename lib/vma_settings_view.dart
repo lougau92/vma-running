@@ -18,48 +18,18 @@ class VmaSettingsView extends StatefulWidget {
 }
 
 class _VmaSettingsViewState extends State<VmaSettingsView> {
-  late TextEditingController _apiKeyController;
-  late TextEditingController _athleteController;
-  late Future<PackageInfo> _packageInfoFuture;
-  String? _apiKeyError;
-  String? _athleteError;
+  late final Future<PackageInfo> _packageInfoFuture;
 
   @override
   void initState() {
     super.initState();
     _packageInfoFuture = PackageInfo.fromPlatform();
-    _apiKeyController = TextEditingController(
-      text: widget.settings.intervalsApiKey ?? '',
-    );
-    _athleteController = TextEditingController(
-      text: widget.settings.intervalsAthleteId ?? '',
-    );
-  }
-
-  @override
-  void didUpdateWidget(covariant VmaSettingsView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.settings.intervalsApiKey != widget.settings.intervalsApiKey) {
-      _apiKeyController.text = widget.settings.intervalsApiKey ?? '';
-    }
-    if (oldWidget.settings.intervalsAthleteId !=
-        widget.settings.intervalsAthleteId) {
-      _athleteController.text = widget.settings.intervalsAthleteId ?? '';
-    }
-  }
-
-  @override
-  void dispose() {
-    _apiKeyController.dispose();
-    _athleteController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     final localeValue = widget.settings.localeCode ?? 'system';
-    final themeValue = widget.settings.themeMode.name;
 
     return Column(
       children: [
@@ -146,105 +116,6 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                   ),
                 ],
               ),
-              const SizedBox(height: 24),
-              Card(
-                margin: EdgeInsets.zero,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              strings.intervalsSectionTitle,
-                              style: Theme.of(context).textTheme.titleMedium,
-                            ),
-                          ),
-                          IconButton(
-                            tooltip: strings.intervalsApiKeyInfo,
-                            icon: const Icon(Icons.info_outline),
-                            onPressed: () =>
-                                _showIntervalsApiHelp(context, strings),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      _CredentialField(
-                        controller: _athleteController,
-                        label: strings.intervalsAthleteIdLabel,
-                        hint: strings.intervalsAthleteIdHint,
-                        errorText: _athleteError,
-                        onChanged: (value) {
-                          final trimmed = value.trim();
-                          final nextValue = trimmed.isEmpty ? null : trimmed;
-                          if (trimmed.isNotEmpty &&
-                              !_isValidAthleteId(trimmed)) {
-                            setState(() {
-                              _athleteError = strings.intervalsAthleteIdInvalid;
-                            });
-                            return;
-                          }
-                          setState(() => _athleteError = null);
-                          if (nextValue != widget.settings.intervalsAthleteId) {
-                            widget.onSettingsChanged(
-                              widget.settings.copyWith(
-                                intervalsAthleteId: nextValue,
-                              ),
-                            );
-                          }
-                        },
-                        onClear: () {
-                          _athleteController.clear();
-                          setState(() => _athleteError = null);
-                          if (widget.settings.intervalsAthleteId != null) {
-                            widget.onSettingsChanged(
-                              widget.settings.copyWith(
-                                intervalsAthleteId: null,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 12),
-                      _CredentialField(
-                        controller: _apiKeyController,
-                        label: strings.intervalsApiKeyLabel,
-                        hint: strings.intervalsApiKeyHint,
-                        errorText: _apiKeyError,
-                        onChanged: (value) {
-                          final trimmed = value.trim();
-                          final nextKey = trimmed.isEmpty ? null : trimmed;
-                          if (trimmed.isNotEmpty && !_isValidApiKey(trimmed)) {
-                            setState(() {
-                              _apiKeyError = strings.intervalsApiKeyInvalid;
-                            });
-                            return;
-                          }
-                          setState(() => _apiKeyError = null);
-                          if (nextKey != widget.settings.intervalsApiKey) {
-                            widget.onSettingsChanged(
-                              widget.settings.copyWith(
-                                intervalsApiKey: nextKey,
-                              ),
-                            );
-                          }
-                        },
-                        onClear: () {
-                          _apiKeyController.clear();
-                          setState(() => _apiKeyError = null);
-                          if (widget.settings.intervalsApiKey != null) {
-                            widget.onSettingsChanged(
-                              widget.settings.copyWith(intervalsApiKey: null),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -272,78 +143,6 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showIntervalsApiHelp(BuildContext context, AppLocalizations strings) {
-    final steps = strings.intervalsApiKeyInstructions.split('\n');
-    showDialog<void>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(strings.intervalsApiKeyInstructionsTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: steps
-              .map(
-                (line) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(line),
-                ),
-              )
-              .toList(),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: Text(strings.cancel),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-bool _isValidAthleteId(String value) {
-  return RegExp(r'^i[0-9]+$').hasMatch(value.trim());
-}
-
-bool _isValidApiKey(String value) {
-  return RegExp(r'^[A-Za-z0-9]{20,40}$').hasMatch(value.trim());
-}
-
-class _CredentialField extends StatelessWidget {
-  const _CredentialField({
-    required this.controller,
-    required this.label,
-    required this.hint,
-    this.errorText,
-    required this.onChanged,
-    required this.onClear,
-  });
-
-  final TextEditingController controller;
-  final String label;
-  final String hint;
-  final String? errorText;
-  final ValueChanged<String> onChanged;
-  final VoidCallback onClear;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        errorText: errorText,
-        suffixIcon: IconButton(
-          tooltip: label,
-          icon: const Icon(Icons.delete_forever),
-          onPressed: onClear,
-        ),
-      ),
-      onChanged: onChanged,
     );
   }
 }

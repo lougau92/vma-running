@@ -3,6 +3,7 @@ import 'package:app_feedback/app_feedback.dart'
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
+import 'feature_flags.dart';
 import 'decorated_scaffold.dart';
 import 'distance_extensions.dart';
 import 'presets.dart';
@@ -20,15 +21,32 @@ import 'vma_times_table.dart';
 import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
 
+enum _HomePage {
+  intensity,
+  times,
+  trainingPlan,
+  communications,
+  rankings;
+
+  bool get requiresVma => switch (this) {
+    intensity || times || trainingPlan => true,
+    communications || rankings => false,
+  };
+}
+
 class VmaHomePage extends StatefulWidget {
   const VmaHomePage({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
     this.feedbackSender = const UnavailableFeedbackSender(),
+    this.features = const FeatureFlags(),
+    this.loader,
   });
 
   final FeedbackSender feedbackSender;
+  final FeatureFlags features;
+  final RemoteAssetLoader? loader;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
 
@@ -39,8 +57,17 @@ class VmaHomePage extends StatefulWidget {
 class _VmaHomePageState extends State<VmaHomePage> {
   final _vmaStorage = VmaStorage();
   final _paceCalculator = VmaPaceCalculator();
-  final RemoteAssetLoader _remoteLoader = RemoteAssetLoader();
-  int _tabIndex = 0;
+  late final RemoteAssetLoader _remoteLoader;
+  _HomePage _selectedPage = _HomePage.intensity;
+
+  List<_HomePage> get _pages => [
+    _HomePage.intensity,
+    _HomePage.times,
+    _HomePage.trainingPlan,
+    if (widget.features.clubCommunications) _HomePage.communications,
+    if (widget.features.clubRankings) _HomePage.rankings,
+  ];
+
   double? _vma;
   bool _loading = true;
   double _minPercent = 60;
@@ -54,8 +81,17 @@ class _VmaHomePageState extends State<VmaHomePage> {
   double _timesPercent = 100;
 
   @override
+  void didUpdateWidget(covariant VmaHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!_pages.contains(_selectedPage)) {
+      _selectedPage = _HomePage.intensity;
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
+    _remoteLoader = widget.loader ?? RemoteAssetLoader();
     _timesMinDistance = widget.settings.timesMinDistance ?? _timesMinDistance;
     _timesMaxDistance = widget.settings.timesMaxDistance ?? _timesMaxDistance;
     _timesMinSeconds = widget.settings.timesMinSeconds ?? _timesMinSeconds;
@@ -136,22 +172,21 @@ class _VmaHomePageState extends State<VmaHomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final requiresVma = _tabIndex <= 2;
-    if (_vma == null && requiresVma) {
+    if (_vma == null && _selectedPage.requiresVma) {
       return Center(child: Text(strings.enterVmaPlaceholder));
     }
 
-    final content = switch (_tabIndex) {
-      0 => _buildPaceBody(strings),
-      1 => _buildTimesBody(strings),
-      2 => VmaTrainingPlan(
+    final content = switch (_selectedPage) {
+      _HomePage.intensity => _buildPaceBody(strings),
+      _HomePage.times => _buildTimesBody(strings),
+      _HomePage.trainingPlan => VmaTrainingPlan(
         userVma: _vma!,
         settings: widget.settings,
         onSettingsChanged: widget.onSettingsChanged,
         loader: _remoteLoader,
       ),
-      3 => ClubCommunicationsPage(loader: _remoteLoader),
-      _ => _buildChallengeBody(),
+      _HomePage.communications => ClubCommunicationsPage(loader: _remoteLoader),
+      _HomePage.rankings => _buildChallengeBody(),
     };
 
     return Padding(
@@ -179,30 +214,24 @@ class _VmaHomePageState extends State<VmaHomePage> {
       unselectedItemColor: isDark
           ? Colors.white70
           : theme.colorScheme.onSurface,
-      currentIndex: _tabIndex,
-      onTap: (idx) => setState(() => _tabIndex = idx),
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.analytics),
-          label: strings.intensityTab,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.timer),
-          label: strings.timesTab,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.fitness_center),
-          label: strings.trainingPlanTab,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.campaign_outlined),
-          label: strings.communicationsTab,
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.emoji_events),
-          label: strings.challengeTab,
-        ),
-      ],
+      currentIndex: _pages.indexOf(_selectedPage),
+      onTap: (idx) => setState(() => _selectedPage = _pages[idx]),
+      items: _pages.map((page) {
+        final (icon, label) = switch (page) {
+          _HomePage.intensity => (Icons.analytics, strings.intensityTab),
+          _HomePage.times => (Icons.timer, strings.timesTab),
+          _HomePage.trainingPlan => (
+            Icons.fitness_center,
+            strings.trainingPlanTab,
+          ),
+          _HomePage.communications => (
+            Icons.campaign_outlined,
+            strings.communicationsTab,
+          ),
+          _HomePage.rankings => (Icons.emoji_events, strings.challengeTab),
+        };
+        return BottomNavigationBarItem(icon: Icon(icon), label: label);
+      }).toList(),
     );
   }
 

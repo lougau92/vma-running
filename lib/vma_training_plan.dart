@@ -48,10 +48,7 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   int _selectedGroup = 0;
   late Stream<TrainingPlanResult> _planStream;
   String? _lastNoticeKey;
-  final List<PlanExporter> _exporters = [
-    ClipboardPlanExporter(),
-    GarminPlanExporter(),
-  ];
+  final List<PlanExporter> _exporters = [ClipboardPlanExporter()];
   final ScrollController _verticalController = ScrollController();
 
   @override
@@ -223,8 +220,6 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
       group: plan.groups[_selectedGroup.clamp(0, plan.groups.length - 1)],
       userVma: widget.userVma,
       strings: strings,
-      settings: widget.settings,
-      onSettingsChanged: widget.onSettingsChanged,
     );
 
     await exporter.export(data, context);

@@ -26,26 +26,6 @@ class TranslationsFr {
     'theme': 'Thème',
     'dark': 'Sombre',
     'light': 'Clair',
-    'intervalsApiKeyLabel': 'Cle API Intervals.icu',
-    'intervalsApiKeyHint':
-        'Collez la cle API Intervals.icu (ex : 5l59eeg3l2t649230use6y568)',
-    'intervalsApiKeyInstructionsTitle': 'Ou trouver la cle',
-    'intervalsApiKeyInfo': 'Comment la trouver',
-    'intervalsSectionTitle': 'Connexion Intervals.icu',
-    'intervalsApiKeyInstructions':
-        '1) Creez un compte Intervals.icu.\n'
-        '2) Parametres > Connexions > Garmin : lier Garmin Connect et cocher "Upload planned workouts".\n'
-        '3) Parametres > Developpeur : copier l athleteId et la cle API et les coller ici.',
-    'intervalsAthleteIdLabel': 'ID athlete',
-    'intervalsAthleteIdHint': 'ex : i434321',
-    'intervalsAthleteIdInvalid': 'Format attendu : i434321 (i + chiffres).',
-    'intervalsApiKeyInvalid':
-        'Cle API invalide. Utilisez la cle alphanumerique longue.',
-    'intervalsApiKeyPromptTitle': 'Connexion Intervals.icu',
-    'enterIntervalsApiKey': 'Ajoutez la cle API Intervals.icu.',
-    'intervalsApiKeySaved':
-        'Identifiants Intervals.icu enregistres. Relancez l export Garmin.',
-    'intervalsApiKeyClear': 'Supprimer la cle API',
     'timeRange': 'Plage de temps',
     'settingsComingSoon': 'D\'autres paramètres arrivent bientôt.',
     'adjustIntensity': 'Ajuster les pourcentages',
@@ -88,8 +68,6 @@ class TranslationsFr {
     'export': 'Exporter',
     'exportSuccess': 'Plan copie dans le presse-papiers',
     'exportToClipboard': 'Exporter vers le presse-papiers',
-    'exportToGarmin': 'Exporter vers Garmin',
-    'exportToGarminComingSoon': 'L export Garmin utilisera cette cle bientot.',
     'refreshContent': 'Actualiser le contenu',
     'trainingPlanUsedCache':
         'Impossible de joindre le serveur, plan en cache affiché.',

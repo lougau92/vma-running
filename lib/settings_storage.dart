@@ -11,8 +11,6 @@ class SettingsStorage {
   static const _timesMaxSecondsKey = 'times_max_seconds';
   static const _timesMinDistanceKey = 'times_min_distance';
   static const _timesMaxDistanceKey = 'times_max_distance';
-  static const _intervalsApiKeyKey = 'intervals_api_key';
-  static const _intervalsAthleteIdKey = 'intervals_athlete_id';
 
   Future<AppSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -33,8 +31,6 @@ class SettingsStorage {
       timesMaxSeconds: prefs.getDouble(_timesMaxSecondsKey),
       timesMinDistance: prefs.getDouble(_timesMinDistanceKey),
       timesMaxDistance: prefs.getDouble(_timesMaxDistanceKey),
-      intervalsApiKey: prefs.getString(_intervalsApiKeyKey),
-      intervalsAthleteId: prefs.getString(_intervalsAthleteIdKey),
     );
   }
 
@@ -54,16 +50,6 @@ class SettingsStorage {
       prefs,
       _timesMaxDistanceKey,
       settings.timesMaxDistance,
-    );
-    _writeNullableString(
-      prefs,
-      _intervalsApiKeyKey,
-      settings.intervalsApiKey?.trim(),
-    );
-    _writeNullableString(
-      prefs,
-      _intervalsAthleteIdKey,
-      settings.intervalsAthleteId?.trim(),
     );
   }
 
@@ -96,18 +82,6 @@ class SettingsStorage {
       await prefs.remove(key);
     } else {
       await prefs.setDouble(key, value);
-    }
-  }
-
-  Future<void> _writeNullableString(
-    SharedPreferences prefs,
-    String key,
-    String? value,
-  ) async {
-    if (value == null || value.isEmpty) {
-      await prefs.remove(key);
-    } else {
-      await prefs.setString(key, value);
     }
   }
 }

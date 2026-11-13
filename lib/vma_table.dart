@@ -22,6 +22,7 @@ class VmaPaceTable extends StatefulWidget {
 }
 
 class _VmaPaceTableState extends State<VmaPaceTable> {
+  final _columnOrder = [0, 1, 2, 3];
   final ScrollController _verticalController = ScrollController();
   final ScrollController _horizontalController = ScrollController();
 
@@ -35,52 +36,119 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    final labels = [
+      strings.intensity,
+      strings.pacePerKm,
+      strings.timeForDistanceLabel(widget.distanceMeters),
+      strings.speedKmh,
+    ];
+
+    Widget header(int column) {
+      final onTap = switch (column) {
+        0 => widget.onEditPercentages,
+        2 => widget.onEditDistance,
+        _ => null,
+      };
+      final label = onTap == null
+          ? Text(labels[column])
+          : InteractiveHeader(
+              label: labels[column],
+              onTap: onTap,
+              tooltip: labels[column],
+            );
+      return DragTarget<int>(
+        onWillAcceptWithDetails: (details) => details.data != column,
+        onAcceptWithDetails: (details) {
+          setState(() {
+            final target = _columnOrder.indexOf(column);
+            _columnOrder.remove(details.data);
+            _columnOrder.insert(target, details.data);
+          });
+        },
+        builder: (context, candidates, rejected) => LongPressDraggable<int>(
+          data: column,
+          feedback: Material(
+            elevation: 6,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text(labels[column]),
+            ),
+          ),
+          childWhenDragging: Opacity(opacity: 0.3, child: label),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: candidates.isEmpty
+                  ? null
+                  : Theme.of(context).colorScheme.primaryContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: label,
+          ),
+        ),
+      );
+    }
+
+    DataTable table(List<int> columns) => DataTable(
+      // Both halves share fixed row heights so horizontal scrolling cannot
+      // separate a value from its pinned row.
+      headingRowHeight: 72,
+      dataRowMinHeight: 48,
+      dataRowMaxHeight: 48,
+      horizontalMargin: 16,
+      columnSpacing: 24,
+      columns: [
+        for (final column in columns) DataColumn(label: header(column)),
+      ],
+      rows: [
+        for (final entry in widget.entries)
+          DataRow(
+            cells: [
+              for (final column in columns)
+                DataCell(
+                  Text(switch (column) {
+                    0 => '${entry.percent.toStringAsFixed(0)}%',
+                    1 => entry.pacePerKm,
+                    2 => entry.timeForDistance,
+                    _ => entry.speedKmh.toStringAsFixed(2),
+                  }),
+                ),
+            ],
+          ),
+      ],
+    );
+
     return Scrollbar(
       thumbVisibility: true,
       controller: _verticalController,
       child: SingleChildScrollView(
         controller: _verticalController,
-        scrollDirection: Axis.vertical,
-        child: SingleChildScrollView(
-          controller: _horizontalController,
-          scrollDirection: Axis.horizontal,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 400),
-            child: DataTable(
-              columns: [
-                DataColumn(
-                  label: InteractiveHeader(
-                    label: strings.intensity,
-                    onTap: widget.onEditPercentages,
-                    tooltip: strings.intensity,
-                  ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                border: BorderDirectional(
+                  end: BorderSide(color: Theme.of(context).dividerColor),
                 ),
-                DataColumn(label: Text(strings.pacePerKm)),
-                DataColumn(
-                  label: InteractiveHeader(
-                    label: strings.timeForDistanceLabel(widget.distanceMeters),
-                    onTap: widget.onEditDistance,
-                    tooltip: strings.timeForDistanceLabel(
-                      widget.distanceMeters,
-                    ),
-                  ),
-                ),
-                DataColumn(label: Text(strings.speedKmh)),
-              ],
-              rows: widget.entries
-                  .map(
-                    (entry) => DataRow(
-                      cells: [
-                        DataCell(Text('${entry.percent.toStringAsFixed(0)}%')),
-                        DataCell(Text(entry.pacePerKm)),
-                        DataCell(Text(entry.timeForDistance)),
-                        DataCell(Text(entry.speedKmh.toStringAsFixed(2))),
-                      ],
-                    ),
-                  )
-                  .toList(),
+              ),
+              child: table([_columnOrder.first]),
             ),
-          ),
+            Expanded(
+              child: Scrollbar(
+                controller: _horizontalController,
+                thumbVisibility: true,
+                notificationPredicate: (notification) =>
+                    notification.depth == 0,
+                child: SingleChildScrollView(
+                  controller: _horizontalController,
+                  scrollDirection: Axis.horizontal,
+                  child: table(_columnOrder.sublist(1)),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

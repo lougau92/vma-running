@@ -43,7 +43,7 @@ CupertinoPicker _picker(WidgetTester tester, String key) =>
 void main() {
   setUp(() => SharedPreferences.setMockInitialValues({'user_vma': 17.15}));
 
-  testWidgets('scrolling preserves hundredths and only Save persists changes', (
+  testWidgets('scrolling preserves hundredths and dismissal persists changes', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(360, 668);
@@ -77,7 +77,8 @@ void main() {
       (await SharedPreferences.getInstance()).getDouble('user_vma'),
       17.15,
     );
-    await tester.tap(find.text('Enregistrer'));
+    expect(find.text('Enregistrer'), findsNothing);
+    await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
     expect(result, 17.16);
     expect(
@@ -87,36 +88,40 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Cancel discards the draft and reopening restores saved VMA', (
-    tester,
-  ) async {
-    double? result = 99;
-    await tester.pumpWidget(_app(initial: 17.15, onResult: (v) => result = v));
-    await tester.tap(find.text('Edit'));
-    await tester.pumpAndSettle();
-    _picker(tester, 'number-whole-picker').scrollController!.jumpToItem(20);
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Annuler'));
-    await tester.pumpAndSettle();
-    expect(result, isNull);
-    expect(
-      (await SharedPreferences.getInstance()).getDouble('user_vma'),
-      17.15,
-    );
-    await tester.tap(find.text('Edit'));
-    await tester.pumpAndSettle();
-    expect(
-      _picker(tester, 'number-whole-picker').scrollController!.selectedItem,
-      16,
-    );
-    expect(
-      _picker(tester, 'number-fraction-picker').scrollController!.selectedItem,
-      15,
-    );
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'typing edits the selected number inline and persists on dismissal',
+    (tester) async {
+      double? result;
+      await tester.pumpWidget(
+        _app(initial: 17.15, onResult: (v) => result = v),
+      );
+      await tester.tap(find.text('Edit'));
+      await tester.pumpAndSettle();
+      final wheel = find.descendant(
+        of: find.byKey(const ValueKey('number-whole-picker')),
+        matching: find.byType(CupertinoPicker),
+      );
+      await tester.tapAt(tester.getCenter(wheel));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsOneWidget);
+      await tester.enterText(find.byType(TextField), '21');
+      await tester.pumpAndSettle();
+      expect(
+        (await SharedPreferences.getInstance()).getDouble('user_vma'),
+        17.15,
+      );
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(result, 21.15);
+      expect(
+        (await SharedPreferences.getInstance()).getDouble('user_vma'),
+        21.15,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
-  testWidgets('first use offers a valid default without saving on dismissal', (
+  testWidgets('first use stores its valid default on dismissal', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
@@ -133,6 +138,6 @@ void main() {
     );
     await tester.binding.handlePopRoute();
     await tester.pumpAndSettle();
-    expect(await VmaStorage().load(), isNull);
+    expect(await VmaStorage().load(), 18);
   });
 }

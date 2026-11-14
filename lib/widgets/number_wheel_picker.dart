@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
 import '../app_localizations.dart';
 
-/// A labelled wheel for numeric values, including formatted times or distances.
+/// A labelled wheel whose selected number can also be edited in place.
 /// [initialIndex] is applied when the wheel is first mounted.
-class NumberWheelPicker extends StatefulWidget {
+class NumberWheelPicker extends StatelessWidget {
   const NumberWheelPicker({
     super.key,
     required this.label,
@@ -26,135 +26,271 @@ class NumberWheelPicker extends StatefulWidget {
   final TextInputType? inputKeyboardType;
 
   @override
-  State<NumberWheelPicker> createState() => _NumberWheelPickerState();
+  Widget build(BuildContext context) => _EditableWheel<int>(
+    label: label,
+    values: List.generate(itemCount, (index) => index),
+    initialValue: initialIndex,
+    formatValue: formatItem,
+    parseInput: (input, current) {
+      final parser = parseInput;
+      if (parser != null) {
+        final index = parser(input, current);
+        return index != null && index >= 0 && index < itemCount ? index : null;
+      }
+      final text = input.trim().toLowerCase();
+      for (var index = 0; index < itemCount; index++) {
+        if (formatItem(index).trim().toLowerCase() == text) return index;
+      }
+      return null;
+    },
+    onChanged: onChanged,
+    inputKeyboardType: inputKeyboardType,
+  );
 }
 
-class _NumberWheelPickerState extends State<NumberWheelPicker> {
-  late int _selectedIndex = widget.initialIndex;
-  late final _controller = FixedExtentScrollController(
-    initialItem: widget.initialIndex,
-  );
+/// A numeric preset wheel that also preserves custom values entered by typing.
+class NumberValueWheelPicker extends StatelessWidget {
+  const NumberValueWheelPicker({
+    super.key,
+    required this.label,
+    required this.initialValue,
+    required this.values,
+    required this.formatValue,
+    required this.parseInput,
+    required this.onChanged,
+    this.inputKeyboardType,
+    this.minValue = 0,
+    this.maxValue = double.infinity,
+  });
 
-  int? _parseInput(String input) {
-    final parser = widget.parseInput;
-    if (parser != null) return parser(input, _selectedIndex);
-    final value = input.trim().toLowerCase();
-    for (var index = 0; index < widget.itemCount; index++) {
-      if (widget.formatItem(index).trim().toLowerCase() == value) {
-        return index;
+  final String label;
+  final double initialValue;
+  final List<double> values;
+  final String Function(double) formatValue;
+  final double? Function(String input, double currentValue) parseInput;
+  final ValueChanged<double> onChanged;
+  final TextInputType? inputKeyboardType;
+  final double minValue;
+  final double maxValue;
+
+  @override
+  Widget build(BuildContext context) => _EditableWheel<double>(
+    label: label,
+    values: {...values, initialValue}.toList()..sort(),
+    initialValue: initialValue,
+    formatValue: formatValue,
+    parseInput: (input, current) {
+      final text = input.trim().toLowerCase();
+      // Formatted presets may contain units that the numeric parser omits.
+      for (final value in values) {
+        if (formatValue(value).trim().toLowerCase() == text) return value;
       }
-    }
-    return null;
+      final value = parseInput(input, current);
+      return value != null &&
+              value.isFinite &&
+              value >= minValue &&
+              value <= maxValue
+          ? value
+          : null;
+    },
+    compare: (a, b) => a.compareTo(b),
+    onChanged: onChanged,
+    inputKeyboardType: inputKeyboardType,
+  );
+}
+
+class _EditableWheel<T> extends StatefulWidget {
+  const _EditableWheel({
+    required this.label,
+    required this.values,
+    required this.initialValue,
+    required this.formatValue,
+    required this.parseInput,
+    required this.onChanged,
+    this.compare,
+    this.inputKeyboardType,
+  });
+
+  final String label;
+  final List<T> values;
+  final T initialValue;
+  final String Function(T) formatValue;
+  final T? Function(String, T) parseInput;
+  final ValueChanged<T> onChanged;
+  final Comparator<T>? compare;
+  final TextInputType? inputKeyboardType;
+
+  @override
+  State<_EditableWheel<T>> createState() => _EditableWheelState<T>();
+}
+
+class _EditableWheelState<T> extends State<_EditableWheel<T>> {
+  late final List<T> _values = [...widget.values];
+  late T _selected = widget.initialValue;
+  late T _inputReference = widget.initialValue;
+  late final _wheelController = FixedExtentScrollController(
+    initialItem: _values.indexOf(_selected),
+  );
+  final _textController = TextEditingController();
+  final _focus = FocusNode();
+  bool _editing = false;
+  bool _invalid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(_focusChanged);
   }
 
-  Future<void> _editSelectedValue() async {
-    final controller = TextEditingController(
-      text: widget.formatItem(_selectedIndex),
-    );
-    controller.selection = TextSelection(
-      baseOffset: 0,
-      extentOffset: controller.text.length,
-    );
-    final strings = AppLocalizations.of(context);
-    final index = await showDialog<int>(
-      context: context,
-      builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          final parsedIndex = _parseInput(controller.text);
-          return AlertDialog(
-            title: Text(widget.label),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              keyboardType:
-                  widget.inputKeyboardType ??
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(labelText: strings.enterNumber),
-              onChanged: (_) => setDialogState(() {}),
-              onSubmitted: (_) {
-                if (parsedIndex != null) {
-                  Navigator.of(dialogContext).pop(parsedIndex);
-                }
-              },
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(dialogContext).pop(),
-                child: Text(strings.cancel),
-              ),
-              FilledButton(
-                onPressed: parsedIndex == null
-                    ? null
-                    : () => Navigator.of(dialogContext).pop(parsedIndex),
-                child: Text(strings.save),
-              ),
-            ],
-          );
-        },
-      ),
-    );
-    controller.dispose();
+  void _focusChanged() {
+    if (!_focus.hasFocus && _editing) {
+      if (_invalid) _textController.text = widget.formatValue(_selected);
+      setState(() => _editing = false);
+    }
+  }
 
-    if (index == null || !mounted || index == _selectedIndex) return;
-    await _controller.animateToItem(
-      index,
-      duration: const Duration(milliseconds: 250),
-      curve: Curves.easeOut,
+  void _startEditing() {
+    _inputReference = _selected;
+    _textController.text = widget.formatValue(_selected);
+    _textController.selection = TextSelection(
+      baseOffset: 0,
+      extentOffset: _textController.text.length,
     );
+    setState(() {
+      _editing = true;
+      _invalid = false;
+    });
+    _focus.requestFocus();
+  }
+
+  void _applyInput(String input) {
+    final value = widget.parseInput(input, _inputReference);
+    setState(() => _invalid = value == null);
+    if (value == null || value == _selected) return;
+    setState(() {
+      if (!_values.contains(value)) {
+        _values.add(value);
+        if (widget.compare != null) _values.sort(widget.compare);
+      }
+      _selected = value;
+    });
+    widget.onChanged(value);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _wheelController.hasClients) {
+        _wheelController.jumpToItem(_values.indexOf(_selected));
+      }
+    });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _focus.removeListener(_focusChanged);
+    _focus.dispose();
+    _textController.dispose();
+    _wheelController.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Text(widget.label, textAlign: TextAlign.center),
-      const SizedBox(height: 8),
-      SizedBox(
-        height: 180,
-        child: Semantics(
-          label: widget.label,
-          child: CupertinoPicker.builder(
-            scrollController: _controller,
-            itemExtent: 40,
-            childCount: widget.itemCount,
-            onSelectedItemChanged: (index) {
-              setState(() => _selectedIndex = index);
-              widget.onChanged(index);
-            },
-            itemBuilder: (context, index) {
-              final text = FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  widget.formatItem(index),
-                  style: Theme.of(context).textTheme.titleLarge,
-                  maxLines: 1,
-                  softWrap: false,
-                ),
-              );
-              if (index != _selectedIndex) return Center(child: text);
-              return Center(
-                child: Tooltip(
-                  message: AppLocalizations.of(context).enterNumber,
-                  child: InkWell(
-                    onTap: _editSelectedValue,
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: text,
-                    ),
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(widget.label, textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        SizedBox(
+          height: 180,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              IgnorePointer(
+                ignoring: _editing,
+                child: Semantics(
+                  label: widget.label,
+                  child: CupertinoPicker.builder(
+                    scrollController: _wheelController,
+                    itemExtent: 40,
+                    childCount: _values.length,
+                    onSelectedItemChanged: (index) {
+                      // Typing can insert a value before the current index.
+                      // Ignore the temporary old offset until the wheel syncs.
+                      if (_editing) return;
+                      final value = _values[index];
+                      if (value == _selected) return;
+                      setState(() {
+                        _selected = value;
+                        _invalid = false;
+                      });
+                      widget.onChanged(value);
+                    },
+                    itemBuilder: (context, index) {
+                      final value = _values[index];
+                      if (_editing && value == _selected) {
+                        return const SizedBox.shrink();
+                      }
+                      final text = FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          widget.formatValue(value),
+                          style: Theme.of(context).textTheme.titleLarge,
+                          maxLines: 1,
+                          softWrap: false,
+                        ),
+                      );
+                      if (value != _selected) return Center(child: text);
+                      return Center(
+                        child: Tooltip(
+                          message: strings.enterNumber,
+                          child: InkWell(
+                            onTap: _startEditing,
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 4,
+                              ),
+                              child: text,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
-              );
-            },
+              ),
+              if (_editing)
+                TextField(
+                  controller: _textController,
+                  focusNode: _focus,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.titleLarge,
+                  keyboardType:
+                      widget.inputKeyboardType ??
+                      const TextInputType.numberWithOptions(decimal: true),
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 4,
+                      vertical: 8,
+                    ),
+                    errorText: _invalid ? strings.enterNumber : null,
+                    errorMaxLines: 2,
+                  ),
+                  onChanged: _applyInput,
+                  onSubmitted: (_) => _focus.unfocus(),
+                  onTapOutside: (_) => _focus.unfocus(),
+                ),
+            ],
           ),
         ),
-      ),
-    ],
-  );
+        if (_invalid && !_editing)
+          Text(
+            strings.enterNumber,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+      ],
+    );
+  }
 }

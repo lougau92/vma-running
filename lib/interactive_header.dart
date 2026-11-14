@@ -8,7 +8,6 @@ class InteractiveHeader extends StatelessWidget {
     this.onTap,
     this.tooltip,
     this.compact = false,
-    this.tapIcon = true,
   });
 
   final String label;
@@ -16,7 +15,6 @@ class InteractiveHeader extends StatelessWidget {
   final VoidCallback? onTap;
   final String? tooltip;
   final bool compact;
-  final bool tapIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +28,8 @@ class InteractiveHeader extends StatelessWidget {
 
     final labelStyle = theme.textTheme.bodyMedium?.copyWith(
       fontWeight: FontWeight.w600,
-      color: resolvedTextColor.withOpacity(enabled ? 1 : 0.7),
+      color: resolvedTextColor.withValues(alpha: enabled ? 1 : 0.7),
     );
-
-    List<Widget> iconWidget = icon != null
-        ? [Icon(icon, size: 24, color: resolvedTextColor), SizedBox(width: 6)]
-        : [SizedBox.shrink()];
 
     final content = AnimatedContainer(
       duration: const Duration(milliseconds: 160),
@@ -43,16 +37,19 @@ class InteractiveHeader extends StatelessWidget {
           ? const EdgeInsets.symmetric(horizontal: 10, vertical: 6)
           : const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: colorScheme.primary.withOpacity(enabled ? 0.12 : 0.05),
+        color: colorScheme.primary.withValues(alpha: enabled ? 0.12 : 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: colorScheme.primary.withOpacity(enabled ? 0.5 : 0.2),
+          color: colorScheme.primary.withValues(alpha: enabled ? 0.5 : 0.2),
         ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (iconWidget.isNotEmpty) ...iconWidget,
+          if (icon != null) ...[
+            Icon(icon, size: 24, color: resolvedTextColor),
+            const SizedBox(width: 6),
+          ],
           Flexible(
             child: Text(
               label,
@@ -62,14 +59,6 @@ class InteractiveHeader extends StatelessWidget {
               style: labelStyle,
             ),
           ),
-          if (enabled && tapIcon) ...[
-            const SizedBox(width: 6),
-            Icon(
-              Icons.touch_app,
-              size: 14,
-              color: resolvedTextColor.withOpacity(0.9),
-            ),
-          ],
         ],
       ),
     );
@@ -81,7 +70,7 @@ class InteractiveHeader extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
-      splashColor: colorScheme.primary.withOpacity(0.16),
+      splashColor: colorScheme.primary.withValues(alpha: 0.16),
       highlightColor: Colors.transparent,
       child: child,
     );
@@ -120,7 +109,6 @@ class SortableHeader extends StatelessWidget {
       onTap: onTap,
       tooltip: tooltip,
       compact: compact,
-      tapIcon: false,
     );
   }
 }

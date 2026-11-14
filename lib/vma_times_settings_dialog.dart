@@ -20,9 +20,11 @@ Future<DistanceRange?> showDistancesSettingsDialog(
   BuildContext context, {
   required double initialMin,
   required double initialMax,
+  ValueChanged<DistanceRange>? onChanged,
 }) async {
   final strings = AppLocalizations.of(context);
-  final selected = await showDialog<RangeValues>(
+  var selected = RangeValues(initialMin, initialMax);
+  await showDialog<void>(
     context: context,
     builder: (_) => NumberRangePickerDialog(
       title: strings.distanceRange,
@@ -30,6 +32,10 @@ Future<DistanceRange?> showDistancesSettingsDialog(
       initialMin: initialMin,
       initialMax: initialMax,
       formatValue: strings.distanceShort,
+      onChanged: (range) {
+        selected = range;
+        onChanged?.call(DistanceRange(min: range.start, max: range.end));
+      },
       parseValueInput: (input, currentValue) {
         final bareNumber = double.tryParse(input.trim().replaceAll(',', '.'));
         if (bareNumber != null && currentValue >= 1000) {
@@ -40,18 +46,18 @@ Future<DistanceRange?> showDistancesSettingsDialog(
       },
     ),
   );
-  return selected == null
-      ? null
-      : DistanceRange(min: selected.start, max: selected.end);
+  return DistanceRange(min: selected.start, max: selected.end);
 }
 
 Future<TimeRange?> showTimesSettingsDialog(
   BuildContext context, {
   required double initialMinSeconds,
   required double initialMaxSeconds,
+  ValueChanged<TimeRange>? onChanged,
 }) async {
   final strings = AppLocalizations.of(context);
-  final selected = await showDialog<RangeValues>(
+  var selected = RangeValues(initialMinSeconds, initialMaxSeconds);
+  await showDialog<void>(
     context: context,
     builder: (_) => NumberRangePickerDialog(
       title: strings.timeRange,
@@ -60,10 +66,14 @@ Future<TimeRange?> showTimesSettingsDialog(
       initialMax: initialMaxSeconds,
       formatValue: (seconds) => formatElapsed(seconds.toInt()),
       parseValueInput: (input, _) => parseRunningDuration(input),
+      onChanged: (range) {
+        selected = range;
+        onChanged?.call(
+          TimeRange(minSeconds: range.start, maxSeconds: range.end),
+        );
+      },
       inputKeyboardType: TextInputType.text,
     ),
   );
-  return selected == null
-      ? null
-      : TimeRange(minSeconds: selected.start, maxSeconds: selected.end);
+  return TimeRange(minSeconds: selected.start, maxSeconds: selected.end);
 }

@@ -129,7 +129,7 @@ void main() {
           .single
           .cells
           .skip(1)
-          .map((cell) => (cell.child as Text).data!)
+          .map((cell) => ((cell.child as Align).child as Text).data!)
           .toList();
       await tester.pumpWidget(app());
       expect(row(), ['400 m', '01:00']);

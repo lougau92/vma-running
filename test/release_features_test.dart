@@ -192,6 +192,53 @@ void main() {
     },
   );
 
+  testWidgets(
+    'table edge swipe changes page and returning preserves table state',
+    (tester) async {
+      tester.view.physicalSize = const Size(360, 668);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(_app(_Loader(), const FeatureFlags()));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.timer));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.swap_horiz));
+      await tester.pumpAndSettle();
+      final state = tester.state(find.byType(VmaTimesTable));
+      final horizontal = find.descendant(
+        of: find.byType(VmaTimesTable),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is SingleChildScrollView &&
+              widget.scrollDirection == Axis.horizontal,
+        ),
+      );
+      final controller = tester
+          .widget<SingleChildScrollView>(horizontal)
+          .controller!;
+      controller.jumpTo(controller.position.maxScrollExtent);
+      await tester.pump();
+      await tester.dragFrom(
+        tester.getTopLeft(horizontal) + const Offset(140, 100),
+        const Offset(-140, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<BottomNavigationBar>(find.byType(BottomNavigationBar))
+            .currentIndex,
+        2,
+      );
+      expect(find.byType(VmaTrainingPlan), findsOneWidget);
+      await tester.tap(find.byIcon(Icons.timer));
+      await tester.pumpAndSettle();
+      expect(tester.state(find.byType(VmaTimesTable)), same(state));
+      expect(controller.offset, controller.position.maxScrollExtent);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
   for (final whole in [16, 17, 19]) {
     testWidgets('settings celebrates VMA ${whole + 1} only when changed', (
       tester,
@@ -269,7 +316,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.drag(find.byType(Slider), const Offset(-1000, 0));
     await tester.pumpAndSettle();
-    expect(find.text('Intensity: 60%VMA'), findsOneWidget);
+    expect(find.text('60% VMA'), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.settings));
     await tester.pumpAndSettle();

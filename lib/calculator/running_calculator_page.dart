@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
-import '../running/running.dart' show isPositiveFinite;
+import '../presets.dart';
+import '../running/running.dart';
+import '../widgets/number_picker_dialog.dart';
+import '../widgets/number_wheel_picker.dart';
 import 'running_calculator_draft.dart';
 
 class RunningCalculatorPage extends StatelessWidget {
@@ -10,13 +13,63 @@ class RunningCalculatorPage extends StatelessWidget {
     required this.draft,
     required this.onChanged,
     required this.vma,
-    required this.onEditVma,
+    required this.onVmaChanged,
   });
 
   final RunningCalculatorDraft draft;
   final ValueChanged<RunningCalculatorDraft> onChanged;
+
+  /// Calculator-only VMA, initially copied from the user's saved VMA.
   final double? vma;
-  final VoidCallback onEditVma;
+  final ValueChanged<double> onVmaChanged;
+
+  Future<void> _editVma(BuildContext context) => showDialog<void>(
+    context: context,
+    builder: (_) => NumberPickerDialog(
+      title: AppLocalizations.of(context).setVma,
+      initialValue: isPositiveFinite(vma) ? vma!.clamp(1.0, 99.99) : 18,
+      formatValue: AppLocalizations.of(context).yourVma,
+      onChanged: onVmaChanged,
+    ),
+  );
+
+  Future<void> _editValue(BuildContext context, int index) {
+    final measure = draft.measureAt(index);
+    final current = draft.displayValueAt(index, vma);
+    final initial =
+        _pickerValue(measure, current, vma) ??
+        _pickerValue(measure, measure.example, vma)!;
+    var edited = draft.activate(index, _formatValue(measure, initial));
+    onChanged(edited);
+    final label = _label(AppLocalizations.of(context), measure);
+    return showDialog<void>(
+      context: context,
+      builder: (_) => AlertDialog(
+        scrollable: true,
+        title: Text(label),
+        content: SizedBox(
+          width: 320,
+          child: NumberValueWheelPicker(
+            key: ValueKey('calculator-picker-${measure.name}'),
+            label: label,
+            initialValue: initial,
+            values: _presets(measure),
+            minValue: double.minPositive,
+            formatValue: (value) => _formatValue(measure, value),
+            parseInput: (input, _) => _pickerValue(measure, input, vma),
+            inputKeyboardType:
+                measure == RunningMeasure.time || measure == RunningMeasure.pace
+                ? TextInputType.text
+                : const TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) {
+              edited = edited.edit(index, _formatValue(measure, value));
+              onChanged(edited);
+            },
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,17 +78,11 @@ class RunningCalculatorPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            strings['calculatorTab'],
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 8),
-          Text(strings['calculatorHelp']),
-          const SizedBox(height: 12),
           Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
-              onPressed: onEditVma,
+              key: const ValueKey('calculator-vma'),
+              onPressed: () => _editVma(context),
               icon: const Icon(Icons.edit_outlined, size: 18),
               label: Text(
                 !isPositiveFinite(vma) ? strings.setVma : strings.yourVma(vma!),
@@ -75,14 +122,16 @@ class RunningCalculatorPage extends StatelessWidget {
     final measure = draft.measureAt(index);
     final isInput = draft.isInput(index);
     final value = draft.displayValueAt(index, vma);
-    final otherMeasures = [
-      for (var other = 0; other < 4; other++)
-        if (other != index) draft.measureAt(other),
-    ];
+    final missingVma =
+        measure == RunningMeasure.intensity && !isPositiveFinite(vma);
     final invalid =
         isInput &&
         value.isNotEmpty &&
         parseRunningValue(measure, value, vma: vma) == null;
+    final otherMeasures = [
+      for (var other = 0; other < 4; other++)
+        if (other != index) draft.measureAt(other),
+    ];
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
@@ -127,16 +176,35 @@ class RunningCalculatorPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            _CalculatorValueField(
-              key: ValueKey('calculator-value-$index'),
-              measure: measure,
+            Semantics(
+              button: true,
+              label: _label(strings, measure),
               value: value,
-              isInput: isInput,
-              invalid: invalid,
-              vmaMissing:
-                  measure == RunningMeasure.intensity && !isPositiveFinite(vma),
-              onActivate: () => onChanged(draft.activate(index, value)),
-              onChanged: (text) => onChanged(draft.edit(index, text)),
+              child: InkWell(
+                key: ValueKey('calculator-value-$index'),
+                onTap: missingVma
+                    ? () => _editVma(context)
+                    : () => _editValue(context, index),
+                borderRadius: BorderRadius.circular(12),
+                child: InputDecorator(
+                  isEmpty: value.isEmpty,
+                  decoration: InputDecoration(
+                    labelText: _label(strings, measure),
+                    errorText: missingVma
+                        ? strings['calculatorNeedsVma']
+                        : invalid
+                        ? strings['calculatorInvalid']
+                        : null,
+                    errorMaxLines: 2,
+                    suffixIcon: const Icon(Icons.edit_outlined),
+                  ),
+                  child: Text(
+                    value,
+                    key: ValueKey('calculator-display-$index'),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -145,104 +213,44 @@ class RunningCalculatorPage extends StatelessWidget {
   }
 }
 
-class _CalculatorValueField extends StatefulWidget {
-  const _CalculatorValueField({
-    super.key,
-    required this.measure,
-    required this.value,
-    required this.isInput,
-    required this.invalid,
-    required this.vmaMissing,
-    required this.onActivate,
-    required this.onChanged,
-  });
-
-  final RunningMeasure measure;
-  final String value;
-  final bool isInput;
-  final bool invalid;
-  final bool vmaMissing;
-  final VoidCallback onActivate;
-  final ValueChanged<String> onChanged;
-
-  @override
-  State<_CalculatorValueField> createState() => _CalculatorValueFieldState();
+// Validate through the domain parser, then retain the selected card's units.
+double? _pickerValue(RunningMeasure measure, String input, double? vma) {
+  if (parseRunningValue(measure, input, vma: vma) == null) return null;
+  return switch (measure) {
+    RunningMeasure.time => parseRunningDuration(input),
+    RunningMeasure.pace => parseRunningDuration(input, allowHours: false),
+    _ => double.tryParse(input.trim().replaceAll(',', '.')),
+  };
 }
 
-class _CalculatorValueFieldState extends State<_CalculatorValueField> {
-  final FocusNode _focusNode = FocusNode();
-  late final TextEditingController _controller = TextEditingController(
-    text: widget.value,
-  );
-
-  @override
-  void didUpdateWidget(covariant _CalculatorValueField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.measure != widget.measure ||
-        (!widget.isInput && oldWidget.value != widget.value) ||
-        (oldWidget.isInput && !widget.isInput)) {
-      _controller.value = TextEditingValue(
-        text: widget.value,
-        selection: TextSelection.collapsed(offset: widget.value.length),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  void _activate() {
-    widget.onActivate();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      _focusNode.requestFocus();
-      _controller.selection = TextSelection(
-        baseOffset: 0,
-        extentOffset: _controller.text.length,
-      );
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final strings = AppLocalizations.of(context);
-    final duration =
-        widget.measure == RunningMeasure.time ||
-        widget.measure == RunningMeasure.pace;
-    return TextFormField(
-      controller: _controller,
-      focusNode: _focusNode,
-      readOnly: !widget.isInput,
-      onTap: widget.isInput ? null : _activate,
-      keyboardType: duration
-          ? TextInputType.datetime
-          : const TextInputType.numberWithOptions(decimal: true),
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-        labelText: _label(strings, widget.measure),
-        helperText:
-            strings[widget.isInput
-                ? duration
-                      ? 'calculatorDurationHelp'
-                      : 'calculatorNumberHelp'
-                : 'calculatorTapToEdit'],
-        helperMaxLines: 4,
-        errorText: widget.invalid
-            ? strings[widget.vmaMissing
-                  ? 'calculatorNeedsVma'
-                  : 'calculatorInvalid']
-            : null,
-        errorMaxLines: 2,
-        suffixIcon: widget.isInput ? null : const Icon(Icons.edit_outlined),
-      ),
-      onChanged: widget.isInput ? widget.onChanged : null,
-    );
-  }
+String _formatValue(RunningMeasure measure, double value) {
+  final numeric = value.toString().replaceFirst(RegExp(r'\.0$'), '');
+  final duration = switch (measure) {
+    RunningMeasure.time => formatRunningDuration(value),
+    RunningMeasure.pace => formatPacePerKm(RunningSpeed.fromPaceSeconds(value)),
+    _ => null,
+  };
+  // Keep fractional seconds and long/custom durations exact when the compact
+  // display format would round them or could not be parsed back.
+  return duration != null &&
+          parseRunningDuration(
+                duration,
+                allowHours: measure != RunningMeasure.pace,
+              ) ==
+              value
+      ? duration
+      : numeric;
 }
+
+List<double> _presets(RunningMeasure measure) => switch (measure) {
+  RunningMeasure.distance => [
+    for (final meters in presetDistances()) meters / 1000,
+  ],
+  RunningMeasure.time => presetTimesSeconds(),
+  RunningMeasure.pace => List.generate(120, (index) => (index + 1) * 15.0),
+  RunningMeasure.speed => List.generate(80, (index) => (index + 1) / 2),
+  RunningMeasure.intensity => List.generate(60, (index) => (index + 1) * 5.0),
+};
 
 String _label(AppLocalizations strings, RunningMeasure measure) =>
     strings[switch (measure) {

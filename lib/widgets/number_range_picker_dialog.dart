@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../app_localizations.dart';
 import 'number_wheel_picker.dart';
 
-/// Selects ordered bounds from numeric presets without discarding custom bounds.
+/// Selects ordered bounds and applies each valid range without a Save action.
 class NumberRangePickerDialog extends StatefulWidget {
   const NumberRangePickerDialog({
     super.key,
@@ -12,6 +12,7 @@ class NumberRangePickerDialog extends StatefulWidget {
     required this.initialMax,
     required this.formatValue,
     required this.parseValueInput,
+    required this.onChanged,
     this.inputKeyboardType,
   });
 
@@ -21,6 +22,7 @@ class NumberRangePickerDialog extends StatefulWidget {
   final double initialMax;
   final String Function(double) formatValue;
   final double? Function(String input, double currentValue) parseValueInput;
+  final ValueChanged<RangeValues> onChanged;
   final TextInputType? inputKeyboardType;
 
   @override
@@ -29,40 +31,22 @@ class NumberRangePickerDialog extends StatefulWidget {
 }
 
 class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
-  late final _values = {
-    ...widget.values,
-    widget.initialMin,
-    widget.initialMax,
-  }.toList()..sort();
   late double _min = widget.initialMin;
   late double _max = widget.initialMax;
-  bool _invalid = false;
 
-  int? _indexForInput(String input, int currentIndex) {
-    final trimmed = input.trim().toLowerCase();
-    final exactIndex = _values.indexWhere(
-      (value) => widget.formatValue(value).trim().toLowerCase() == trimmed,
-    );
-    if (exactIndex >= 0) return exactIndex;
-
-    final value = widget.parseValueInput(input, _values[currentIndex]);
-    if (value == null || value < _values.first || value > _values.last) {
-      return null;
-    }
-    var nearestIndex = 0;
-    for (var index = 1; index < _values.length; index++) {
-      if ((_values[index] - value).abs() <
-          (_values[nearestIndex] - value).abs()) {
-        nearestIndex = index;
-      }
-    }
-    return nearestIndex;
+  void _update({double? min, double? max}) {
+    setState(() {
+      _min = min ?? _min;
+      _max = max ?? _max;
+    });
+    if (_min < _max) widget.onChanged(RangeValues(_min, _max));
   }
 
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return AlertDialog(
+      scrollable: true,
       title: Text(widget.title),
       content: SizedBox(
         width: 320,
@@ -73,39 +57,37 @@ class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: NumberWheelPicker(
+                  child: NumberValueWheelPicker(
                     key: const ValueKey('range-min-picker'),
                     label: strings.translate('minimum'),
-                    initialIndex: _values.indexOf(widget.initialMin),
-                    itemCount: _values.length,
-                    formatItem: (index) => widget.formatValue(_values[index]),
-                    parseInput: _indexForInput,
+                    initialValue: widget.initialMin,
+                    values: widget.values,
+                    formatValue: widget.formatValue,
+                    parseInput: widget.parseValueInput,
+                    minValue: widget.values.first,
+                    maxValue: widget.values.last,
                     inputKeyboardType: widget.inputKeyboardType,
-                    onChanged: (index) => setState(() {
-                      _min = _values[index];
-                      _invalid = false;
-                    }),
+                    onChanged: (value) => _update(min: value),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: NumberWheelPicker(
+                  child: NumberValueWheelPicker(
                     key: const ValueKey('range-max-picker'),
                     label: strings.translate('maximum'),
-                    initialIndex: _values.indexOf(widget.initialMax),
-                    itemCount: _values.length,
-                    formatItem: (index) => widget.formatValue(_values[index]),
-                    parseInput: _indexForInput,
+                    initialValue: widget.initialMax,
+                    values: widget.values,
+                    formatValue: widget.formatValue,
+                    parseInput: widget.parseValueInput,
+                    minValue: widget.values.first,
+                    maxValue: widget.values.last,
                     inputKeyboardType: widget.inputKeyboardType,
-                    onChanged: (index) => setState(() {
-                      _max = _values[index];
-                      _invalid = false;
-                    }),
+                    onChanged: (value) => _update(max: value),
                   ),
                 ),
               ],
             ),
-            if (_invalid)
+            if (_min >= _max)
               Text(
                 strings.minLessThanMax,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -113,22 +95,6 @@ class _NumberRangePickerDialogState extends State<NumberRangePickerDialog> {
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(strings.cancel),
-        ),
-        FilledButton(
-          onPressed: () {
-            if (_min >= _max) {
-              setState(() => _invalid = true);
-              return;
-            }
-            Navigator.of(context).pop(RangeValues(_min, _max));
-          },
-          child: Text(strings.save),
-        ),
-      ],
     );
   }
 }

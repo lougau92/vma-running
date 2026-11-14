@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/calculator/running_calculator_draft.dart';
 import 'package:vma_running/calculator/running_calculator_page.dart';
 import 'package:vma_running/vma_home.dart';
+import 'package:vma_running/widgets/number_wheel_picker.dart';
+import 'package:vma_running/widgets/vma_celebration_overlay.dart';
 
 Widget _app(Widget child, {String locale = 'en'}) => MaterialApp(
   locale: Locale(locale),
@@ -20,12 +23,64 @@ Widget _app(Widget child, {String locale = 'en'}) => MaterialApp(
   home: Scaffold(body: child),
 );
 
-String _result(WidgetTester tester, String name) => tester
-    .widget<SelectableText>(find.byKey(ValueKey('calculator-result-$name')))
+String _display(WidgetTester tester, int index) => tester
+    .widget<Text>(find.byKey(ValueKey('calculator-display-$index')))
     .data!;
 
+Future<void> _edit(
+  WidgetTester tester, {
+  required int index,
+  required String selected,
+  required String input,
+}) async {
+  await tester.ensureVisible(find.byKey(ValueKey('calculator-value-$index')));
+  await tester.tap(find.byKey(ValueKey('calculator-value-$index')));
+  await tester.pumpAndSettle();
+  await tester.tap(
+    find
+        .descendant(
+          of: find.byType(NumberValueWheelPicker),
+          matching: find.text(selected),
+        )
+        .first,
+  );
+  await tester.pumpAndSettle();
+  await tester.enterText(find.byType(TextField).last, input);
+  await tester.testTextInput.receiveAction(TextInputAction.done);
+  await tester.pumpAndSettle();
+  await tester.tapAt(const Offset(5, 5));
+  await tester.pumpAndSettle();
+}
+
 void main() {
-  testWidgets('updates live, clears stale results and accepts comma decimals', (
+  testWidgets(
+    'wheel typing updates calculations and preserves comma decimals',
+    (tester) async {
+      var draft = const RunningCalculatorDraft();
+      await tester.pumpWidget(
+        _app(
+          StatefulBuilder(
+            builder: (context, setState) => RunningCalculatorPage(
+              draft: draft,
+              vma: 18,
+              onVmaChanged: (_) {},
+              onChanged: (value) => setState(() => draft = value),
+            ),
+          ),
+        ),
+      );
+      expect(_display(tester, 2), '12.00');
+      expect(find.text('Calculator'), findsNothing);
+      expect(find.textContaining('Choose four'), findsNothing);
+      await _edit(tester, index: 0, selected: '5', input: '2,5');
+      expect(_display(tester, 0), '2.5');
+      expect(_display(tester, 2), '6.00');
+      expect(_display(tester, 3), '10:00');
+      expect(draft.inputIndices, [0, 1]);
+    },
+  );
+
+  testWidgets('custom distance and fractional duration stay exact', (
     tester,
   ) async {
     var draft = const RunningCalculatorDraft();
@@ -35,79 +90,79 @@ void main() {
           builder: (context, setState) => RunningCalculatorPage(
             draft: draft,
             vma: 18,
-            onEditVma: () {},
+            onVmaChanged: (_) {},
             onChanged: (value) => setState(() => draft = value),
           ),
         ),
       ),
     );
-    expect(_result(tester, 'speed'), '12.00');
-    await tester.enterText(find.byType(TextFormField).first, '10');
-    await tester.pump();
-    expect(_result(tester, 'speed'), '24.00');
-    expect(_result(tester, 'pace'), '02:30');
-    await tester.enterText(find.byType(TextFormField).first, '');
-    await tester.pump();
-    expect(find.byType(SelectableText), findsNothing);
-    await tester.enterText(find.byType(TextFormField).first, '2,5');
-    await tester.pump();
-    expect(_result(tester, 'speed'), '6.00');
-    expect(_result(tester, 'intensity'), '33.33');
+    await _edit(tester, index: 0, selected: '5', input: '5.12345');
+    expect(double.parse(draft.firstText), closeTo(5.12345, 1e-12));
+    await _edit(tester, index: 1, selected: '25:00', input: '1500.25');
+    expect(parseRunningValue(RunningMeasure.time, draft.secondText), 1500.25);
+    expect(draft.calculate(18)!.seconds, 1500.25);
   });
 
-  testWidgets(
-    'supports pace and intensity inputs and filters dependent quantities',
-    (tester) async {
-      var draft = const RunningCalculatorDraft();
-      double? vma = 18;
-      late StateSetter change;
-      await tester.pumpWidget(
-        _app(
-          StatefulBuilder(
-            builder: (context, setState) {
-              change = setState;
-              return RunningCalculatorPage(
-                draft: draft,
-                vma: vma,
-                onEditVma: () {},
-                onChanged: (value) => setState(() => draft = value),
-              );
-            },
+  testWidgets('editing calculated pace replaces the speed-family input', (
+    tester,
+  ) async {
+    var draft = const RunningCalculatorDraft(
+      inputIndices: [0, 2],
+      thirdText: '12',
+    );
+    await tester.pumpWidget(
+      _app(
+        StatefulBuilder(
+          builder: (context, setState) => RunningCalculatorPage(
+            draft: draft,
+            vma: 18,
+            onVmaChanged: (_) {},
+            onChanged: (value) => setState(() => draft = value),
           ),
         ),
-      );
-      await tester.tap(
-        find.byType(DropdownButtonFormField<RunningMeasure>).at(1),
-      );
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('Pace (min:sec/km)').last);
-      await tester.pumpAndSettle();
-      await tester.enterText(find.byType(TextFormField).at(1), '4:00');
-      await tester.pump();
-      expect(_result(tester, 'time'), '20:00');
-      expect(_result(tester, 'speed'), '15.00');
-      final first = tester.widget<DropdownButton<RunningMeasure>>(
-        find.descendant(
-          of: find.byType(DropdownButtonFormField<RunningMeasure>).first,
-          matching: find.byType(DropdownButton<RunningMeasure>),
+      ),
+    );
+    await _edit(tester, index: 3, selected: '05:00', input: '4:00');
+    expect(draft.inputIndices, [0, 3]);
+    expect(_display(tester, 1), '20:00');
+    expect(_display(tester, 2), '15.00');
+  });
+
+  testWidgets('intensity uses calculator VMA and follows supplied updates', (
+    tester,
+  ) async {
+    var draft = const RunningCalculatorDraft(
+      second: RunningMeasure.intensity,
+      secondText: '100',
+    );
+    double? vma = 18;
+    late StateSetter change;
+    await tester.pumpWidget(
+      _app(
+        StatefulBuilder(
+          builder: (context, setState) {
+            change = setState;
+            return RunningCalculatorPage(
+              draft: draft,
+              vma: vma,
+              onVmaChanged: (value) => setState(() => vma = value),
+              onChanged: (value) => setState(() => draft = value),
+            );
+          },
         ),
-      );
-      expect(first.items!.map((item) => item.value), [
-        RunningMeasure.distance,
-        RunningMeasure.time,
-      ]);
-      change(() => draft = draft.select(1, RunningMeasure.intensity));
-      await tester.pump();
-      expect(_result(tester, 'speed'), '18.00');
-      change(() => vma = 20);
-      await tester.pump();
-      expect(_result(tester, 'speed'), '20.00');
-      change(() => vma = null);
-      await tester.pump();
-      expect(find.byType(SelectableText), findsNothing);
-      expect(find.text('Set your VMA to calculate intensity.'), findsOneWidget);
-    },
-  );
+      ),
+    );
+    expect(_display(tester, 2), '18.00');
+    await _edit(tester, index: 1, selected: '100', input: '87.5');
+    expect(_display(tester, 2), '15.75');
+    change(() => vma = 20);
+    await tester.pump();
+    expect(_display(tester, 2), '17.50');
+    change(() => vma = null);
+    await tester.pump();
+    expect(_display(tester, 2), '');
+    expect(find.text('Set your VMA to calculate intensity.'), findsOneWidget);
+  });
 
   for (final locale in ['en', 'fr', 'nl']) {
     testWidgets('fits a narrow screen with large text in $locale', (
@@ -125,14 +180,13 @@ void main() {
                 draft: const RunningCalculatorDraft(),
                 vma: null,
                 onChanged: (_) {},
-                onEditVma: () {},
+                onVmaChanged: (_) {},
               ),
             ),
           ),
           locale: locale,
         ),
       );
-      expect(_result(tester, 'intensity'), '—');
       await tester.drag(
         find.byType(SingleChildScrollView),
         const Offset(0, -1500),
@@ -142,8 +196,17 @@ void main() {
     });
   }
 
-  testWidgets('calculator draft survives switching tabs', (tester) async {
+  testWidgets('calculator draft and local VMA survive switching tabs', (
+    tester,
+  ) async {
     SharedPreferences.setMockInitialValues({'user_vma': 18.0});
+    PackageInfo.setMockInitialValues(
+      appName: 'VMA',
+      packageName: 'vma_running',
+      version: '1.0.0',
+      buildNumber: '1',
+      buildSignature: '',
+    );
     await tester.pumpWidget(
       _app(
         VmaHomePage(settings: const AppSettings(), onSettingsChanged: (_) {}),
@@ -152,19 +215,52 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.calculate_outlined));
     await tester.pumpAndSettle();
-    await tester.enterText(find.byType(TextFormField).first, '10');
-    await tester.pump();
-    expect(_result(tester, 'speed'), '24.00');
+    await _edit(tester, index: 0, selected: '5', input: '10');
+    expect(_display(tester, 2), '24.00');
+
+    await tester.tap(find.byKey(const ValueKey('calculator-vma')));
+    await tester.pumpAndSettle();
+    final whole = find.byKey(const ValueKey('number-whole-picker'));
+    await tester.tap(
+      find.descendant(of: whole, matching: find.text('18')).first,
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '20');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    await tester.tapAt(const Offset(5, 5));
+    await tester.pumpAndSettle();
+    expect(find.text('VMA: 20.00 km/h'), findsOneWidget);
+    final preferences = await SharedPreferences.getInstance();
+    expect(preferences.getDouble('user_vma'), 18);
+    expect(find.byType(VmaCelebrationOverlay), findsNothing);
+
     await tester.tap(find.byIcon(Icons.timer));
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.calculate_outlined));
     await tester.pumpAndSettle();
-    expect(_result(tester, 'speed'), '24.00');
-    expect(
-      tester
-          .widget<TextFormField>(find.byType(TextFormField).first)
-          .initialValue,
-      '10',
+    expect(_display(tester, 2), '24.00');
+    expect(_display(tester, 0), '10');
+    expect(find.text('VMA: 20.00 km/h'), findsOneWidget);
+
+    // Updating the saved VMA in settings provides the calculator's new default.
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('vma-edit')));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(of: whole, matching: find.text('18')).first,
     );
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '21');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pumpAndSettle();
+    await tester.tapAt(const Offset(5, 5));
+    await tester.pumpAndSettle();
+    expect(preferences.getDouble('user_vma'), 21);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+    expect(find.text('VMA: 21.00 km/h'), findsOneWidget);
+    expect(_display(tester, 0), '10');
   });
 }

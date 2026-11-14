@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../app_localizations.dart';
 import 'number_wheel_picker.dart';
 
-/// Edits a decimal value; the caller applies it when the dialog closes.
+/// Edits a decimal value and reports valid changes as they are made.
 class NumberPickerDialog extends StatefulWidget {
   const NumberPickerDialog({
     super.key,
@@ -49,6 +49,7 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
         ? '.'
         : ',';
     return AlertDialog(
+      scrollable: true,
       title: Text(widget.title),
       content: SizedBox(
         width: 280,

@@ -36,6 +36,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     final labels = [
       strings.intensity,
       strings.pacePerKm,
@@ -50,13 +51,30 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
         _ => null,
       };
       final label = onTap == null
-          ? Text(labels[column])
+          ? Text(
+              labels[column],
+              style: column == _columnOrder.first
+                  ? TextStyle(
+                      color: colors.primary,
+                      fontWeight: FontWeight.w600,
+                    )
+                  : null,
+            )
           : InteractiveHeader(
               label: labels[column],
               onTap: onTap,
               tooltip: labels[column],
             );
+      Widget feedback() => Material(
+        color: colors.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(labels[column]),
+        ),
+      );
       return DragTarget<int>(
+        key: ValueKey('pace-column-$column'),
         onWillAcceptWithDetails: (details) => details.data != column,
         onAcceptWithDetails: (details) {
           setState(() {
@@ -67,23 +85,38 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
         },
         builder: (context, candidates, rejected) => LongPressDraggable<int>(
           data: column,
-          feedback: Material(
-            elevation: 6,
-            borderRadius: BorderRadius.circular(12),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text(labels[column]),
-            ),
-          ),
+          feedback: feedback(),
           childWhenDragging: Opacity(opacity: 0.3, child: label),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: candidates.isEmpty
-                  ? null
-                  : Theme.of(context).colorScheme.primaryContainer,
+              color: candidates.isEmpty ? null : colors.primaryContainer,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: label,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // A dedicated handle makes reordering discoverable and keeps
+                // its horizontal drag separate from tapping the edit label.
+                Draggable<int>(
+                  data: column,
+                  axis: Axis.horizontal,
+                  affinity: Axis.horizontal,
+                  feedback: feedback(),
+                  childWhenDragging: const SizedBox(width: 32, height: 40),
+                  child: SizedBox(
+                    key: ValueKey('pace-column-handle-$column'),
+                    width: 32,
+                    height: 40,
+                    child: Icon(
+                      Icons.drag_indicator,
+                      color: colors.onSurfaceVariant,
+                      size: 18,
+                    ),
+                  ),
+                ),
+                label,
+              ],
+            ),
           ),
         ),
       );
@@ -98,20 +131,35 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
       horizontalMargin: 16,
       columnSpacing: 24,
       columns: [
-        for (final column in columns) DataColumn(label: header(column)),
+        for (final column in columns)
+          DataColumn(
+            label: header(column),
+            headingRowAlignment: column == _columnOrder.first
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
+          ),
       ],
       rows: [
-        for (final entry in widget.entries)
+        for (var index = 0; index < widget.entries.length; index++)
           DataRow(
+            color: WidgetStatePropertyAll(
+              index.isEven ? colors.surface : colors.surfaceContainerLow,
+            ),
             cells: [
               for (final column in columns)
                 DataCell(
-                  Text(switch (column) {
-                    0 => '${entry.percent.toStringAsFixed(0)}%',
-                    1 => entry.pacePerKm,
-                    2 => entry.timeForDistance,
-                    _ => entry.speedKmh.toStringAsFixed(2),
-                  }),
+                  Align(
+                    alignment: column == _columnOrder.first
+                        ? Alignment.center
+                        : Alignment.centerLeft,
+                    child: Text(switch (column) {
+                      0 =>
+                        '${widget.entries[index].percent.toStringAsFixed(0)}%',
+                      1 => widget.entries[index].pacePerKm,
+                      2 => widget.entries[index].timeForDistance,
+                      _ => widget.entries[index].speedKmh.toStringAsFixed(2),
+                    }),
+                  ),
                 ),
             ],
           ),

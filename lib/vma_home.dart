@@ -26,6 +26,8 @@ import 'vma_times_table.dart';
 import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
 import 'widgets/vma_celebration_overlay.dart';
+import 'widgets/page_swipe_region.dart';
+import 'widgets/intensity_pace_control.dart';
 
 enum _HomePage {
   intensity('intensity'),
@@ -69,7 +71,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
   final _paceCalculator = VmaPaceCalculator();
   late final RemoteAssetLoader _remoteLoader;
   _HomePage _selectedPage = _HomePage.intensity;
-  double _horizontalDrag = 0;
+  final _visitedPages = <_HomePage>{_HomePage.intensity};
   OverlayEntry? _celebrationEntry;
 
   List<_HomePage> get _pages => [
@@ -83,6 +85,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
 
   RunningCalculatorDraft _calculatorDraft = const RunningCalculatorDraft();
   double? _vma;
+  double? _calculatorVma;
   bool _loading = true;
   double _minPercent = 60;
   double _maxPercent = 120;
@@ -102,7 +105,10 @@ class _VmaHomePageState extends State<VmaHomePage> {
 
   void _setVma(double value) {
     final changed = _vma != null && value != _vma;
-    setState(() => _vma = value);
+    setState(() {
+      if (_vma != value) _calculatorVma = value;
+      _vma = value;
+    });
     if (changed) _celebrateVmaChange();
   }
 
@@ -131,6 +137,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
     if (!_pages.contains(_selectedPage)) {
       _selectedPage = _HomePage.intensity;
     }
+    _visitedPages.removeWhere((page) => !_pages.contains(page));
+    _visitedPages.add(_selectedPage);
   }
 
   @override
@@ -150,6 +158,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
 
     setState(() {
       _vma = stored;
+      _calculatorVma = stored;
       _loading = false;
     });
 
@@ -212,79 +221,106 @@ class _VmaHomePageState extends State<VmaHomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    if (_vma == null && _selectedPage.requiresVma) {
-      return Center(child: Text(strings.enterVmaPlaceholder));
+    final pages = _pages;
+    return PageSwipeRegion(
+      pageIndex: pages.indexOf(_selectedPage),
+      allowTableEdgeSwipes:
+          _selectedPage == _HomePage.intensity ||
+          _selectedPage == _HomePage.times,
+      onSwipe: (direction) {
+        final next = pages.indexOf(_selectedPage) + direction;
+        if (next >= 0 && next < pages.length) _selectPage(pages[next]);
+      },
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          for (final page in pages)
+            if (_visitedPages.contains(page))
+              Offstage(
+                key: ValueKey(page),
+                offstage: page != _selectedPage,
+                child: TickerMode(
+                  enabled: page == _selectedPage,
+                  child: _buildPage(page, strings),
+                ),
+              ),
+        ],
+      ),
+    );
+  }
+
+  void _selectPage(_HomePage page) {
+    if (page == _selectedPage) return;
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {
+      _visitedPages.add(page);
+      _selectedPage = page;
+    });
+  }
+
+  Widget _buildPage(_HomePage page, AppLocalizations strings) {
+    final Widget content;
+    if (_vma == null && page.requiresVma) {
+      content = Center(child: Text(strings.enterVmaPlaceholder));
+    } else {
+      content = switch (page) {
+        _HomePage.intensity => _buildPaceBody(),
+        _HomePage.times => _buildTimesBody(),
+        _HomePage.trainingPlan => VmaTrainingPlan(
+          userVma: _vma!,
+          settings: widget.settings,
+          onSettingsChanged: widget.onSettingsChanged,
+          loader: _remoteLoader,
+        ),
+        _HomePage.calculator => RunningCalculatorPage(
+          draft: _calculatorDraft,
+          vma: _calculatorVma,
+          onVmaChanged: (value) => setState(() => _calculatorVma = value),
+          onChanged: (draft) => setState(() => _calculatorDraft = draft),
+        ),
+        _HomePage.communications => ClubCommunicationsPage(
+          loader: _remoteLoader,
+        ),
+        _HomePage.rankings => _buildChallengeBody(),
+      };
     }
 
-    final content = switch (_selectedPage) {
-      _HomePage.intensity => _buildPaceBody(),
-      _HomePage.times => _buildTimesBody(strings),
-      _HomePage.trainingPlan => VmaTrainingPlan(
-        userVma: _vma!,
-        settings: widget.settings,
-        onSettingsChanged: widget.onSettingsChanged,
-        loader: _remoteLoader,
-      ),
-      _HomePage.calculator => RunningCalculatorPage(
-        draft: _calculatorDraft,
-        vma: _vma,
-        onEditVma: _promptForVma,
-        onChanged: (draft) => setState(() => _calculatorDraft = draft),
-      ),
-      _HomePage.communications => ClubCommunicationsPage(loader: _remoteLoader),
-      _HomePage.rankings => _buildChallengeBody(),
-    };
-
-    final isTablePage =
-        _selectedPage == _HomePage.intensity ||
-        _selectedPage == _HomePage.times;
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onHorizontalDragStart: (_) => _horizontalDrag = 0,
-      onHorizontalDragUpdate: (details) => _horizontalDrag += details.delta.dx,
-      onHorizontalDragEnd: (_) {
-        if (_horizontalDrag.abs() < 70) return;
-        final index = _pages.indexOf(_selectedPage);
-        final next = _horizontalDrag < 0 ? index + 1 : index - 1;
-        if (next >= 0 && next < _pages.length) {
-          setState(() => _selectedPage = _pages[next]);
-        }
-      },
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(24, isTablePage ? 8 : 24, 24, 24),
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 900),
-            child: FeedbackContextScope(
-              id: _selectedPage.contextId,
-              isScreen: true,
-              data: _pageContextState,
-              child: content,
-            ),
+    final isTablePage = page == _HomePage.intensity || page == _HomePage.times;
+    return Padding(
+      padding: EdgeInsets.fromLTRB(24, isTablePage ? 8 : 24, 24, 24),
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: FeedbackContextScope(
+            id: page.contextId,
+            isScreen: true,
+            data: _pageContextState(page),
+            child: content,
           ),
         ),
       ),
     );
   }
 
-  Map<String, Object?> get _pageContextState => {
-    if (_selectedPage.requiresVma || _selectedPage == _HomePage.calculator)
-      'vmaKmh': _vma,
-    if (_selectedPage == _HomePage.calculator) ...{
+  Map<String, Object?> _pageContextState(_HomePage page) => {
+    if (page.requiresVma) 'vmaKmh': _vma,
+    if (page == _HomePage.calculator) ...{
+      'vmaKmh': _calculatorVma,
+      'savedVmaKmh': _vma,
       'measures': [
         for (var index = 0; index < 4; index++)
           _calculatorDraft.measureAt(index).name,
       ],
       'inputIndices': _calculatorDraft.inputIndices,
     },
-    if (_selectedPage == _HomePage.intensity) ...{
+    if (page == _HomePage.intensity) ...{
       'minPercent': _minPercent,
       'maxPercent': _maxPercent,
       'stepPercent': _step,
       'distanceMeters': _distanceMeters,
     },
-    if (_selectedPage == _HomePage.times) ...{
+    if (page == _HomePage.times) ...{
       'intensityPercent': _timesPercent,
       'minDistanceMeters': _timesMinDistance,
       'maxDistanceMeters': _timesMaxDistance,
@@ -308,7 +344,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
           ? Colors.white70
           : theme.colorScheme.onSurface,
       currentIndex: _pages.indexOf(_selectedPage),
-      onTap: (idx) => setState(() => _selectedPage = _pages[idx]),
+      onTap: (idx) => _selectPage(_pages[idx]),
       items: _pages.map((page) {
         final (icon, label) = switch (page) {
           _HomePage.intensity => (Icons.analytics, strings.intensityTab),
@@ -333,65 +369,62 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   Future<void> _openTableSettingsDialog() async {
-    final result = await showVmaSettingsDialog(
+    await showVmaSettingsDialog(
       context,
       initialSettings: VmaTableSettings(
         minPercent: _minPercent,
         maxPercent: _maxPercent,
         step: _step,
       ),
+      onChanged: (settings) {
+        if (!mounted) return;
+        setState(() {
+          _minPercent = settings.minPercent;
+          _maxPercent = settings.maxPercent;
+          _step = settings.step;
+        });
+      },
     );
-
-    if (result != null && mounted) {
-      setState(() {
-        _minPercent = result.minPercent;
-        _maxPercent = result.maxPercent;
-        _step = result.step;
-      });
-    }
   }
 
   Future<void> _openDistanceDialog() async {
-    final updatedDistance = await showDistanceDialog(
+    await showDistanceDialog(
       context,
       initialDistanceMeters: _distanceMeters,
+      onChanged: (value) {
+        if (mounted) setState(() => _distanceMeters = value);
+      },
     );
-
-    if (updatedDistance != null && mounted) {
-      setState(() {
-        _distanceMeters = updatedDistance;
-      });
-    }
   }
 
   Future<void> _openDistancesSettingDialog() async {
-    final result = await showDistancesSettingsDialog(
+    await showDistancesSettingsDialog(
       context,
       initialMin: _timesMinDistance,
       initialMax: _timesMaxDistance,
+      onChanged: (range) {
+        if (!mounted) return;
+        setState(() {
+          _timesMinDistance = range.min;
+          _timesMaxDistance = range.max;
+        });
+      },
     );
-
-    if (result != null && mounted) {
-      setState(() {
-        _timesMinDistance = result.min;
-        _timesMaxDistance = result.max;
-      });
-    }
   }
 
   Future<void> _openTimesSettingsDialog() async {
-    final result = await showTimesSettingsDialog(
+    await showTimesSettingsDialog(
       context,
       initialMinSeconds: _timesMinSeconds,
       initialMaxSeconds: _timesMaxSeconds,
+      onChanged: (range) {
+        if (!mounted) return;
+        setState(() {
+          _timesMinSeconds = range.minSeconds;
+          _timesMaxSeconds = range.maxSeconds;
+        });
+      },
     );
-
-    if (result != null && mounted) {
-      setState(() {
-        _timesMinSeconds = result.minSeconds;
-        _timesMaxSeconds = result.maxSeconds;
-      });
-    }
   }
 
   Widget _buildChallengeBody() {
@@ -415,51 +448,17 @@ class _VmaHomePageState extends State<VmaHomePage> {
     );
   }
 
-  Widget _buildTimesBody(AppLocalizations strings) {
+  Widget _buildTimesBody() {
     final speed = RunningSpeed.fromVma(_vma, _timesPercent);
-    final paceText = formatPacePerKm(speed, includeUnit: true);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _wrapCenteredWidth(
-          Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Wrap(
-                    alignment: WrapAlignment.spaceBetween,
-                    spacing: 12,
-                    runSpacing: 4,
-                    children: [
-                      Text(
-                        '${strings.intensity}: ${_timesPercent.toStringAsFixed(0)}%VMA',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        '${strings.pacePerKm}: $paceText',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                  Slider(
-                    value: _timesPercent,
-                    min: 60,
-                    max: 120,
-                    divisions: 12,
-                    label: '${_timesPercent.toStringAsFixed(0)}%',
-                    onChanged: (value) {
-                      setState(() {
-                        _timesPercent = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
+          IntensityPaceControl(
+            percent: _timesPercent,
+            speed: speed,
+            onChanged: (value) => setState(() => _timesPercent = value),
           ),
         ),
         const SizedBox(height: 12),

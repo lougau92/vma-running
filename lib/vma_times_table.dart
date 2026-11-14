@@ -44,6 +44,7 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    final colors = Theme.of(context).colorScheme;
     final data = _distanceFirst ? _buildDistances() : _buildTimes();
 
     final distanceHeader = SizedBox(
@@ -81,8 +82,18 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
       ),
     );
 
-    final distanceColumn = DataColumn(label: distanceHeader);
-    final timeColumn = DataColumn(label: timeHeader);
+    final distanceColumn = DataColumn(
+      label: distanceHeader,
+      headingRowAlignment: _distanceFirst
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
+    );
+    final timeColumn = DataColumn(
+      label: timeHeader,
+      headingRowAlignment: !_distanceFirst
+          ? MainAxisAlignment.center
+          : MainAxisAlignment.start,
+    );
 
     final columns = [
       swapColumn,
@@ -107,9 +118,17 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
               child: DataTable(
                 columnSpacing: 16,
                 columns: columns,
-                rows: data
-                    .map((value) => DataRow(cells: _buildRow(value, strings)))
-                    .toList(),
+                rows: [
+                  for (var index = 0; index < data.length; index++)
+                    DataRow(
+                      color: WidgetStatePropertyAll(
+                        index.isEven
+                            ? colors.surface
+                            : colors.surfaceContainerLow,
+                      ),
+                      cells: _buildRow(data[index], strings),
+                    ),
+                ],
               ),
             ),
           ),
@@ -125,9 +144,17 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     final meters = _distanceFirst ? value : split?.distanceMeters;
     final seconds = _distanceFirst ? split?.seconds : value;
     final distanceCell = DataCell(
-      Text(meters == null ? '-' : strings.distanceShort(meters)),
+      Align(
+        alignment: _distanceFirst ? Alignment.center : Alignment.centerLeft,
+        child: Text(meters == null ? '-' : strings.distanceShort(meters)),
+      ),
     );
-    final timeCell = DataCell(Text(formatRunningDuration(seconds)));
+    final timeCell = DataCell(
+      Align(
+        alignment: !_distanceFirst ? Alignment.center : Alignment.centerLeft,
+        child: Text(formatRunningDuration(seconds)),
+      ),
+    );
     const spacer = DataCell(SizedBox.shrink());
     return _distanceFirst
         ? [spacer, distanceCell, timeCell]

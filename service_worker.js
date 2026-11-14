@@ -1,7 +1,7 @@
 // Offline-first service worker for VMA Running Companion.
 
 // 1. DYNAMIC CACHE NAME (Injected by your build script)
-const CACHE_NAME = 'vma-running-cache-1.10.7+16';
+const CACHE_NAME = 'vma-running-cache-1.10.10+19';
 
 // 2. RELATIVE PATHS (The Fix)
 // Using './' forces the browser to resolve paths relative to the Service Worker's location

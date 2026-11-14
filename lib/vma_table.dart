@@ -124,6 +124,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
       child: SingleChildScrollView(
         controller: _verticalController,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DecoratedBox(
@@ -135,7 +136,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
               ),
               child: table([_columnOrder.first]),
             ),
-            Expanded(
+            Flexible(
               child: Scrollbar(
                 controller: _horizontalController,
                 thumbVisibility: true,

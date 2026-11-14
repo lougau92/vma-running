@@ -211,11 +211,7 @@ String _formatNumber(double value) => value < 0.01 || value >= 1e9
 
 /// Normalizes distance to meters, time to seconds and the speed family to km/h.
 double? parseRunningValue(RunningMeasure measure, String text, {double? vma}) {
-  final value = switch (measure) {
-    RunningMeasure.time => parseRunningDuration(text),
-    RunningMeasure.pace => parseRunningDuration(text, allowHours: false),
-    _ => double.tryParse(text.trim().replaceAll(',', '.')),
-  };
+  final value = parseRunningMeasureInput(measure, text);
   if (!isPositiveFinite(value)) return null;
   final normalized = switch (measure) {
     RunningMeasure.distance => value! * 1000,
@@ -226,3 +222,11 @@ double? parseRunningValue(RunningMeasure measure, String text, {double? vma}) {
   };
   return isPositiveFinite(normalized) ? normalized : null;
 }
+
+/// Parses a measure's displayed units without converting them to base units.
+double? parseRunningMeasureInput(RunningMeasure measure, String text) =>
+    switch (measure) {
+      RunningMeasure.time => parseRunningDuration(text),
+      RunningMeasure.pace => parseRunningDuration(text, allowHours: false),
+      _ => double.tryParse(text.trim().replaceAll(',', '.')),
+    };

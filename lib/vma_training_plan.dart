@@ -195,40 +195,44 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    _SectionCard(
+                    _PlanCard(
                       contextId: 'warmup',
-                      colors: (
-                        theme.colorScheme.tertiaryContainer,
-                        theme.colorScheme.onTertiaryContainer,
-                      ),
+                      background: theme.colorScheme.tertiaryContainer,
+                      foreground: theme.colorScheme.onTertiaryContainer,
                       title: strings.preSession,
-                      items: [plan.warmup],
+                      children: _sectionLines([plan.warmup]),
                     ),
                     const SizedBox(height: 12),
-                    _BlocksCard(
-                      group: group,
-                      strings: strings,
-                      vma: widget.userVma,
+                    _PlanCard(
+                      contextId: 'intervals',
+                      contextData: {'blockCount': group.blocks.length},
+                      background: theme.colorScheme.primaryContainer,
+                      foreground: theme.colorScheme.onPrimaryContainer,
+                      title: strings.sessionContent,
+                      children: [
+                        for (final block in group.blocks)
+                          _BlockView(
+                            block: block,
+                            strings: strings,
+                            vma: widget.userVma,
+                          ),
+                      ],
                     ),
                     const SizedBox(height: 12),
-                    _SectionCard(
+                    _PlanCard(
                       contextId: 'cooldown',
-                      colors: (
-                        theme.colorScheme.secondaryContainer,
-                        theme.colorScheme.onSecondaryContainer,
-                      ),
+                      background: theme.colorScheme.secondaryContainer,
+                      foreground: theme.colorScheme.onSecondaryContainer,
                       title: strings.cooldown,
-                      items: [plan.cooldown],
+                      children: _sectionLines([plan.cooldown]),
                     ),
                     const SizedBox(height: 12),
-                    _SectionCard(
+                    _PlanCard(
                       contextId: 'notes',
-                      colors: (
-                        theme.colorScheme.surfaceContainerHigh,
-                        theme.colorScheme.onSurface,
-                      ),
+                      background: theme.colorScheme.surfaceContainerHigh,
+                      foreground: theme.colorScheme.onSurface,
                       title: strings.remarks,
-                      items: [plan.remarks],
+                      children: _sectionLines([plan.remarks]),
                     ),
                     const SizedBox(height: 16),
                     Align(
@@ -328,53 +332,6 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
   }
 }
 
-class _BlocksCard extends StatelessWidget {
-  const _BlocksCard({
-    required this.group,
-    required this.strings,
-    required this.vma,
-  });
-
-  final BlockGroup group;
-  final AppLocalizations strings;
-  final double vma;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return FeedbackContextScope(
-      id: 'intervals',
-      data: {'blockCount': group.blocks.length},
-      child: Card(
-        color: theme.colorScheme.primaryContainer,
-        surfaceTintColor: Colors.transparent,
-        child: DefaultTextStyle.merge(
-          style: TextStyle(color: theme.colorScheme.onPrimaryContainer),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  strings.sessionContent,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                ...group.blocks.map(
-                  (block) =>
-                      _BlockView(block: block, strings: strings, vma: vma),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _BlockView extends StatelessWidget {
   const _BlockView({
     required this.block,
@@ -422,29 +379,34 @@ class _BlockView extends StatelessWidget {
   }
 }
 
-class _SectionCard extends StatelessWidget {
-  const _SectionCard({
+class _PlanCard extends StatelessWidget {
+  const _PlanCard({
     required this.contextId,
+    this.contextData = const {},
     required this.title,
-    required this.items,
-    required this.colors,
+    required this.children,
+    required this.background,
+    required this.foreground,
   });
 
   final String contextId;
+  final Map<String, Object?> contextData;
   final String title;
-  final List<String> items;
-  final (Color background, Color foreground) colors;
+  final List<Widget> children;
+  final Color background;
+  final Color foreground;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return FeedbackContextScope(
       id: contextId,
+      data: contextData,
       child: Card(
-        color: colors.$1,
+        color: background,
         surfaceTintColor: Colors.transparent,
         child: DefaultTextStyle.merge(
-          style: TextStyle(color: colors.$2),
+          style: TextStyle(color: foreground),
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
@@ -453,16 +415,11 @@ class _SectionCard extends StatelessWidget {
                 Text(
                   title,
                   style: theme.textTheme.titleMedium?.copyWith(
-                    color: colors.$2,
+                    color: foreground,
                   ),
                 ),
                 const SizedBox(height: 8),
-                ...items.map(
-                  (line) => Padding(
-                    padding: const EdgeInsets.only(bottom: 6),
-                    child: Text(line),
-                  ),
-                ),
+                ...children,
               ],
             ),
           ),
@@ -471,3 +428,8 @@ class _SectionCard extends StatelessWidget {
     );
   }
 }
+
+List<Widget> _sectionLines(Iterable<String> lines) => [
+  for (final line in lines)
+    Padding(padding: const EdgeInsets.only(bottom: 6), child: Text(line)),
+];

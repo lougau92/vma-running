@@ -33,6 +33,9 @@ void main() {
   });
 
   test('parses decimal commas and unambiguous duration formats', () {
+    expect(parseRunningMeasureInput(RunningMeasure.distance, ' 0,4 '), 0.4);
+    expect(parseRunningMeasureInput(RunningMeasure.time, '1:02:03.5'), 3723.5);
+    expect(parseRunningMeasureInput(RunningMeasure.pace, '4:30,5'), 270.5);
     expect(parseRunningValue(RunningMeasure.distance, ' 0,4 '), 400);
     expect(parseRunningValue(RunningMeasure.time, '1:02:03.5'), 3723.5);
     expect(parseRunningValue(RunningMeasure.time, '90:00'), 5400);

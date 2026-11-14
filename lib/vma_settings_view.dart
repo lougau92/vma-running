@@ -76,7 +76,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _LanguageChip(
+                  _SelectionChip<String>(
                     label: strings.systemDefault,
                     value: 'system',
                     current: localeValue,
@@ -84,7 +84,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                       widget.settings.copyWith(localeCode: null),
                     ),
                   ),
-                  _LanguageChip(
+                  _SelectionChip<String>(
                     label: strings.english,
                     value: 'en',
                     current: localeValue,
@@ -92,7 +92,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                       widget.settings.copyWith(localeCode: 'en'),
                     ),
                   ),
-                  _LanguageChip(
+                  _SelectionChip<String>(
                     label: strings.french,
                     value: 'fr',
                     current: localeValue,
@@ -100,7 +100,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                       widget.settings.copyWith(localeCode: 'fr'),
                     ),
                   ),
-                  _LanguageChip(
+                  _SelectionChip<String>(
                     label: strings.dutch,
                     value: 'nl',
                     current: localeValue,
@@ -120,7 +120,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                 spacing: 8,
                 runSpacing: 8,
                 children: [
-                  _ThemeChip(
+                  _SelectionChip<ThemeMode>(
                     label: strings.dark,
                     value: ThemeMode.dark,
                     current: widget.settings.themeMode,
@@ -128,7 +128,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                       widget.settings.copyWith(themeMode: ThemeMode.dark),
                     ),
                   ),
-                  _ThemeChip(
+                  _SelectionChip<ThemeMode>(
                     label: strings.light,
                     value: ThemeMode.light,
                     current: widget.settings.themeMode,
@@ -136,7 +136,7 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
                       widget.settings.copyWith(themeMode: ThemeMode.light),
                     ),
                   ),
-                  _ThemeChip(
+                  _SelectionChip<ThemeMode>(
                     label: strings.systemDefault,
                     value: ThemeMode.system,
                     current: widget.settings.themeMode,
@@ -177,8 +177,8 @@ class _VmaSettingsViewState extends State<VmaSettingsView> {
   }
 }
 
-class _LanguageChip extends StatelessWidget {
-  const _LanguageChip({
+class _SelectionChip<T> extends StatelessWidget {
+  const _SelectionChip({
     required this.label,
     required this.value,
     required this.current,
@@ -186,39 +186,8 @@ class _LanguageChip extends StatelessWidget {
   });
 
   final String label;
-  final String value;
-  final String current;
-  final VoidCallback onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final selected = current == value;
-    return ChoiceChip(
-      label: Text(label),
-      selected: selected,
-      selectedColor: colors.primaryContainer,
-      checkmarkColor: colors.onPrimaryContainer,
-      labelStyle: TextStyle(color: selected ? colors.onPrimaryContainer : null),
-      side: BorderSide(
-        color: selected ? colors.primary : colors.outlineVariant,
-      ),
-      onSelected: (_) => onSelected(),
-    );
-  }
-}
-
-class _ThemeChip extends StatelessWidget {
-  const _ThemeChip({
-    required this.label,
-    required this.value,
-    required this.current,
-    required this.onSelected,
-  });
-
-  final String label;
-  final ThemeMode value;
-  final ThemeMode current;
+  final T value;
+  final T current;
   final VoidCallback onSelected;
 
   @override

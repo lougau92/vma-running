@@ -389,11 +389,7 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
 // Validate through the domain parser, then retain the selected card's units.
 double? _pickerValue(RunningMeasure measure, String input, double? vma) {
   if (parseRunningValue(measure, input, vma: vma) == null) return null;
-  return switch (measure) {
-    RunningMeasure.time => parseRunningDuration(input),
-    RunningMeasure.pace => parseRunningDuration(input, allowHours: false),
-    _ => double.tryParse(input.trim().replaceAll(',', '.')),
-  };
+  return parseRunningMeasureInput(measure, input);
 }
 
 String _formatValue(RunningMeasure measure, double value) {

@@ -1,0 +1,4 @@
+garminconnect==0.3.20
+cryptography>=46,<47
+keyring>=25,<26
+fitdecode==0.11.0

@@ -1,0 +1,2894 @@
+{
+  "vma_kmh": 16.0,
+  "recovery_end": "time",
+  "cases": {
+    "group_1": {
+      "case": "group_1",
+      "payload": {
+        "workoutName": "Promenade verte E3 G1",
+        "description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 1. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA très important. Les pourcentages uniques sont des cibles exactes, sans tolérance ajoutée.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "description": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 1/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 1/3 : 400 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 6,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 1/3 : 200 m à 110% VMA.",
+                "targetValueOne": 4.888888888888889,
+                "targetValueTwo": 4.888888888888889
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 7,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 8,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1200,
+                "description": "Bloc 1/3 : 1200 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 9,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 120,
+                "description": "Pause sèche : 2 minutes entre les blocs."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 10,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 2/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 11,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 12,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 2/3 : 400 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 13,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 14,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 2/3 : 200 m à 110% VMA.",
+                "targetValueOne": 4.888888888888889,
+                "targetValueTwo": 4.888888888888889
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 15,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 16,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1200,
+                "description": "Bloc 2/3 : 1200 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 17,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 120,
+                "description": "Pause sèche : 2 minutes entre les blocs."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 18,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 3/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 19,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 20,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 3/3 : 400 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 21,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 22,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 3/3 : 200 m à 110% VMA.",
+                "targetValueOne": 4.888888888888889,
+                "targetValueTwo": 4.888888888888889
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 23,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 24,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1200,
+                "description": "Bloc 3/3 : 1200 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 25,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "description": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours."
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "Promenade verte E3 G1",
+        "description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 1. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA très important. Les pourcentages uniques sont des cibles exactes, sans tolérance ajoutée.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": null,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup",
+                  "displayOrder": 1
+                },
+                "description": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance.",
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 400 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 6,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 200 m à 110% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.8888889,
+                "targetValueTwo": 4.8888889,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 7,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 8,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 1200 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 9,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest",
+                  "displayOrder": 5
+                },
+                "description": "Pause sèche : 2 minutes entre les blocs.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 120.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 10,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 11,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 12,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 400 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 13,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 14,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 200 m à 110% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.8888889,
+                "targetValueTwo": 4.8888889,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 15,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 16,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 1200 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 17,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest",
+                  "displayOrder": 5
+                },
+                "description": "Pause sèche : 2 minutes entre les blocs.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 120.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 18,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 19,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 20,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 400 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 21,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 22,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 200 m à 110% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.8888889,
+                "targetValueTwo": 4.8888889,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 23,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 24,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 1200 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 25,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown",
+                  "displayOrder": 2
+                },
+                "description": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours.",
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "Promenade verte E3 G1",
+            "wkt_description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 1. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA...",
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 25,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "warmup",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open",
+            "notes": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 1/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 3,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 1/3 : 400 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 4,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 5,
+            "intensity": "active",
+            "custom_target_speed_low": 4.889,
+            "custom_target_speed_high": 4.889,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 1/3 : 200 m à 110% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 6,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 7,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1200.0,
+            "notes": "Bloc 1/3 : 1200 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 8,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 120.0,
+            "notes": "Pause sèche : 2 minutes entre les blocs."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 9,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 2/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 10,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 11,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 2/3 : 400 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 12,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 13,
+            "intensity": "active",
+            "custom_target_speed_low": 4.889,
+            "custom_target_speed_high": 4.889,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 2/3 : 200 m à 110% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 14,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 15,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1200.0,
+            "notes": "Bloc 2/3 : 1200 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 16,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 120.0,
+            "notes": "Pause sèche : 2 minutes entre les blocs."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 17,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 3/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 18,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 19,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 3/3 : 400 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 20,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 21,
+            "intensity": "active",
+            "custom_target_speed_low": 4.889,
+            "custom_target_speed_high": 4.889,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 3/3 : 200 m à 110% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 22,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 23,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1200.0,
+            "notes": "Bloc 3/3 : 1200 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 24,
+            "intensity": "cooldown",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open",
+            "notes": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours."
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "group_2": {
+      "case": "group_2",
+      "payload": {
+        "workoutName": "Promenade verte E3 G2",
+        "description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 2. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA très important. Les pourcentages uniques sont des cibles exactes, sans tolérance ajoutée.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "description": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 1/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 1/3 : 200 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 6,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1000,
+                "description": "Bloc 1/3 : 1000 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 7,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 120,
+                "description": "Pause sèche : 2 minutes entre les blocs."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 8,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 2/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 9,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 10,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 2/3 : 200 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 11,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 12,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1000,
+                "description": "Bloc 2/3 : 1000 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 13,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 120,
+                "description": "Pause sèche : 2 minutes entre les blocs."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 14,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 400,
+                "description": "Bloc 3/3 : 400 m à 90% VMA.",
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 15,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 16,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "description": "Bloc 3/3 : 200 m à 100% VMA.",
+                "targetValueOne": 4.444444444444445,
+                "targetValueTwo": 4.444444444444445
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 17,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60,
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 18,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 1000,
+                "description": "Bloc 3/3 : 1000 m à 80–85% VMA.",
+                "targetValueOne": 3.7777777777777777,
+                "targetValueTwo": 3.555555555555556
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 19,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "description": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours."
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "Promenade verte E3 G2",
+        "description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 2. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA très important. Les pourcentages uniques sont des cibles exactes, sans tolérance ajoutée.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": null,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup",
+                  "displayOrder": 1
+                },
+                "description": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance.",
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 200 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 6,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 1/3 : 1000 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1000.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 7,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest",
+                  "displayOrder": 5
+                },
+                "description": "Pause sèche : 2 minutes entre les blocs.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 120.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 8,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 9,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 10,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 200 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 11,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 12,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 2/3 : 1000 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1000.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 13,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest",
+                  "displayOrder": 5
+                },
+                "description": "Pause sèche : 2 minutes entre les blocs.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 120.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 14,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 400 m à 90% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 400.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.0,
+                "targetValueTwo": 4.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 15,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 16,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 200 m à 100% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 4.4444444,
+                "targetValueTwo": 4.4444444,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 17,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute.",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 18,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Bloc 3/3 : 1000 m à 80–85% VMA.",
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 1000.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7777778,
+                "targetValueTwo": 3.5555556,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 19,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown",
+                  "displayOrder": 2
+                },
+                "description": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours.",
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "Promenade verte E3 G2",
+            "wkt_description": "Stade Fallon. Objectif Promenade verte, épisode 3. Groupe 2. VMA 16 km/h. Contenu annoncé : 40 min (indicatif, pas une limite). Bien respecter les % de VMA...",
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 19,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "warmup",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open",
+            "notes": "Échauffement sur la promenade verte. Appuyer sur LAP pour commencer la séance."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 1/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 3,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 1/3 : 200 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 4,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 5,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1000.0,
+            "notes": "Bloc 1/3 : 1000 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 6,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 120.0,
+            "notes": "Pause sèche : 2 minutes entre les blocs."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 7,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 2/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 8,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 9,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 2/3 : 200 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 10,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 11,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1000.0,
+            "notes": "Bloc 2/3 : 1000 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 12,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 120.0,
+            "notes": "Pause sèche : 2 minutes entre les blocs."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 13,
+            "intensity": "active",
+            "custom_target_speed_low": 4.0,
+            "custom_target_speed_high": 4.0,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 400.0,
+            "notes": "Bloc 3/3 : 400 m à 90% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 14,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 15,
+            "intensity": "active",
+            "custom_target_speed_low": 4.444,
+            "custom_target_speed_high": 4.444,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0,
+            "notes": "Bloc 3/3 : 200 m à 100% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 16,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0,
+            "notes": "Pause active : 1 minute (200 m indicatifs). Fin après 1 minute."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 17,
+            "intensity": "active",
+            "custom_target_speed_low": 3.556,
+            "custom_target_speed_high": 3.778,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 1000.0,
+            "notes": "Bloc 3/3 : 1000 m à 80–85% VMA."
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 18,
+            "intensity": "cooldown",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open",
+            "notes": "Retour au calme : 2 tours tous ensemble. Appuyer sur LAP après les 2 tours."
+          }
+        }
+      ],
+      "outcome": "exported"
+    }
+  },
+  "observed_on": "2026-11-12",
+  "scope": "Synthetic club-session probes at VMA 16 km/h, JSON and FIT readback, deleted after validation; no watch delivery."
+}

@@ -1,0 +1,3697 @@
+{
+  "observed_on": "2026-11-12",
+  "library": "garminconnect==0.3.20",
+  "fit_decoder": "fitdecode==0.11.0",
+  "scope": "Garmin Connect JSON storage and CRC-checked FIT exports; no watch delivery or execution. Synthetic payloads only; account metadata and created workout IDs excluded.",
+  "cases": {
+    "timed_and_distance": {
+      "case": "timed_and_distance",
+      "payload": {
+        "workoutName": "VMA probe timed_and_distance",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 200
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 15
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 60
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe timed_and_distance",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup",
+                  "displayOrder": 1
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 4,
+                  "stepTypeKey": "recovery",
+                  "displayOrder": 4
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 5,
+                  "stepTypeKey": "rest",
+                  "displayOrder": 5
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 15.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown",
+                  "displayOrder": 2
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 60.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe timed_and_distance",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 5,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "warmup",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 3,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 15.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 4,
+            "intensity": "cooldown",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 60.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "lap_button": {
+      "case": "lap_button",
+      "payload": {
+        "workoutName": "VMA probe lap_button",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                }
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe lap_button",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup",
+                  "displayOrder": 1
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown",
+                  "displayOrder": 2
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe lap_button",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 3,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "warmup",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open"
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "cooldown",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open",
+            "duration_value": null
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "pace_fast_first": {
+      "case": "pace_fast_first",
+      "payload": {
+        "workoutName": "VMA probe pace_fast_first",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "targetValueOne": 3.7037037037037037,
+                "targetValueTwo": 3.3333333333333335
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe pace_fast_first",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7037037,
+                "targetValueTwo": 3.3333333,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe pace_fast_first",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 20000,
+            "unknown_9": 1,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "unknown_24": 0,
+            "unknown_22": 20000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "custom_target_speed_low": 3.333,
+            "custom_target_speed_high": 3.704,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "pace_slow_first": {
+      "case": "pace_slow_first",
+      "payload": {
+        "workoutName": "VMA probe pace_slow_first",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 200,
+                "targetValueOne": 3.3333333333333335,
+                "targetValueTwo": 3.7037037037037037
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe pace_slow_first",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 3,
+                  "conditionTypeKey": "distance",
+                  "displayOrder": 3,
+                  "displayable": true
+                },
+                "endConditionValue": 200.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.3333333,
+                "targetValueTwo": 3.7037037,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe pace_slow_first",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 20000,
+            "unknown_9": 1,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "unknown_24": 0,
+            "unknown_22": 20000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "custom_target_speed_low": 3.333,
+            "custom_target_speed_high": 3.704,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "repeat_distance_recovery": {
+      "case": "repeat_distance_recovery",
+      "payload": {
+        "workoutName": "VMA probe repeat_distance_recovery",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                }
+              },
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "endConditionValue": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 3,
+                      "conditionTypeKey": "distance"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 6,
+                      "workoutTargetTypeKey": "pace.zone"
+                    },
+                    "endConditionValue": 200,
+                    "targetValueOne": 3.7037037037037037,
+                    "targetValueTwo": 3.3333333333333335
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 4,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  }
+                ]
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown"
+                },
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe repeat_distance_recovery",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 1,
+                  "stepTypeKey": "warmup",
+                  "displayOrder": 1
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval",
+                      "displayOrder": 3
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 3,
+                      "conditionTypeKey": "distance",
+                      "displayOrder": 3,
+                      "displayable": true
+                    },
+                    "endConditionValue": 200.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 6,
+                      "workoutTargetTypeKey": "pace.zone",
+                      "displayOrder": 6
+                    },
+                    "targetValueOne": 3.7037037,
+                    "targetValueTwo": 3.3333333,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 4,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery",
+                      "displayOrder": 4
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": null,
+                "smartRepeat": false
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 5,
+                "stepType": {
+                  "stepTypeId": 2,
+                  "stepTypeKey": "cooldown",
+                  "displayOrder": 2
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 1,
+                  "conditionTypeKey": "lap.button",
+                  "displayOrder": 1,
+                  "displayable": true
+                },
+                "endConditionValue": null,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe repeat_distance_recovery",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 5,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "warmup",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open"
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "custom_target_speed_low": 3.333,
+            "custom_target_speed_high": 3.704,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "distance",
+            "duration_distance": 200.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "recovery",
+            "custom_target_value_low": null,
+            "custom_target_value_high": null,
+            "target_value": 0,
+            "target_type": "open",
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 3,
+            "duration_step": 1,
+            "unknown_18": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 4,
+            "intensity": "cooldown",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "open"
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "nested_repeats": {
+      "case": "nested_repeats",
+      "payload": {
+        "workoutName": "VMA probe nested_repeats",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "endConditionValue": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "RepeatGroupDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 6,
+                      "stepTypeKey": "repeat"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 7,
+                      "conditionTypeKey": "iterations"
+                    },
+                    "numberOfIterations": 2,
+                    "endConditionValue": 2,
+                    "smartRepeat": false,
+                    "workoutSteps": [
+                      {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 3,
+                        "stepType": {
+                          "stepTypeId": 3,
+                          "stepTypeKey": "interval"
+                        },
+                        "endCondition": {
+                          "conditionTypeId": 2,
+                          "conditionTypeKey": "time"
+                        },
+                        "targetType": {
+                          "workoutTargetTypeId": 1,
+                          "workoutTargetTypeKey": "no.target"
+                        },
+                        "endConditionValue": 30
+                      },
+                      {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 4,
+                        "stepType": {
+                          "stepTypeId": 4,
+                          "stepTypeKey": "recovery"
+                        },
+                        "endCondition": {
+                          "conditionTypeId": 2,
+                          "conditionTypeKey": "time"
+                        },
+                        "targetType": {
+                          "workoutTargetTypeId": 1,
+                          "workoutTargetTypeKey": "no.target"
+                        },
+                        "endConditionValue": 15
+                      }
+                    ]
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 5,
+                    "stepType": {
+                      "stepTypeId": 5,
+                      "stepTypeKey": "rest"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe nested_repeats",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "RepeatGroupDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 6,
+                      "stepTypeKey": "repeat",
+                      "displayOrder": 6
+                    },
+                    "numberOfIterations": 2,
+                    "workoutSteps": [
+                      {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 3,
+                        "stepType": {
+                          "stepTypeId": 3,
+                          "stepTypeKey": "interval",
+                          "displayOrder": 3
+                        },
+                        "description": null,
+                        "endCondition": {
+                          "conditionTypeId": 2,
+                          "conditionTypeKey": "time",
+                          "displayOrder": 2,
+                          "displayable": true
+                        },
+                        "endConditionValue": 30.0,
+                        "targetType": {
+                          "workoutTargetTypeId": 1,
+                          "workoutTargetTypeKey": "no.target",
+                          "displayOrder": 1
+                        },
+                        "targetValueOne": null,
+                        "targetValueTwo": null,
+                        "zoneNumber": null,
+                        "secondaryTargetType": null,
+                        "secondaryTargetValueOne": null,
+                        "secondaryTargetValueTwo": null,
+                        "secondaryZoneNumber": null
+                      },
+                      {
+                        "type": "ExecutableStepDTO",
+                        "stepOrder": 4,
+                        "stepType": {
+                          "stepTypeId": 4,
+                          "stepTypeKey": "recovery",
+                          "displayOrder": 4
+                        },
+                        "description": null,
+                        "endCondition": {
+                          "conditionTypeId": 2,
+                          "conditionTypeKey": "time",
+                          "displayOrder": 2,
+                          "displayable": true
+                        },
+                        "endConditionValue": 15.0,
+                        "targetType": {
+                          "workoutTargetTypeId": 1,
+                          "workoutTargetTypeKey": "no.target",
+                          "displayOrder": 1
+                        },
+                        "targetValueOne": null,
+                        "targetValueTwo": null,
+                        "zoneNumber": null,
+                        "secondaryTargetType": null,
+                        "secondaryTargetValueOne": null,
+                        "secondaryTargetValueTwo": null,
+                        "secondaryZoneNumber": null
+                      }
+                    ],
+                    "endConditionValue": 2.0,
+                    "endCondition": {
+                      "conditionTypeId": 7,
+                      "conditionTypeKey": "iterations",
+                      "displayOrder": 7,
+                      "displayable": false
+                    },
+                    "skipLastRestStep": null,
+                    "smartRepeat": false
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 5,
+                    "stepType": {
+                      "stepTypeId": 5,
+                      "stepTypeKey": "rest",
+                      "displayOrder": 5
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": null,
+                "smartRepeat": false
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe nested_repeats",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 5,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 15.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 2,
+            "duration_step": 0,
+            "unknown_18": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 3,
+            "intensity": "rest",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": "open",
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 4,
+            "duration_step": 0,
+            "unknown_18": 0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "heart_rate_and_cadence": {
+      "case": "heart_rate_and_cadence",
+      "payload": {
+        "workoutName": "VMA probe heart_rate_and_cadence",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 4,
+                  "workoutTargetTypeKey": "heart.rate.zone"
+                },
+                "endConditionValue": 30,
+                "targetValueOne": 130,
+                "targetValueTwo": 150
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 4,
+                  "workoutTargetTypeKey": "heart.rate.zone"
+                },
+                "endConditionValue": 30,
+                "zoneNumber": 2
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 3,
+                  "workoutTargetTypeKey": "cadence"
+                },
+                "endConditionValue": 30,
+                "targetValueOne": 160,
+                "targetValueTwo": 180
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe heart_rate_and_cadence",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 4,
+                  "workoutTargetTypeKey": "heart.rate.zone",
+                  "displayOrder": 4
+                },
+                "targetValueOne": 130.0,
+                "targetValueTwo": 150.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 4,
+                  "workoutTargetTypeKey": "heart.rate.zone",
+                  "displayOrder": 4
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": 2,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 3,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 3,
+                  "workoutTargetTypeKey": "cadence",
+                  "displayOrder": 3
+                },
+                "targetValueOne": 160.0,
+                "targetValueTwo": 180.0,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe heart_rate_and_cadence",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 3,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "heart_rate",
+            "custom_target_heart_rate_low": 230,
+            "custom_target_heart_rate_high": 250,
+            "target_hr_zone": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "target_type": "heart_rate",
+            "custom_target_heart_rate_low": null,
+            "custom_target_heart_rate_high": null,
+            "target_hr_zone": 2,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "active",
+            "target_type": "cadence",
+            "custom_target_cadence_low": 80,
+            "custom_target_cadence_high": 90,
+            "target_cadence_zone": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "secondary_target_and_notes": {
+      "case": "secondary_target_and_notes",
+      "payload": {
+        "workoutName": "VMA probe secondary_target_and_notes",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone"
+                },
+                "endConditionValue": 30,
+                "description": "Easy pace – récupération",
+                "targetValueOne": 3.7037037037037037,
+                "targetValueTwo": 3.3333333333333335,
+                "secondaryTargetType": {
+                  "workoutTargetTypeId": 3,
+                  "workoutTargetTypeKey": "cadence"
+                },
+                "secondaryTargetValueOne": 160,
+                "secondaryTargetValueTwo": 180
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe secondary_target_and_notes",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": "Easy pace – récupération",
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 6,
+                  "workoutTargetTypeKey": "pace.zone",
+                  "displayOrder": 6
+                },
+                "targetValueOne": 3.7037037,
+                "targetValueTwo": 3.3333333,
+                "zoneNumber": null,
+                "secondaryTargetType": {
+                  "workoutTargetTypeId": 3,
+                  "workoutTargetTypeKey": "cadence",
+                  "displayOrder": 3
+                },
+                "secondaryTargetValueOne": 160.0,
+                "secondaryTargetValueTwo": 180.0,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe secondary_target_and_notes",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "custom_target_speed_low": 3.333,
+            "custom_target_speed_high": 3.704,
+            "target_speed_zone": 0,
+            "target_type": "speed",
+            "secondary_target_type": "cadence",
+            "secondary_custom_target_cadence_low": 80,
+            "secondary_custom_target_cadence_high": 90,
+            "secondary_target_cadence_zone": 0,
+            "duration_type": "time",
+            "duration_time": 30.0,
+            "notes": "Easy pace – récupération"
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "skip_last_recovery": {
+      "case": "skip_last_recovery",
+      "payload": {
+        "workoutName": "VMA probe skip_last_recovery",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "endConditionValue": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 15
+                  }
+                ],
+                "skipLastRestStep": true
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe skip_last_recovery",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval",
+                      "displayOrder": 3
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery",
+                      "displayOrder": 4
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 15.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": true,
+                "smartRepeat": false
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe skip_last_recovery",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 3,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 15.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 2,
+            "duration_step": 0,
+            "unknown_18": 1
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "duplicate_orders": {
+      "case": "duplicate_orders",
+      "payload": {
+        "workoutName": "VMA probe duplicate_orders",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              },
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "endConditionValue": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 1,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [
+        {
+          "path": "workoutSegments[0].workoutSteps[1].workoutSteps[0].stepOrder",
+          "sent": 1,
+          "stored": 3
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].workoutSteps[1].stepOrder",
+          "sent": 2,
+          "stored": 4
+        }
+      ],
+      "stored": {
+        "workoutName": "VMA probe duplicate_orders",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              },
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 2,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval",
+                      "displayOrder": 3
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 4,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery",
+                      "displayOrder": 4
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": null,
+                "smartRepeat": false
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe duplicate_orders",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 4,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 2,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 3,
+            "duration_step": 1,
+            "unknown_18": 0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "omitted_estimate": {
+      "case": "omitted_estimate",
+      "payload": {
+        "workoutName": "VMA probe omitted_estimate",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe omitted_estimate",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 30,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe omitted_estimate",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 30000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 30000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "unknown_field": {
+      "case": "unknown_field",
+      "payload": {
+        "workoutName": "VMA probe unknown_field",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30,
+                "vmaProbeUnknown": "should-not-be-relied-on"
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [
+        {
+          "path": "workoutSegments[0].workoutSteps[0].vmaProbeUnknown",
+          "sent": "should-not-be-relied-on",
+          "stored": "<missing>"
+        }
+      ],
+      "stored": {
+        "workoutName": "VMA probe unknown_field",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe unknown_field",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "omitted_orders": {
+      "case": "omitted_orders",
+      "payload": {
+        "workoutName": "VMA probe omitted_orders",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              },
+              {
+                "type": "RepeatGroupDTO",
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "endConditionValue": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [
+        {
+          "path": "workoutSegments[0].workoutSteps[0].type",
+          "sent": "ExecutableStepDTO",
+          "stored": "RepeatGroupDTO"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].stepType.stepTypeId",
+          "sent": 3,
+          "stored": 6
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].stepType.stepTypeKey",
+          "sent": "interval",
+          "stored": "repeat"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].endCondition.conditionTypeId",
+          "sent": 2,
+          "stored": 7
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].endCondition.conditionTypeKey",
+          "sent": "time",
+          "stored": "iterations"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].targetType",
+          "sent": {
+            "workoutTargetTypeId": 1,
+            "workoutTargetTypeKey": "no.target"
+          },
+          "stored": "<missing>"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[0].endConditionValue",
+          "sent": 30,
+          "stored": 2.0
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].type",
+          "sent": "RepeatGroupDTO",
+          "stored": "ExecutableStepDTO"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].stepType.stepTypeId",
+          "sent": 6,
+          "stored": 3
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].stepType.stepTypeKey",
+          "sent": "repeat",
+          "stored": "interval"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].endCondition.conditionTypeId",
+          "sent": 7,
+          "stored": 2
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].endCondition.conditionTypeKey",
+          "sent": "iterations",
+          "stored": "time"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].numberOfIterations",
+          "sent": 2,
+          "stored": "<missing>"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].endConditionValue",
+          "sent": 2,
+          "stored": 30.0
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].smartRepeat",
+          "sent": false,
+          "stored": "<missing>"
+        },
+        {
+          "path": "workoutSegments[0].workoutSteps[1].workoutSteps",
+          "sent": [
+            {
+              "type": "ExecutableStepDTO",
+              "stepType": {
+                "stepTypeId": 3,
+                "stepTypeKey": "interval"
+              },
+              "endCondition": {
+                "conditionTypeId": 2,
+                "conditionTypeKey": "time"
+              },
+              "targetType": {
+                "workoutTargetTypeId": 1,
+                "workoutTargetTypeKey": "no.target"
+              },
+              "endConditionValue": 30
+            },
+            {
+              "type": "ExecutableStepDTO",
+              "stepType": {
+                "stepTypeId": 4,
+                "stepTypeKey": "recovery"
+              },
+              "endCondition": {
+                "conditionTypeId": 2,
+                "conditionTypeKey": "time"
+              },
+              "targetType": {
+                "workoutTargetTypeId": 1,
+                "workoutTargetTypeKey": "no.target"
+              },
+              "endConditionValue": 30
+            }
+          ],
+          "stored": "<missing>"
+        }
+      ],
+      "stored": {
+        "workoutName": "VMA probe omitted_orders",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval",
+                      "displayOrder": 3
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery",
+                      "displayOrder": 4
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": null,
+                "smartRepeat": false
+              },
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 4,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe omitted_orders",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 4,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 2,
+            "duration_step": 0,
+            "unknown_18": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 3,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "repeat_without_condition_value": {
+      "case": "repeat_without_condition_value",
+      "payload": {
+        "workoutName": "VMA probe repeat_without_condition_value",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations"
+                },
+                "numberOfIterations": 2,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe repeat_without_condition_value",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat",
+                  "displayOrder": 6
+                },
+                "numberOfIterations": 2,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval",
+                      "displayOrder": 3
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery",
+                      "displayOrder": 4
+                    },
+                    "description": null,
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time",
+                      "displayOrder": 2,
+                      "displayable": true
+                    },
+                    "endConditionValue": 30.0,
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target",
+                      "displayOrder": 1
+                    },
+                    "targetValueOne": null,
+                    "targetValueTwo": null,
+                    "zoneNumber": null,
+                    "secondaryTargetType": null,
+                    "secondaryTargetValueOne": null,
+                    "secondaryTargetValueTwo": null,
+                    "secondaryZoneNumber": null
+                  }
+                ],
+                "endConditionValue": 2.0,
+                "endCondition": {
+                  "conditionTypeId": 7,
+                  "conditionTypeKey": "iterations",
+                  "displayOrder": 7,
+                  "displayable": false
+                },
+                "skipLastRestStep": null,
+                "smartRepeat": false
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe repeat_without_condition_value",
+            "wkt_description": "Synthetic API probe; not a training recommendation.",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 3,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 1,
+            "intensity": "recovery",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "duration_type": "repeat_until_steps_cmplt",
+            "repeat_steps": 2,
+            "message_index": 2,
+            "duration_step": 0,
+            "unknown_18": 0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "time_based_repeat": {
+      "case": "time_based_repeat",
+      "payload": {
+        "workoutName": "VMA probe time_based_repeat",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "RepeatGroupDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 6,
+                  "stepTypeKey": "repeat"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "numberOfIterations": null,
+                "endConditionValue": 120,
+                "smartRepeat": false,
+                "workoutSteps": [
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 2,
+                    "stepType": {
+                      "stepTypeId": 3,
+                      "stepTypeKey": "interval"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 30
+                  },
+                  {
+                    "type": "ExecutableStepDTO",
+                    "stepOrder": 3,
+                    "stepType": {
+                      "stepTypeId": 4,
+                      "stepTypeKey": "recovery"
+                    },
+                    "endCondition": {
+                      "conditionTypeId": 2,
+                      "conditionTypeKey": "time"
+                    },
+                    "targetType": {
+                      "workoutTargetTypeId": 1,
+                      "workoutTargetTypeKey": "no.target"
+                    },
+                    "endConditionValue": 15
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "not_created",
+      "outcome": "error",
+      "failure_stage": "upload",
+      "error_type": "GarminConnectConnectionError",
+      "http_status": 400
+    },
+    "minimal_top_level": {
+      "case": "minimal_top_level",
+      "payload": {
+        "workoutName": "VMA probe minimal_top_level",
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "not_created",
+      "outcome": "error",
+      "failure_stage": "upload",
+      "error_type": "GarminConnectConnectionError",
+      "http_status": 400
+    },
+    "omitted_description": {
+      "case": "omitted_description",
+      "payload": {
+        "workoutName": "VMA probe omitted_description",
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running"
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "deleted",
+      "changes": [],
+      "stored": {
+        "workoutName": "VMA probe omitted_description",
+        "description": null,
+        "sportType": {
+          "sportTypeId": 1,
+          "sportTypeKey": "running",
+          "displayOrder": 1
+        },
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running",
+              "displayOrder": 1
+            },
+            "estimatedDurationInSecs": null,
+            "description": null,
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval",
+                  "displayOrder": 3
+                },
+                "description": null,
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time",
+                  "displayOrder": 2,
+                  "displayable": true
+                },
+                "endConditionValue": 30.0,
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target",
+                  "displayOrder": 1
+                },
+                "targetValueOne": null,
+                "targetValueTwo": null,
+                "zoneNumber": null,
+                "secondaryTargetType": null,
+                "secondaryTargetValueOne": null,
+                "secondaryTargetValueTwo": null,
+                "secondaryZoneNumber": null
+              }
+            ]
+          }
+        ]
+      },
+      "fit": [
+        {
+          "message": "workout",
+          "fields": {
+            "wkt_name": "VMA probe omitted_description",
+            "unknown_10": 180000,
+            "unknown_9": 0,
+            "unknown_23": 0,
+            "unknown_21": 180000,
+            "sport": "running",
+            "sub_sport": "generic",
+            "capabilities": "tcx",
+            "num_valid_steps": 1,
+            "message_index": 0
+          }
+        },
+        {
+          "message": "workout_step",
+          "fields": {
+            "message_index": 0,
+            "intensity": "active",
+            "target_type": "open",
+            "target_value": 0,
+            "secondary_target_type": null,
+            "secondary_target_value": 0,
+            "duration_type": "time",
+            "duration_time": 30.0
+          }
+        }
+      ],
+      "outcome": "exported"
+    },
+    "omitted_sport": {
+      "case": "omitted_sport",
+      "payload": {
+        "workoutName": "VMA probe omitted_sport",
+        "description": "Synthetic API probe; not a training recommendation.",
+        "estimatedDurationInSecs": 180,
+        "workoutSegments": [
+          {
+            "segmentOrder": 1,
+            "sportType": {
+              "sportTypeId": 1,
+              "sportTypeKey": "running"
+            },
+            "workoutSteps": [
+              {
+                "type": "ExecutableStepDTO",
+                "stepOrder": 1,
+                "stepType": {
+                  "stepTypeId": 3,
+                  "stepTypeKey": "interval"
+                },
+                "endCondition": {
+                  "conditionTypeId": 2,
+                  "conditionTypeKey": "time"
+                },
+                "targetType": {
+                  "workoutTargetTypeId": 1,
+                  "workoutTargetTypeKey": "no.target"
+                },
+                "endConditionValue": 30
+              }
+            ]
+          }
+        ]
+      },
+      "cleanup": "not_created",
+      "outcome": "error",
+      "failure_stage": "upload",
+      "error_type": "GarminConnectConnectionError",
+      "http_status": 400
+    }
+  }
+}

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'widgets/interactive_header.dart';
-import 'vma_pace.dart';
+import '../app_localizations.dart';
+import 'interactive_header.dart';
+import '../pace.dart';
 
-class VmaPaceTable extends StatefulWidget {
-  const VmaPaceTable({
+class PaceTable extends StatefulWidget {
+  const PaceTable({
     super.key,
     required this.entries,
     required this.onEditPercentages,
@@ -12,16 +12,16 @@ class VmaPaceTable extends StatefulWidget {
     required this.onEditDistance,
   });
 
-  final List<VmaPaceEntry> entries;
+  final List<PaceEntry> entries;
   final VoidCallback onEditPercentages;
   final double distanceMeters;
   final VoidCallback onEditDistance;
 
   @override
-  State<VmaPaceTable> createState() => _VmaPaceTableState();
+  State<PaceTable> createState() => _PaceTableState();
 }
 
-class _VmaPaceTableState extends State<VmaPaceTable> {
+class _PaceTableState extends State<PaceTable> {
   final _columnOrder = [0, 1, 2, 3];
   final ScrollController _verticalController = ScrollController();
   final ScrollController _horizontalController = ScrollController();

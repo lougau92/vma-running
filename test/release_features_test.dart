@@ -9,14 +9,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
-import 'package:vma_running/club_communications_page.dart';
+import 'package:vma_running/widgets/club_communications_page.dart';
 import 'package:vma_running/feature_flags.dart';
 import 'package:vma_running/remote_asset_loader.dart';
-import 'package:vma_running/vma_challenge_table.dart';
-import 'package:vma_running/vma_home.dart';
-import 'package:vma_running/vma_times_table.dart';
-import 'package:vma_running/vma_training_plan.dart';
-import 'package:vma_running/widgets/vma_celebration_overlay.dart';
+import 'package:vma_running/widgets/challenge_table.dart';
+import 'package:vma_running/widgets/home_page.dart';
+import 'package:vma_running/widgets/times_table.dart';
+import 'package:vma_running/widgets/training_plan_page.dart';
+import 'package:vma_running/widgets/vma_change_celebration.dart';
 
 class _Loader extends RemoteAssetLoader {
   final reads = <String>[];
@@ -62,7 +62,7 @@ Widget _app(_Loader loader, FeatureFlags flags) => MaterialApp(
     GlobalWidgetsLocalizations.delegate,
     GlobalCupertinoLocalizations.delegate,
   ],
-  home: VmaHomePage(
+  home: HomePage(
     settings: const AppSettings(localeCode: 'en'),
     onSettingsChanged: (_) {},
     features: flags,
@@ -117,10 +117,10 @@ void main() {
 
           await tester.tap(find.byIcon(Icons.timer));
           await tester.pumpAndSettle();
-          expect(find.byType(VmaTimesTable), findsOneWidget);
+          expect(find.byType(TimesTable), findsOneWidget);
           await tester.tap(find.byIcon(Icons.fitness_center));
           await tester.pumpAndSettle();
-          expect(find.byType(VmaTrainingPlan), findsOneWidget);
+          expect(find.byType(TrainingPlanPage), findsOneWidget);
           expect(loader.reads, ['app_documents/training_plan']);
 
           if (communications) {
@@ -131,7 +131,7 @@ void main() {
           if (rankings) {
             await tester.tap(find.byIcon(Icons.emoji_events));
             await tester.pumpAndSettle();
-            expect(find.byType(VmaChallengeTable), findsOneWidget);
+            expect(find.byType(ChallengeTable), findsOneWidget);
           }
           expect(
             loader.reads.contains('app_documents/club_communications'),
@@ -167,7 +167,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(VmaChallengeTable), findsOneWidget);
+      expect(find.byType(ChallengeTable), findsOneWidget);
       expect(
         tester
             .widget<BottomNavigationBar>(find.byType(BottomNavigationBar))
@@ -181,7 +181,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.byType(VmaChallengeTable), findsNothing);
+      expect(find.byType(ChallengeTable), findsNothing);
       expect(
         tester
             .widget<BottomNavigationBar>(find.byType(BottomNavigationBar))
@@ -205,9 +205,9 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byIcon(Icons.swap_horiz));
       await tester.pumpAndSettle();
-      final state = tester.state(find.byType(VmaTimesTable));
+      final state = tester.state(find.byType(TimesTable));
       final horizontal = find.descendant(
-        of: find.byType(VmaTimesTable),
+        of: find.byType(TimesTable),
         matching: find.byWidgetPredicate(
           (widget) =>
               widget is SingleChildScrollView &&
@@ -230,10 +230,10 @@ void main() {
             .currentIndex,
         2,
       );
-      expect(find.byType(VmaTrainingPlan), findsOneWidget);
+      expect(find.byType(TrainingPlanPage), findsOneWidget);
       await tester.tap(find.byIcon(Icons.timer));
       await tester.pumpAndSettle();
-      expect(tester.state(find.byType(VmaTimesTable)), same(state));
+      expect(tester.state(find.byType(TimesTable)), same(state));
       expect(controller.offset, controller.position.maxScrollExtent);
       expect(tester.takeException(), isNull);
     },
@@ -249,7 +249,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       await tester.pumpWidget(_app(_Loader(), const FeatureFlags()));
       await tester.pumpAndSettle();
-      expect(find.byType(VmaCelebrationOverlay), findsNothing);
+      expect(find.byType(VmaChangeCelebration), findsNothing);
 
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pumpAndSettle();
@@ -270,7 +270,7 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
       expect(
-        find.byType(VmaCelebrationOverlay),
+        find.byType(VmaChangeCelebration),
         whole == 17 ? findsNothing : findsOneWidget,
       );
       if (whole != 17) {
@@ -298,7 +298,7 @@ void main() {
         whole + 1.0,
       );
       await tester.pumpAndSettle();
-      expect(find.byType(VmaCelebrationOverlay), findsNothing);
+      expect(find.byType(VmaChangeCelebration), findsNothing);
       expect(tester.takeException(), isNull);
     });
   }
@@ -346,7 +346,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('VMA: 20.50 km/h'), findsNothing);
     expect(
-      tester.widget<VmaTimesTable>(find.byType(VmaTimesTable)).speed!.kmh,
+      tester.widget<TimesTable>(find.byType(TimesTable)).speed!.kmh,
       closeTo(12.3, 0.000001),
     );
     await tester.tap(find.byIcon(Icons.settings));

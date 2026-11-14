@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
 
-class VmaHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const VmaHomeAppBar({
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const HomeAppBar({
     super.key,
     required this.feedbackSender,
     required this.onSettingsPressed,

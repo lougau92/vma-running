@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import '../app_settings.dart';
 import '../presets.dart';
 import '../running/running.dart' show RunningSpeed, kMarathonMeters;
-import '../vma_times_settings_dialog.dart';
-import '../vma_times_table.dart';
+import 'times_settings_dialog.dart';
+import 'times_table.dart';
 import 'centered_width.dart';
 import 'intensity_pace_control.dart';
 
-class VmaTimesTab extends StatefulWidget {
-  const VmaTimesTab({
+class TimesTab extends StatefulWidget {
+  const TimesTab({
     super.key,
     required this.vma,
     required this.settings,
@@ -22,10 +22,10 @@ class VmaTimesTab extends StatefulWidget {
   final ValueChanged<AppSettings> onSettingsChanged;
 
   @override
-  State<VmaTimesTab> createState() => _VmaTimesTabState();
+  State<TimesTab> createState() => _TimesTabState();
 }
 
-class _VmaTimesTabState extends State<VmaTimesTab> {
+class _TimesTabState extends State<TimesTab> {
   double _percent = 100;
   double _minDistance = 100;
   double _maxDistance = kMarathonMeters;
@@ -155,7 +155,7 @@ class _VmaTimesTabState extends State<VmaTimesTab> {
           const SizedBox(height: 12),
           Expanded(
             child: CenteredWidth(
-              child: VmaTimesTable(
+              child: TimesTable(
                 speed: speed,
                 minDistanceMeters: _minDistance,
                 maxDistanceMeters: _maxDistance,

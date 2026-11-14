@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'widgets/number_wheel_picker.dart';
+import '../app_localizations.dart';
+import 'number_wheel_picker.dart';
 
-class VmaTableSettings {
-  const VmaTableSettings({
+class TableSettings {
+  const TableSettings({
     required this.minPercent,
     required this.maxPercent,
     required this.step,
@@ -14,10 +14,10 @@ class VmaTableSettings {
   final double step;
 }
 
-Future<VmaTableSettings?> showVmaSettingsDialog(
+Future<TableSettings?> showTableSettingsDialog(
   BuildContext context, {
-  required VmaTableSettings initialSettings,
-  ValueChanged<VmaTableSettings>? onChanged,
+  required TableSettings initialSettings,
+  ValueChanged<TableSettings>? onChanged,
 }) async {
   var selected = initialSettings;
   await showDialog<void>(
@@ -39,8 +39,8 @@ class _IntensityRangePicker extends StatefulWidget {
     required this.onChanged,
   });
 
-  final VmaTableSettings initialSettings;
-  final ValueChanged<VmaTableSettings> onChanged;
+  final TableSettings initialSettings;
+  final ValueChanged<TableSettings> onChanged;
 
   @override
   State<_IntensityRangePicker> createState() => _IntensityRangePickerState();
@@ -67,7 +67,7 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
     } else {
       _error = null;
       widget.onChanged(
-        VmaTableSettings(minPercent: _min, maxPercent: _max, step: _step),
+        TableSettings(minPercent: _min, maxPercent: _max, step: _step),
       );
     }
   }

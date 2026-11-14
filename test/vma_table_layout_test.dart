@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
-import 'package:vma_running/vma_pace.dart';
-import 'package:vma_running/vma_table.dart';
-import 'package:vma_running/vma_times_table.dart';
+import 'package:vma_running/pace.dart';
+import 'package:vma_running/widgets/pace_table.dart';
+import 'package:vma_running/widgets/times_table.dart';
 import 'package:vma_running/running/running.dart';
 import 'package:vma_running/theme.dart';
 
@@ -31,8 +31,8 @@ void main() {
             body: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1200),
-                child: VmaPaceTable(
-                  entries: VmaPaceCalculator().buildTable(
+                child: PaceTable(
+                  entries: PaceCalculator().buildTable(
                     13,
                     minPercent: 60,
                     maxPercent: 120,
@@ -84,7 +84,7 @@ void main() {
     var distanceEdits = 0;
     await tester.pumpWidget(
       _app(
-        VmaPaceTable(
+        PaceTable(
           entries: _entries(),
           onEditPercentages: () => intensityEdits++,
           distanceMeters: 400,
@@ -133,7 +133,7 @@ void main() {
   ) async {
     await tester.pumpWidget(
       _app(
-        VmaPaceTable(
+        PaceTable(
           entries: _entries(),
           onEditPercentages: () {},
           distanceMeters: 400,
@@ -175,7 +175,7 @@ void main() {
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
-          body: VmaPaceTable(
+          body: PaceTable(
             entries: _entries(),
             onEditPercentages: () {},
             distanceMeters: 400,
@@ -204,7 +204,7 @@ void main() {
     (tester) async {
       await tester.pumpWidget(
         _app(
-          VmaTimesTable(
+          TimesTable(
             speed: RunningSpeed.fromKmh(15),
             minDistanceMeters: 100,
             maxDistanceMeters: 400,
@@ -253,7 +253,7 @@ void main() {
   );
 }
 
-List<VmaPaceEntry> _entries() => VmaPaceCalculator().buildTable(
+List<PaceEntry> _entries() => PaceCalculator().buildTable(
   13,
   minPercent: 60,
   maxPercent: 120,

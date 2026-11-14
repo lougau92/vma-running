@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'presets.dart';
-import 'running/running.dart';
-import 'widgets/number_range_picker_dialog.dart';
+import '../app_localizations.dart';
+import '../presets.dart';
+import '../running/running.dart';
+import 'number_range_picker_dialog.dart';
 
 class DistanceRange {
   const DistanceRange({required this.min, required this.max});

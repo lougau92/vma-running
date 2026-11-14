@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart' show AppLocalizations;
-import '../runtime/runtime_environment_host.dart' show readRuntimeEnvironment;
+import '../widgets/runtime_environment_host.dart' show readRuntimeEnvironment;
 
 class ContentRefreshButton extends StatelessWidget {
   const ContentRefreshButton({

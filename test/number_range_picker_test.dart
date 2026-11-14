@@ -4,9 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/presets.dart';
-import 'package:vma_running/vma_distance_dialog.dart';
-import 'package:vma_running/vma_settings_dialog.dart';
-import 'package:vma_running/vma_times_settings_dialog.dart';
+import 'package:vma_running/widgets/distance_dialog.dart';
+import 'package:vma_running/widgets/pace_table_settings_dialog.dart';
+import 'package:vma_running/widgets/times_settings_dialog.dart';
 
 Widget _app(Future<void> Function(BuildContext) edit) => MaterialApp(
   locale: const Locale('en'),
@@ -53,13 +53,13 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
-      VmaTableSettings? result;
-      VmaTableSettings? live;
+      TableSettings? result;
+      TableSettings? live;
       await tester.pumpWidget(
         _app((context) async {
-          result = await showVmaSettingsDialog(
+          result = await showTableSettingsDialog(
             context,
-            initialSettings: const VmaTableSettings(
+            initialSettings: const TableSettings(
               minPercent: 60,
               maxPercent: 120,
               step: 5,
@@ -103,12 +103,12 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.view.resetViewInsets);
-      VmaTableSettings? live;
+      TableSettings? live;
       await tester.pumpWidget(
         _app((context) async {
-          await showVmaSettingsDialog(
+          await showTableSettingsDialog(
             context,
-            initialSettings: const VmaTableSettings(
+            initialSettings: const TableSettings(
               minPercent: 60,
               maxPercent: 120,
               step: 5,

@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:cryptography/cryptography.dart';
-import 'app_localizations.dart';
-import 'content_refresh.dart' show refreshContent;
-import 'widgets/content_refresh_button.dart' show ContentRefreshButton;
-import 'remote_asset_loader.dart';
+import '../app_localizations.dart';
+import '../content_refresh.dart' show refreshContent;
+import 'content_refresh_button.dart' show ContentRefreshButton;
+import '../remote_asset_loader.dart';
 
 class ClubCommunicationsPage extends StatefulWidget {
   const ClubCommunicationsPage({super.key, required this.loader});

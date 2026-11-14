@@ -7,8 +7,8 @@ import 'package:vma_running/plan_exporter.dart';
 import 'package:vma_running/running/running_distance_labels.dart';
 import 'package:vma_running/running/running.dart';
 import 'package:vma_running/training_plan.dart';
-import 'package:vma_running/vma_pace.dart';
-import 'package:vma_running/vma_times_table.dart';
+import 'package:vma_running/pace.dart';
+import 'package:vma_running/widgets/times_table.dart';
 
 void main() {
   final draft = const RunningCalculatorDraft(
@@ -19,7 +19,7 @@ void main() {
 
   test('calculator, VMA rows and workout lines agree on the same effort', () {
     final run = draft.calculate(20)!;
-    final row = VmaPaceCalculator()
+    final row = PaceCalculator()
         .buildTable(
           20,
           minPercent: 120,
@@ -63,7 +63,7 @@ void main() {
   );
 
   test('invalid table parameters produce no rows instead of looping', () {
-    final calculator = VmaPaceCalculator();
+    final calculator = PaceCalculator();
     for (final step in [0.0, -1.0, double.nan, double.infinity]) {
       expect(
         calculator.buildTable(
@@ -112,7 +112,7 @@ void main() {
           GlobalCupertinoLocalizations.delegate,
         ],
         home: Scaffold(
-          body: VmaTimesTable(
+          body: TimesTable(
             speed: valid ? run.speed : null,
             minDistanceMeters: 400,
             maxDistanceMeters: 400,

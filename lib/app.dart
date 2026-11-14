@@ -3,32 +3,29 @@
 import 'dart:async' show unawaited;
 
 import 'package:app_feedback/app_feedback.dart'
-    show
-        FeedbackSender,
-        SupabaseFeedbackSender,
-        FeedbackContextScope;
+    show FeedbackSender, SupabaseFeedbackSender, FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
 import 'settings_storage.dart';
-import 'runtime/runtime_environment_host.dart' show RuntimeEnvironmentHost;
+import 'widgets/runtime_environment_host.dart' show RuntimeEnvironmentHost;
 import 'theme.dart';
-import 'vma_home.dart';
+import 'widgets/home_page.dart';
 import 'feedback_setup.dart';
 
-class VmaApp extends StatefulWidget {
-  const VmaApp({super.key, this.feedbackSender, this.feedbackSenderLoader});
+class RunningApp extends StatefulWidget {
+  const RunningApp({super.key, this.feedbackSender, this.feedbackSenderLoader});
 
   final FeedbackSender? feedbackSender;
   final Future<FeedbackSender> Function()? feedbackSenderLoader;
 
   @override
-  State<VmaApp> createState() => _VmaAppState();
+  State<RunningApp> createState() => _RunningAppState();
 }
 
-class _VmaAppState extends State<VmaApp> {
+class _RunningAppState extends State<RunningApp> {
   final SettingsStorage _storage = SettingsStorage();
   AppSettings _settings = const AppSettings();
   bool _loading = true;
@@ -121,7 +118,7 @@ class _VmaAppState extends State<VmaApp> {
         },
         child: RuntimeEnvironmentHost(child: child ?? const SizedBox.shrink()),
       ),
-      home: VmaHomePage(
+      home: HomePage(
         feedbackSender: _feedbackSender,
         settings: _settings,
         onSettingsChanged: _updateSettings,

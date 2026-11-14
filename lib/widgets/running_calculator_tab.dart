@@ -2,7 +2,7 @@ import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/material.dart';
 
 import '../calculator/running_calculator_draft.dart';
-import '../calculator/running_calculator_page.dart';
+import 'calculator/running_calculator_page.dart';
 
 class RunningCalculatorTab extends StatefulWidget {
   const RunningCalculatorTab({

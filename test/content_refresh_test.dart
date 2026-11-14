@@ -6,12 +6,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart' show AppLocalizations;
 import 'package:vma_running/app_settings.dart' show AppSettings;
-import 'package:vma_running/club_communications_page.dart'
+import 'package:vma_running/widgets/club_communications_page.dart'
     show ClubCommunicationsPage;
 import 'package:vma_running/remote_asset_loader.dart'
     show RemoteAssetLoader, RemoteLoadOrigin, RemoteLoadResult;
-import 'package:vma_running/vma_challenge_table.dart' show VmaChallengeTable;
-import 'package:vma_running/vma_training_plan.dart' show VmaTrainingPlan;
+import 'package:vma_running/widgets/challenge_table.dart' show ChallengeTable;
+import 'package:vma_running/widgets/training_plan_page.dart'
+    show TrainingPlanPage;
 
 class _Loader extends RemoteAssetLoader {
   final updates = StreamController<RemoteLoadResult>();
@@ -47,13 +48,13 @@ String _plan(String label, int groups) => jsonEncode({
 });
 
 Widget _screen(int kind, _Loader loader) => switch (kind) {
-  0 => VmaTrainingPlan(
+  0 => TrainingPlanPage(
     userVma: 18,
     settings: const AppSettings(),
     onSettingsChanged: (_) {},
     loader: loader,
   ),
-  1 => VmaChallengeTable(loader: loader),
+  1 => ChallengeTable(loader: loader),
   _ => ClubCommunicationsPage(loader: loader),
 };
 

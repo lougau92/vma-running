@@ -3,16 +3,16 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 /// A short visual-only celebration for a newly recorded VMA.
-class VmaCelebrationOverlay extends StatefulWidget {
-  const VmaCelebrationOverlay({super.key, required this.onComplete});
+class VmaChangeCelebration extends StatefulWidget {
+  const VmaChangeCelebration({super.key, required this.onComplete});
 
   final VoidCallback onComplete;
 
   @override
-  State<VmaCelebrationOverlay> createState() => _VmaCelebrationOverlayState();
+  State<VmaChangeCelebration> createState() => _VmaChangeCelebrationState();
 }
 
-class _VmaCelebrationOverlayState extends State<VmaCelebrationOverlay>
+class _VmaChangeCelebrationState extends State<VmaChangeCelebration>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,

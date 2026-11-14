@@ -1,12 +1,12 @@
 import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'widgets/interactive_header.dart';
-import 'presets.dart';
-import 'running/running.dart' show RunningSpeed, formatRunningDuration;
+import '../app_localizations.dart';
+import 'interactive_header.dart';
+import '../presets.dart';
+import '../running/running.dart' show RunningSpeed, formatRunningDuration;
 
-class VmaTimesTable extends StatefulWidget {
-  const VmaTimesTable({
+class TimesTable extends StatefulWidget {
+  const TimesTable({
     super.key,
     required this.speed,
     required this.minDistanceMeters,
@@ -30,10 +30,10 @@ class VmaTimesTable extends StatefulWidget {
   final List<double> customTimes;
 
   @override
-  State<VmaTimesTable> createState() => _VmaTimesTableState();
+  State<TimesTable> createState() => _TimesTableState();
 }
 
-class _VmaTimesTableState extends State<VmaTimesTable> {
+class _TimesTableState extends State<TimesTable> {
   bool _distanceFirst = true;
   final ScrollController _verticalController = ScrollController();
   final ScrollController _horizontalController = ScrollController();

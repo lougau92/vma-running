@@ -1,17 +1,17 @@
 import 'package:app_feedback/app_feedback.dart'
     show FeedbackSender, UnavailableFeedbackSender, FeedbackContextScope;
 import 'package:flutter/material.dart';
-import 'app_settings.dart';
-import 'feature_flags.dart';
-import 'remote_asset_loader.dart';
-import 'vma_storage.dart';
-import 'vma_settings_page.dart';
-import 'widgets/vma_celebration_overlay.dart';
-import 'widgets/vma_home_app_bar.dart';
-import 'widgets/vma_home_workspace.dart';
+import '../app_settings.dart';
+import '../feature_flags.dart';
+import '../remote_asset_loader.dart';
+import '../vma_storage.dart';
+import 'settings_page.dart';
+import 'vma_change_celebration.dart';
+import 'home_app_bar.dart';
+import 'home_workspace.dart';
 
-class VmaHomePage extends StatefulWidget {
-  const VmaHomePage({
+class HomePage extends StatefulWidget {
+  const HomePage({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
@@ -27,10 +27,10 @@ class VmaHomePage extends StatefulWidget {
   final ValueChanged<AppSettings> onSettingsChanged;
 
   @override
-  State<VmaHomePage> createState() => _VmaHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _VmaHomePageState extends State<VmaHomePage> {
+class _HomePageState extends State<HomePage> {
   final _vmaStorage = VmaStorage();
   late final RemoteAssetLoader _remoteLoader;
   OverlayEntry? _celebrationEntry;
@@ -57,7 +57,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
     late OverlayEntry entry;
     entry = OverlayEntry(
       builder: (_) => Positioned.fill(
-        child: VmaCelebrationOverlay(
+        child: VmaChangeCelebration(
           onComplete: () {
             if (identical(_celebrationEntry, entry)) {
               entry.remove();
@@ -105,8 +105,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
   Widget build(BuildContext context) {
     return FeedbackContextScope(
       id: 'home',
-      child: VmaHomeWorkspace(
-        appBar: VmaHomeAppBar(
+      child: HomeWorkspace(
+        appBar: HomeAppBar(
           feedbackSender: widget.feedbackSender,
           onSettingsPressed: _openSettingsPage,
         ),
@@ -124,7 +124,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
     Navigator.of(context).push(
       MaterialPageRoute(
         settings: const RouteSettings(name: '/settings'),
-        builder: (_) => VmaSettingsPage(
+        builder: (_) => SettingsPage(
           feedbackSender: widget.feedbackSender,
           settings: widget.settings,
           onVmaChanged: _setVma,

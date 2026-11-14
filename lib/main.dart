@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'vma_app.dart';
+import 'app.dart';
 
 void main() {
-  runApp(const VmaApp());
+  runApp(const RunningApp());
 }

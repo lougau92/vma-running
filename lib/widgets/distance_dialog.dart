@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'presets.dart';
-import 'running/running.dart';
-import 'widgets/number_wheel_picker.dart';
+import '../app_localizations.dart';
+import '../presets.dart';
+import '../running/running.dart';
+import 'number_wheel_picker.dart';
 
 Future<double?> showDistanceDialog(
   BuildContext context, {

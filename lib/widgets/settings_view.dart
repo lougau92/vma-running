@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'app_localizations.dart';
-import 'app_settings.dart';
-import 'vma_storage.dart';
+import '../app_localizations.dart';
+import '../app_settings.dart';
+import '../vma_storage.dart';
 
-class VmaSettingsView extends StatefulWidget {
-  const VmaSettingsView({
+class SettingsView extends StatefulWidget {
+  const SettingsView({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
@@ -17,10 +17,10 @@ class VmaSettingsView extends StatefulWidget {
   final ValueChanged<double>? onVmaChanged;
 
   @override
-  State<VmaSettingsView> createState() => _VmaSettingsViewState();
+  State<SettingsView> createState() => _SettingsViewState();
 }
 
-class _VmaSettingsViewState extends State<VmaSettingsView> {
+class _SettingsViewState extends State<SettingsView> {
   late final Future<PackageInfo> _packageInfoFuture;
   final _vmaStorage = VmaStorage();
   double? _vma;

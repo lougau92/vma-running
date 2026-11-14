@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show KeyDownEvent, LogicalKeyboardKey;
 
-import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
-import '../presets.dart';
-import '../running/running.dart';
-import '../widgets/number_picker_dialog.dart';
-import '../widgets/number_wheel_picker.dart';
-import 'running_calculator_draft.dart';
+import '../../app_localizations.dart' show AppLocalizations, DynamicStrings;
+import '../../presets.dart';
+import '../../running/running.dart';
+import '../number_picker_dialog.dart';
+import '../number_wheel_picker.dart';
+import '../../calculator/running_calculator_draft.dart';
 
 class RunningCalculatorPage extends StatefulWidget {
   const RunningCalculatorPage({

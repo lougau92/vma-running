@@ -8,7 +8,7 @@ import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/feature_flags.dart';
 import 'package:vma_running/remote_asset_loader.dart';
-import 'package:vma_running/vma_home.dart';
+import 'package:vma_running/widgets/home_page.dart';
 
 class _Sender implements FeedbackSender {
   final sent = <FeedbackSubmission>[];
@@ -42,7 +42,7 @@ void main() {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: VmaHomePage(
+          home: HomePage(
             settings: const AppSettings(),
             onSettingsChanged: (_) {},
             feedbackSender: sender,

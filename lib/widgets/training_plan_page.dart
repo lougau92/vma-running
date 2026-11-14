@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:vma_running/remote_asset_loader.dart';
-import 'app_localizations.dart';
-import 'content_refresh.dart' show refreshContent;
-import 'widgets/content_refresh_button.dart' show ContentRefreshButton;
-import 'app_settings.dart';
-import 'plan_exporter.dart';
-import 'running/running.dart';
-import 'training_plan.dart';
+import '../app_localizations.dart';
+import '../content_refresh.dart' show refreshContent;
+import 'content_refresh_button.dart' show ContentRefreshButton;
+import '../app_settings.dart';
+import '../plan_exporter.dart';
+import '../running/running.dart';
+import '../training_plan.dart';
 
 class TrainingPlanResult {
   const TrainingPlanResult({
@@ -26,13 +26,13 @@ class TrainingPlanResult {
   final bool refreshing;
 }
 
-class VmaTrainingPlan extends StatefulWidget {
+class TrainingPlanPage extends StatefulWidget {
   final double userVma;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
   final RemoteAssetLoader loader;
 
-  VmaTrainingPlan({
+  TrainingPlanPage({
     super.key,
     required this.userVma,
     required this.settings,
@@ -41,10 +41,10 @@ class VmaTrainingPlan extends StatefulWidget {
   }) : loader = loader ?? RemoteAssetLoader();
 
   @override
-  State<VmaTrainingPlan> createState() => _VmaTrainingPlanState();
+  State<TrainingPlanPage> createState() => _TrainingPlanPageState();
 }
 
-class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
+class _TrainingPlanPageState extends State<TrainingPlanPage> {
   static const _documentPath = 'app_documents/training_plan';
   static const _assetFallbackPath =
       'assets/training_plans/training_example.json';

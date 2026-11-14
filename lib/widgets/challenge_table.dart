@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'content_refresh.dart' show refreshContent;
-import 'widgets/content_refresh_button.dart' show ContentRefreshButton;
-import 'widgets/interactive_header.dart';
-import 'remote_asset_loader.dart';
+import '../app_localizations.dart';
+import '../content_refresh.dart' show refreshContent;
+import 'content_refresh_button.dart' show ContentRefreshButton;
+import 'interactive_header.dart';
+import '../remote_asset_loader.dart';
 
-class VmaChallengeTable extends StatefulWidget {
-  const VmaChallengeTable({super.key, required this.loader});
+class ChallengeTable extends StatefulWidget {
+  const ChallengeTable({super.key, required this.loader});
 
   final RemoteAssetLoader loader;
 
   @override
-  State<VmaChallengeTable> createState() => _VmaChallengeTableState();
+  State<ChallengeTable> createState() => _ChallengeTableState();
 }
 
-class _VmaChallengeTableState extends State<VmaChallengeTable> {
+class _ChallengeTableState extends State<ChallengeTable> {
   static const _documentPath = 'app_documents/challenge_classement';
   static const _assetPath =
       'assets/enjambee_challenge/classement_challenge_enjambee_2025_12_10_2025.csv';

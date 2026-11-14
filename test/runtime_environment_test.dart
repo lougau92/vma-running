@@ -2,7 +2,7 @@ import 'package:app_feedback/app_feedback.dart' show captureFeedbackContext;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/runtime/runtime_environment.dart';
-import 'package:vma_running/runtime/runtime_environment_host.dart';
+import 'package:vma_running/widgets/runtime_environment_host.dart';
 
 void main() {
   test('device class is independent of browser and PWA presentation', () {

@@ -5,13 +5,13 @@ import 'package:app_feedback/app_feedback.dart'
         UnavailableFeedbackSender,
         FeedbackContextScope;
 import 'package:flutter/material.dart';
-import 'app_localizations.dart';
-import 'app_settings.dart';
-import 'widgets/decorated_scaffold.dart';
-import 'vma_settings_view.dart';
+import '../app_localizations.dart';
+import '../app_settings.dart';
+import 'decorated_scaffold.dart';
+import 'settings_view.dart';
 
-class VmaSettingsPage extends StatelessWidget {
-  const VmaSettingsPage({
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({
     super.key,
     required this.settings,
     required this.onSettingsChanged,
@@ -42,7 +42,7 @@ class VmaSettingsPage extends StatelessWidget {
             if (feedbackSender != null) FeedbackButton(sender: feedbackSender!),
           ],
         ),
-        body: VmaSettingsView(
+        body: SettingsView(
           settings: settings,
           onSettingsChanged: onSettingsChanged,
           onVmaChanged: onVmaChanged,

@@ -1,9 +1,9 @@
 import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/widgets.dart';
 
-import 'runtime_environment.dart' show RuntimeEnvironment;
-import 'runtime_probe_stub.dart'
-    if (dart.library.js_interop) 'runtime_probe_web.dart'
+import '../runtime/runtime_environment.dart' show RuntimeEnvironment;
+import '../runtime/runtime_probe_stub.dart'
+    if (dart.library.js_interop) '../runtime/runtime_probe_web.dart'
     as probe;
 
 /// Reads device and window signals without depending on widget ancestry.

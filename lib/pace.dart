@@ -6,8 +6,8 @@ import 'running/running.dart'
         formatPacePerKm,
         formatRunningDuration;
 
-class VmaPaceEntry {
-  const VmaPaceEntry({required this.percent, required this.split});
+class PaceEntry {
+  const PaceEntry({required this.percent, required this.split});
 
   final double percent;
   final RunningSplit split;
@@ -18,8 +18,8 @@ class VmaPaceEntry {
 }
 
 /// Selects percentage rows; shared running math derives each row's values.
-class VmaPaceCalculator {
-  List<VmaPaceEntry> buildTable(
+class PaceCalculator {
+  List<PaceEntry> buildTable(
     double vma, {
     required double minPercent,
     required double maxPercent,
@@ -31,14 +31,14 @@ class VmaPaceCalculator {
         minPercent + step <= minPercent) {
       return [];
     }
-    final entries = <VmaPaceEntry>[];
+    final entries = <PaceEntry>[];
     for (double percent = minPercent; percent <= maxPercent; percent += step) {
       final split = RunningSpeed.fromVma(
         vma,
         percent,
       )?.forDistance(distanceMeters);
       if (split == null) return [];
-      entries.add(VmaPaceEntry(percent: percent, split: split));
+      entries.add(PaceEntry(percent: percent, split: split));
     }
     return entries;
   }

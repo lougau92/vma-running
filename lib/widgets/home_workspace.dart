@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
 import '../app_settings.dart';
-import '../club_communications_page.dart';
+import 'club_communications_page.dart';
 import '../feature_flags.dart';
 import '../remote_asset_loader.dart';
-import '../vma_challenge_table.dart';
-import '../vma_training_plan.dart';
+import 'challenge_table.dart';
+import 'training_plan_page.dart';
 import 'decorated_scaffold.dart';
 import 'page_swipe_region.dart';
 import 'running_calculator_tab.dart';
-import 'vma_intensity_tab.dart';
-import 'vma_times_tab.dart';
+import 'intensity_tab.dart';
+import 'times_tab.dart';
 
 enum _HomePage {
   intensity('intensity'),
@@ -31,8 +31,8 @@ enum _HomePage {
   };
 }
 
-class VmaHomeWorkspace extends StatefulWidget {
-  const VmaHomeWorkspace({
+class HomeWorkspace extends StatefulWidget {
+  const HomeWorkspace({
     super.key,
     required this.appBar,
     required this.loading,
@@ -52,10 +52,10 @@ class VmaHomeWorkspace extends StatefulWidget {
   final RemoteAssetLoader loader;
 
   @override
-  State<VmaHomeWorkspace> createState() => _VmaHomeWorkspaceState();
+  State<HomeWorkspace> createState() => _HomeWorkspaceState();
 }
 
-class _VmaHomeWorkspaceState extends State<VmaHomeWorkspace> {
+class _HomeWorkspaceState extends State<HomeWorkspace> {
   _HomePage _selectedPage = _HomePage.intensity;
   final _visitedPages = <_HomePage>{_HomePage.intensity};
 
@@ -69,7 +69,7 @@ class _VmaHomeWorkspaceState extends State<VmaHomeWorkspace> {
   ];
 
   @override
-  void didUpdateWidget(covariant VmaHomeWorkspace oldWidget) {
+  void didUpdateWidget(covariant HomeWorkspace oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!_pages.contains(_selectedPage)) {
       _selectedPage = _HomePage.intensity;
@@ -148,13 +148,13 @@ class _VmaHomeWorkspaceState extends State<VmaHomeWorkspace> {
       content = Center(child: Text(strings.enterVmaPlaceholder));
     } else {
       content = switch (page) {
-        _HomePage.intensity => VmaIntensityTab(vma: vma!),
-        _HomePage.times => VmaTimesTab(
+        _HomePage.intensity => IntensityTab(vma: vma!),
+        _HomePage.times => TimesTab(
           vma: vma!,
           settings: widget.settings,
           onSettingsChanged: widget.onSettingsChanged,
         ),
-        _HomePage.trainingPlan => VmaTrainingPlan(
+        _HomePage.trainingPlan => TrainingPlanPage(
           userVma: vma!,
           settings: widget.settings,
           onSettingsChanged: widget.onSettingsChanged,
@@ -173,7 +173,7 @@ class _VmaHomeWorkspaceState extends State<VmaHomeWorkspace> {
         _HomePage.communications => ClubCommunicationsPage(
           loader: widget.loader,
         ),
-        _HomePage.rankings => VmaChallengeTable(loader: widget.loader),
+        _HomePage.rankings => ChallengeTable(loader: widget.loader),
       };
     }
 

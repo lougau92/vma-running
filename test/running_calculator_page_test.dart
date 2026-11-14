@@ -7,10 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/calculator/running_calculator_draft.dart';
-import 'package:vma_running/calculator/running_calculator_page.dart';
-import 'package:vma_running/vma_home.dart';
+import 'package:vma_running/widgets/calculator/running_calculator_page.dart';
+import 'package:vma_running/widgets/home_page.dart';
 import 'package:vma_running/widgets/number_wheel_picker.dart';
-import 'package:vma_running/widgets/vma_celebration_overlay.dart';
+import 'package:vma_running/widgets/vma_change_celebration.dart';
 
 Widget _app(Widget child, {String locale = 'en'}) => MaterialApp(
   locale: Locale(locale),
@@ -271,9 +271,7 @@ void main() {
       buildSignature: '',
     );
     await tester.pumpWidget(
-      _app(
-        VmaHomePage(settings: const AppSettings(), onSettingsChanged: (_) {}),
-      ),
+      _app(HomePage(settings: const AppSettings(), onSettingsChanged: (_) {})),
     );
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.calculate_outlined));
@@ -296,7 +294,7 @@ void main() {
     expect(find.text('VMA: 20.00 km/h'), findsOneWidget);
     final preferences = await SharedPreferences.getInstance();
     expect(preferences.getDouble('user_vma'), 18);
-    expect(find.byType(VmaCelebrationOverlay), findsNothing);
+    expect(find.byType(VmaChangeCelebration), findsNothing);
 
     await tester.tap(find.byIcon(Icons.timer));
     await tester.pumpAndSettle();

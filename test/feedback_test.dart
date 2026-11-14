@@ -17,8 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/feedback_setup.dart';
-import 'package:vma_running/vma_settings_page.dart';
-import 'package:vma_running/vma_app.dart';
+import 'package:vma_running/widgets/settings_page.dart';
+import 'package:vma_running/app.dart';
 
 class _Bundle extends CachingAssetBundle {
   _Bundle(this.config);
@@ -85,7 +85,7 @@ void main() {
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
-          home: VmaSettingsPage(
+          home: SettingsPage(
             settings: const AppSettings(),
             onSettingsChanged: (_) {},
             feedbackSender: sender,
@@ -125,7 +125,7 @@ void main() {
     );
     final pendingSender = Completer<FeedbackSender>();
     await tester.pumpWidget(
-      VmaApp(feedbackSenderLoader: () => pendingSender.future),
+      RunningApp(feedbackSenderLoader: () => pendingSender.future),
     );
     await tester.pumpAndSettle();
 

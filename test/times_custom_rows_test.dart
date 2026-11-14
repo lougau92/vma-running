@@ -6,8 +6,8 @@ import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/running/running.dart';
 import 'package:vma_running/settings_storage.dart';
-import 'package:vma_running/vma_home.dart';
-import 'package:vma_running/vma_times_table.dart';
+import 'package:vma_running/widgets/home_page.dart';
+import 'package:vma_running/widgets/times_table.dart';
 
 Widget _app(Widget child) => MaterialApp(
   locale: const Locale('en'),
@@ -89,7 +89,7 @@ void main() {
     'custom rows merge with presets, deduplicate and survive range filtering',
     (tester) async {
       Widget table({double max = 1000}) => _app(
-        VmaTimesTable(
+        TimesTable(
           speed: RunningSpeed.fromKmh(15),
           minDistanceMeters: 100,
           maxDistanceMeters: max,
@@ -141,7 +141,7 @@ void main() {
       await tester.pumpWidget(
         _app(
           StatefulBuilder(
-            builder: (context, setState) => VmaHomePage(
+            builder: (context, setState) => HomePage(
               settings: settings,
               onSettingsChanged: (value) => setState(() => settings = value),
             ),

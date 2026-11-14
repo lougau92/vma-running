@@ -1,7 +1,8 @@
-import '../running.dart'
+import 'running.dart'
     show
         RunningSpeed,
         RunningSplit,
+        formatRunningNumber,
         formatPacePerKm,
         formatRunningDuration,
         isPositiveFinite,
@@ -85,12 +86,12 @@ class RunningCalculatorDraft {
     if (split == null) return '';
     final intensity = split.speed.percentOfVma(vma);
     return switch (measureAt(index)) {
-      RunningMeasure.distance => _formatNumber(split.distanceKm),
+      RunningMeasure.distance => formatRunningNumber(split.distanceKm),
       RunningMeasure.time => formatRunningDuration(split.seconds),
-      RunningMeasure.speed => _formatNumber(split.speed.kmh),
+      RunningMeasure.speed => formatRunningNumber(split.speed.kmh),
       RunningMeasure.pace => formatPacePerKm(split.speed),
       RunningMeasure.intensity =>
-        intensity == null ? '—' : _formatNumber(intensity),
+        intensity == null ? '—' : formatRunningNumber(intensity),
     };
   }
 
@@ -204,10 +205,6 @@ class RunningCalculatorDraft {
         : speed?.forDuration(seconds!);
   }
 }
-
-String _formatNumber(double value) => value < 0.01 || value >= 1e9
-    ? value.toStringAsExponential(2)
-    : value.toStringAsFixed(2);
 
 /// Normalizes distance to meters, time to seconds and the speed family to km/h.
 double? parseRunningValue(RunningMeasure measure, String text, {double? vma}) {

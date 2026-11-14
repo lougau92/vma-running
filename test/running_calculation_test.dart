@@ -1,7 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vma_running/calculator/running_calculator_draft.dart';
+import 'package:vma_running/calculator_draft.dart';
+import 'package:vma_running/running.dart' show formatRunningNumber;
 
 void main() {
+  test(
+    'formats running numbers with fixed precision or scientific notation',
+    () {
+      expect(formatRunningNumber(12), '12.00');
+      expect(formatRunningNumber(1.5), '1.50');
+      expect(formatRunningNumber(0.001), '1.00e-3');
+      expect(formatRunningNumber(1e9), '1.00e+9');
+    },
+  );
+
   test('all independent pairs and input orders produce the same run', () {
     const inputs = {
       RunningMeasure.distance: '5',

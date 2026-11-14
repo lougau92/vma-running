@@ -7,7 +7,7 @@ import 'package:vma_running/plan_exporter.dart';
 import 'package:vma_running/running/distance_labels.dart';
 import 'package:vma_running/running.dart';
 import 'package:vma_running/training_plan.dart';
-import 'package:vma_running/pace.dart';
+import 'package:vma_running/widgets/pace_table.dart';
 import 'package:vma_running/widgets/times_table.dart';
 
 void main() {
@@ -19,15 +19,13 @@ void main() {
 
   test('calculator, VMA rows and workout lines agree on the same effort', () {
     final run = draft.calculate(20)!;
-    final row = PaceCalculator()
-        .buildTable(
-          20,
-          minPercent: 120,
-          maxPercent: 120,
-          step: 5,
-          distanceMeters: 400,
-        )
-        .single;
+    final row = PaceTable.buildEntries(
+      20,
+      minPercent: 120,
+      maxPercent: 120,
+      step: 5,
+      distanceMeters: 400,
+    ).single;
     expect(run.speed.kmh, 24);
     expect(run.seconds, closeTo(60, 1e-10));
     expect(row.speedKmh, run.speed.kmh);
@@ -63,10 +61,9 @@ void main() {
   );
 
   test('invalid table parameters produce no rows instead of looping', () {
-    final calculator = PaceCalculator();
     for (final step in [0.0, -1.0, double.nan, double.infinity]) {
       expect(
-        calculator.buildTable(
+        PaceTable.buildEntries(
           18,
           minPercent: 60,
           maxPercent: 120,
@@ -77,7 +74,7 @@ void main() {
       );
     }
     expect(
-      calculator.buildTable(
+      PaceTable.buildEntries(
         0,
         minPercent: 60,
         maxPercent: 120,
@@ -87,7 +84,7 @@ void main() {
       isEmpty,
     );
     expect(
-      calculator.buildTable(
+      PaceTable.buildEntries(
         18,
         minPercent: 120,
         maxPercent: 60,

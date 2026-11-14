@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
-import 'package:vma_running/pace.dart';
 import 'package:vma_running/widgets/pace_table.dart';
 import 'package:vma_running/widgets/times_table.dart';
 import 'package:vma_running/running.dart';
@@ -32,7 +31,7 @@ void main() {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 1200),
                 child: PaceTable(
-                  entries: PaceCalculator().buildTable(
+                  entries: PaceTable.buildEntries(
                     13,
                     minPercent: 60,
                     maxPercent: 120,
@@ -253,7 +252,7 @@ void main() {
   );
 }
 
-List<PaceEntry> _entries() => PaceCalculator().buildTable(
+List<PaceEntry> _entries() => PaceTable.buildEntries(
   13,
   minPercent: 60,
   maxPercent: 120,

@@ -1,9 +1,47 @@
 import 'package:flutter/material.dart';
+
 import '../app_localizations.dart';
+import '../running/speed.dart'
+    show RunningSpeed, RunningSplit, isPositiveFinite;
+import '../running/time.dart' show formatPacePerKm, formatRunningDuration;
 import 'interactive_header.dart';
-import '../pace.dart';
+
+class PaceEntry {
+  const PaceEntry({required this.percent, required this.split});
+
+  final double percent;
+  final RunningSplit split;
+
+  double get speedKmh => split.speed.kmh;
+  String get pacePerKm => formatPacePerKm(split.speed);
+  String get timeForDistance => formatRunningDuration(split.seconds);
+}
 
 class PaceTable extends StatefulWidget {
+  static List<PaceEntry> buildEntries(
+    double vma, {
+    required double minPercent,
+    required double maxPercent,
+    required double step,
+    required double distanceMeters,
+  }) {
+    if (![minPercent, maxPercent, step].every(isPositiveFinite) ||
+        minPercent > maxPercent ||
+        minPercent + step <= minPercent) {
+      return [];
+    }
+    final entries = <PaceEntry>[];
+    for (double percent = minPercent; percent <= maxPercent; percent += step) {
+      final split = RunningSpeed.fromVma(
+        vma,
+        percent,
+      )?.forDistance(distanceMeters);
+      if (split == null) return [];
+      entries.add(PaceEntry(percent: percent, split: split));
+    }
+    return entries;
+  }
+
   const PaceTable({
     super.key,
     required this.entries,

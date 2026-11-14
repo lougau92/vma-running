@@ -2,7 +2,6 @@ import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/material.dart';
 
 import 'distance_dialog.dart';
-import '../pace.dart';
 import 'pace_table_settings_dialog.dart';
 import 'pace_table.dart';
 import 'centered_width.dart';
@@ -17,7 +16,6 @@ class IntensityTab extends StatefulWidget {
 }
 
 class _IntensityTabState extends State<IntensityTab> {
-  final _paceCalculator = PaceCalculator();
   double _minPercent = 60;
   double _maxPercent = 120;
   double _step = 5;
@@ -65,7 +63,7 @@ class _IntensityTabState extends State<IntensityTab> {
     },
     child: CenteredWidth(
       child: PaceTable(
-        entries: _paceCalculator.buildTable(
+        entries: PaceTable.buildEntries(
           widget.vma,
           minPercent: _minPercent,
           maxPercent: _maxPercent,

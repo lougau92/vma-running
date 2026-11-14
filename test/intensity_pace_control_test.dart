@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
-import 'package:vma_running/running/running.dart';
+import 'package:vma_running/running.dart';
 import 'package:vma_running/theme.dart';
 import 'package:vma_running/widgets/intensity_pace_control.dart';
 import 'package:vma_running/widgets/intensity_runner.dart';

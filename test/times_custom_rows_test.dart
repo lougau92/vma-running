@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
-import 'package:vma_running/running/running.dart';
+import 'package:vma_running/running.dart';
 import 'package:vma_running/settings_storage.dart';
 import 'package:vma_running/widgets/home_page.dart';
 import 'package:vma_running/widgets/times_table.dart';

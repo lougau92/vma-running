@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../app_localizations.dart';
 import 'interactive_header.dart';
 import '../presets.dart';
-import '../running/running.dart' show RunningSpeed, formatRunningDuration;
+import '../running.dart' show RunningSpeed, formatRunningDuration;
 
 class TimesTable extends StatefulWidget {
   const TimesTable({

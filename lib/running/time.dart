@@ -1,7 +1,7 @@
 /// Time and pace parsing/formatting for the shared running model.
 library;
 
-import 'running_speed.dart' show RunningSpeed;
+import 'speed.dart' show RunningSpeed;
 
 String _twoDigits(int value) => value.toString().padLeft(2, '0');
 

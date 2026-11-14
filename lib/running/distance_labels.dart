@@ -4,7 +4,7 @@ library;
 import 'package:flutter/widgets.dart' show BuildContext;
 
 import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
-import 'running_distance.dart';
+import 'distance.dart';
 
 String formatDistanceShort(double meters, AppLocalizations strings) =>
     _formatDistance(meters, strings, longUnits: false);

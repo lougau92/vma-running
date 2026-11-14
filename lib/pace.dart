@@ -1,4 +1,4 @@
-import 'running/running.dart'
+import 'running.dart'
     show
         RunningSpeed,
         RunningSplit,

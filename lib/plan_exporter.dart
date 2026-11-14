@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'app_localizations.dart';
-import 'running/running.dart';
+import 'running.dart';
 import 'training_plan.dart';
 
 class PlanExportData {

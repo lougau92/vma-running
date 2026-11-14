@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
-import '../running/running.dart';
+import '../running.dart';
 import 'intensity_runner.dart';
 
 class IntensityPaceControl extends StatelessWidget {

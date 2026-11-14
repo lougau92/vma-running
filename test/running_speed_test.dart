@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vma_running/running/running.dart';
+import 'package:vma_running/running.dart';
 
 void main() {
   test('speed, pace, VMA and distance/time describe the same effort', () {

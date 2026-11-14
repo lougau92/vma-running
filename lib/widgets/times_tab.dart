@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../app_settings.dart';
 import '../presets.dart';
-import '../running/running.dart' show RunningSpeed, kMarathonMeters;
+import '../running.dart' show RunningSpeed, kMarathonMeters;
 import 'times_settings_dialog.dart';
 import 'times_table.dart';
 import 'centered_width.dart';

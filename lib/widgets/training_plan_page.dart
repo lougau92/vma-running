@@ -9,7 +9,7 @@ import '../content_refresh.dart' show refreshContent;
 import 'content_refresh_button.dart' show ContentRefreshButton;
 import '../app_settings.dart';
 import '../plan_exporter.dart';
-import '../running/running.dart';
+import '../running.dart';
 import '../training_plan.dart';
 
 class TrainingPlanResult {

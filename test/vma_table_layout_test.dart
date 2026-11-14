@@ -5,7 +5,7 @@ import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/pace.dart';
 import 'package:vma_running/widgets/pace_table.dart';
 import 'package:vma_running/widgets/times_table.dart';
-import 'package:vma_running/running/running.dart';
+import 'package:vma_running/running.dart';
 import 'package:vma_running/theme.dart';
 
 void main() {

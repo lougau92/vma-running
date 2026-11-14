@@ -197,6 +197,10 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
                     const SizedBox(height: 16),
                     _SectionCard(
                       contextId: 'warmup',
+                      colors: (
+                        theme.colorScheme.tertiaryContainer,
+                        theme.colorScheme.onTertiaryContainer,
+                      ),
                       title: strings.preSession,
                       items: [plan.warmup],
                     ),
@@ -209,12 +213,20 @@ class _VmaTrainingPlanState extends State<VmaTrainingPlan> {
                     const SizedBox(height: 12),
                     _SectionCard(
                       contextId: 'cooldown',
+                      colors: (
+                        theme.colorScheme.secondaryContainer,
+                        theme.colorScheme.onSecondaryContainer,
+                      ),
                       title: strings.cooldown,
                       items: [plan.cooldown],
                     ),
                     const SizedBox(height: 12),
                     _SectionCard(
                       contextId: 'notes',
+                      colors: (
+                        theme.colorScheme.surfaceContainerHigh,
+                        theme.colorScheme.onSurface,
+                      ),
                       title: strings.remarks,
                       items: [plan.remarks],
                     ),
@@ -334,21 +346,28 @@ class _BlocksCard extends StatelessWidget {
       id: 'intervals',
       data: {'blockCount': group.blocks.length},
       child: Card(
-        color: theme.brightness == Brightness.light
-            ? Colors.white
-            : theme.colorScheme.surface,
+        color: theme.colorScheme.primaryContainer,
         surfaceTintColor: Colors.transparent,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(strings.sessionContent, style: theme.textTheme.titleMedium),
-              const SizedBox(height: 8),
-              ...group.blocks.map(
-                (block) => _BlockView(block: block, strings: strings, vma: vma),
-              ),
-            ],
+        child: DefaultTextStyle.merge(
+          style: TextStyle(color: theme.colorScheme.onPrimaryContainer),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  strings.sessionContent,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                ...group.blocks.map(
+                  (block) =>
+                      _BlockView(block: block, strings: strings, vma: vma),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -375,7 +394,12 @@ class _BlockView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(block.title, style: theme.textTheme.titleMedium),
+          Text(
+            block.title,
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: theme.colorScheme.onPrimaryContainer,
+            ),
+          ),
           const SizedBox(height: 4),
           ...block.sets.map(
             (set) => Padding(
@@ -387,7 +411,9 @@ class _BlockView extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               '${strings.recovery}: ${formatElapsed(block.afterRecoverySeconds!.toInt())} (${recoveryLabel(block.afterRecoveryType, strings)})',
-              style: theme.textTheme.bodySmall,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
+              ),
             ),
           ],
         ],
@@ -401,11 +427,13 @@ class _SectionCard extends StatelessWidget {
     required this.contextId,
     required this.title,
     required this.items,
+    required this.colors,
   });
 
   final String contextId;
   final String title;
   final List<String> items;
+  final (Color background, Color foreground) colors;
 
   @override
   Widget build(BuildContext context) {
@@ -413,24 +441,30 @@ class _SectionCard extends StatelessWidget {
     return FeedbackContextScope(
       id: contextId,
       child: Card(
-        color: theme.brightness == Brightness.light
-            ? Colors.white
-            : theme.colorScheme.surface,
+        color: colors.$1,
         surfaceTintColor: Colors.transparent,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: theme.textTheme.titleMedium),
-              const SizedBox(height: 8),
-              ...items.map(
-                (line) => Padding(
-                  padding: const EdgeInsets.only(bottom: 6),
-                  child: Text(line),
+        child: DefaultTextStyle.merge(
+          style: TextStyle(color: colors.$2),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: colors.$2,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 8),
+                ...items.map(
+                  (line) => Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: Text(line),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

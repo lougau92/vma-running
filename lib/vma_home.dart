@@ -217,7 +217,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
     }
 
     final content = switch (_selectedPage) {
-      _HomePage.intensity => _buildPaceBody(strings),
+      _HomePage.intensity => _buildPaceBody(),
       _HomePage.times => _buildTimesBody(strings),
       _HomePage.trainingPlan => VmaTrainingPlan(
         userVma: _vma!,
@@ -235,7 +235,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
       _HomePage.rankings => _buildChallengeBody(),
     };
 
-    final hasVmaHeader =
+    final isTablePage =
         _selectedPage == _HomePage.intensity ||
         _selectedPage == _HomePage.times;
     return GestureDetector(
@@ -251,7 +251,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
         }
       },
       child: Padding(
-        padding: EdgeInsets.fromLTRB(24, hasVmaHeader ? 8 : 24, 24, 24),
+        padding: EdgeInsets.fromLTRB(24, isTablePage ? 8 : 24, 24, 24),
         child: Align(
           alignment: Alignment.topCenter,
           child: ConstrainedBox(
@@ -398,29 +398,20 @@ class _VmaHomePageState extends State<VmaHomePage> {
     return _wrapCenteredWidth(VmaChallengeTable(loader: _remoteLoader));
   }
 
-  Widget _buildPaceBody(AppLocalizations strings) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _buildVMAHeader(strings),
-        const SizedBox(height: 8),
-        Expanded(
-          child: _wrapCenteredWidth(
-            VmaPaceTable(
-              entries: _paceCalculator.buildTable(
-                _vma!,
-                minPercent: _minPercent,
-                maxPercent: _maxPercent,
-                step: _step,
-                distanceMeters: _distanceMeters,
-              ),
-              onEditPercentages: _openTableSettingsDialog,
-              distanceMeters: _distanceMeters,
-              onEditDistance: _openDistanceDialog,
-            ),
-          ),
+  Widget _buildPaceBody() {
+    return _wrapCenteredWidth(
+      VmaPaceTable(
+        entries: _paceCalculator.buildTable(
+          _vma!,
+          minPercent: _minPercent,
+          maxPercent: _maxPercent,
+          step: _step,
+          distanceMeters: _distanceMeters,
         ),
-      ],
+        onEditPercentages: _openTableSettingsDialog,
+        distanceMeters: _distanceMeters,
+        onEditDistance: _openDistanceDialog,
+      ),
     );
   }
 
@@ -431,8 +422,6 @@ class _VmaHomePageState extends State<VmaHomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildVMAHeader(strings),
-        const SizedBox(height: 8),
         _wrapCenteredWidth(
           Card(
             margin: EdgeInsets.zero,
@@ -488,16 +477,6 @@ class _VmaHomePageState extends State<VmaHomePage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildVMAHeader(AppLocalizations strings) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Text(
-        strings.yourVma(_vma!),
-        style: Theme.of(context).textTheme.titleSmall,
-      ),
     );
   }
 

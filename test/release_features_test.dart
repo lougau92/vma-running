@@ -198,6 +198,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('vma-edit')), findsNothing);
     expect(find.byIcon(Icons.edit_outlined), findsNothing);
+    expect(find.text('VMA: 18.00 km/h'), findsNothing);
 
     await tester.tap(find.byIcon(Icons.timer));
     await tester.pumpAndSettle();
@@ -224,14 +225,14 @@ void main() {
     );
     fraction.scrollController!.jumpToItem(50);
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Save'));
+    await tester.tapAt(const Offset(10, 10));
     await tester.pumpAndSettle();
     expect(find.text('VMA: 20.50 km/h'), findsOneWidget);
     expect((await SharedPreferences.getInstance()).getDouble('user_vma'), 20.5);
 
     await tester.pageBack();
     await tester.pumpAndSettle();
-    expect(find.text('VMA: 20.50 km/h'), findsOneWidget);
+    expect(find.text('VMA: 20.50 km/h'), findsNothing);
     expect(
       tester.widget<VmaTimesTable>(find.byType(VmaTimesTable)).speed!.kmh,
       closeTo(12.3, 0.000001),

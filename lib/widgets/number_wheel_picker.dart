@@ -60,6 +60,7 @@ class NumberValueWheelPicker extends StatelessWidget {
     required this.onChanged,
     this.inputKeyboardType,
     this.onInputCompleted,
+    this.autofocusInput = false,
     this.minValue = 0,
     this.maxValue = double.infinity,
   });
@@ -74,6 +75,7 @@ class NumberValueWheelPicker extends StatelessWidget {
   /// Reports the final typed value once on Done, focus loss, or route dismissal.
   final ValueChanged<double>? onInputCompleted;
   final TextInputType? inputKeyboardType;
+  final bool autofocusInput;
   final double minValue;
   final double maxValue;
 
@@ -101,6 +103,7 @@ class NumberValueWheelPicker extends StatelessWidget {
     onChanged: onChanged,
     onInputCompleted: onInputCompleted,
     inputKeyboardType: inputKeyboardType,
+    autofocusInput: autofocusInput,
   );
 }
 
@@ -115,6 +118,7 @@ class _EditableWheel<T> extends StatefulWidget {
     this.compare,
     this.inputKeyboardType,
     this.onInputCompleted,
+    this.autofocusInput = false,
   });
 
   final String label;
@@ -126,6 +130,7 @@ class _EditableWheel<T> extends StatefulWidget {
   final ValueChanged<T>? onInputCompleted;
   final Comparator<T>? compare;
   final TextInputType? inputKeyboardType;
+  final bool autofocusInput;
 
   @override
   State<_EditableWheel<T>> createState() => _EditableWheelState<T>();
@@ -149,6 +154,11 @@ class _EditableWheelState<T> extends State<_EditableWheel<T>> {
   void initState() {
     super.initState();
     _focus.addListener(_focusChanged);
+    if (widget.autofocusInput) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startEditing();
+      });
+    }
   }
 
   @override

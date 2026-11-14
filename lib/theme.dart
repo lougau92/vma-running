@@ -260,6 +260,38 @@ ThemeData _buildTheme({
         scaffoldBackgroundColor,
       ),
     );
+  } else {
+    // Keep dark surfaces aligned with the selected page color. The generated
+    // container defaults are neutral gray, which looks disconnected from the
+    // navy, blue, and teal page backgrounds used by the app themes.
+    colorScheme = colorScheme.copyWith(
+      surface: scaffoldBackgroundColor,
+      surfaceContainerLowest: Color.alphaBlend(
+        Colors.white.withValues(alpha: 0.015),
+        scaffoldBackgroundColor,
+      ),
+      surfaceContainerLow: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.07),
+        scaffoldBackgroundColor,
+      ),
+      surfaceContainer: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.10),
+        scaffoldBackgroundColor,
+      ),
+      surfaceContainerHigh: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.14),
+        scaffoldBackgroundColor,
+      ),
+      surfaceContainerHighest: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.18),
+        scaffoldBackgroundColor,
+      ),
+      onSurface: textColor,
+      onSurfaceVariant: Color.alphaBlend(
+        textColor.withValues(alpha: 0.78),
+        scaffoldBackgroundColor,
+      ),
+    );
   }
   final textTheme = ThemeData(
     colorScheme: colorScheme,

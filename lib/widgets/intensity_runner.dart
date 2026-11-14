@@ -15,7 +15,7 @@ class IntensityRunner extends StatefulWidget {
 
 class _IntensityRunnerState extends State<IntensityRunner>
     with SingleTickerProviderStateMixin {
-  static const _previewSeconds = 3.2;
+  static const _previewSeconds = 2.2;
   late final Ticker _ticker = createTicker(_tick);
   late double _effort = _target;
   double _phase = 0.14;
@@ -168,6 +168,33 @@ class _RunnerPainter extends CustomPainter {
           line
             ..color = energy.withValues(alpha: effort * (0.24 + i * 0.08))
             ..strokeWidth = 1.8,
+        );
+      }
+    }
+
+    // Build from a few fast-moving flame tongues as effort rises. Keeping the
+    // effect behind the runner preserves the silhouette and avoids a large,
+    // expensive particle system for this small preview.
+    final fire = ((effort - 0.22) / 0.78).clamp(0.0, 1.0);
+    if (fire > 0) {
+      final flicker = math.sin(phase * math.pi * 8);
+      for (var i = 0; i < 3; i++) {
+        final lane = (i - 1).toDouble();
+        final pulse = 0.72 + 0.28 * math.sin(phase * math.pi * 6 + i * 1.8);
+        final length = (10 + fire * (13 + i * 5) + flicker * 2) * pulse;
+        final y = -8 + lane * 7;
+        final tail = -12 - length;
+        final flamePath = Path()
+          ..moveTo(-11, y - 2.2)
+          ..quadraticBezierTo(tail * 0.55, y - 4.5 - fire * 2, tail, y)
+          ..quadraticBezierTo(tail * 0.55, y + 4.5 + fire * 2, -11, y + 2.2)
+          ..close();
+        final flameColor = i == 0
+            ? Colors.amber
+            : (i == 1 ? Colors.deepOrange : colors.error);
+        canvas.drawPath(
+          flamePath,
+          Paint()..color = flameColor.withValues(alpha: fire * 0.42 * pulse),
         );
       }
     }

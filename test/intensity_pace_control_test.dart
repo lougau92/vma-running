@@ -48,6 +48,24 @@ Future<Uint8List> _pixels(WidgetTester tester) async {
   }))!;
 }
 
+int _warmPixelCount(Uint8List pixels) {
+  var count = 0;
+  for (var i = 0; i < pixels.length; i += 4) {
+    final pixel = i ~/ 4;
+    final x = pixel % 300;
+    final y = pixel ~/ 300;
+    // Inspect the far-right trail area, where the 120% runner stands.
+    if (x < 180 || y < 14 || y > 46) continue;
+    final red = pixels[i];
+    final green = pixels[i + 1];
+    final blue = pixels[i + 2];
+    if (red > 35 && red > green + 12 && red > blue + 12) {
+      count++;
+    }
+  }
+  return count;
+}
+
 void main() {
   testWidgets(
     'reduced motion shows distinct calm and hard static running poses',
@@ -61,6 +79,7 @@ void main() {
       await tester.pumpAndSettle();
       final hard = await _pixels(tester);
       expect(hard, isNot(orderedEquals(calm)));
+      expect(_warmPixelCount(hard), greaterThan(_warmPixelCount(calm)));
       expect(find.byType(Text), findsNothing);
       expect(tester.binding.hasScheduledFrame, isFalse);
       expect(tester.takeException(), isNull);

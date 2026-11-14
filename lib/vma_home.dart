@@ -195,9 +195,21 @@ class _VmaHomePageState extends State<VmaHomePage> {
       id: 'home',
       child: DecoratedScaffold(
         appBar: AppBar(
-          title: Image.asset(
-            'assets/enjambee_img/logo-header-minimized.png',
-            height: 32,
+          title: Container(
+            width: 38,
+            height: 38,
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 1.5,
+              ),
+            ),
+            child: Image.asset(
+              'assets/enjambee_img/logo-header-minimized.png',
+              fit: BoxFit.contain,
+            ),
           ),
           actions: [
             FeedbackButton(sender: widget.feedbackSender),
@@ -287,6 +299,13 @@ class _VmaHomePageState extends State<VmaHomePage> {
           vma: _calculatorVma,
           onVmaChanged: (value) => setState(() => _calculatorVma = value),
           onChanged: (draft) => setState(() => _calculatorDraft = draft),
+          onNavigatePage: (direction) {
+            if (_selectedPage != page) return;
+            final nextIndex = _pages.indexOf(page) + direction;
+            if (nextIndex >= 0 && nextIndex < _pages.length) {
+              _selectPage(_pages[nextIndex]);
+            }
+          },
         ),
         _HomePage.communications => ClubCommunicationsPage(
           loader: _remoteLoader,

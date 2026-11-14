@@ -145,7 +145,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 border: BorderDirectional(
-                  end: BorderSide(color: Theme.of(context).dividerColor),
+                  end: BorderSide(color: colors.outline, width: 1.5),
                 ),
               ),
               child: table([_columnOrder.first]),

@@ -159,6 +159,46 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('dark table uses brand surfaces and a concise time header', (
+    tester,
+  ) async {
+    final theme = EnjambeeTheme.darkTheme();
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: theme,
+        locale: const Locale('en'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: VmaPaceTable(
+            entries: _entries(),
+            onEditPercentages: () {},
+            distanceMeters: 400,
+            onEditDistance: () {},
+          ),
+        ),
+      ),
+    );
+
+    expect(find.textContaining('(m:s)'), findsNothing);
+    final table = tester.widget<DataTable>(find.byType(DataTable).first);
+    expect(table.rows[0].color!.resolve({}), theme.colorScheme.surface);
+    expect(
+      table.rows[1].color!.resolve({}),
+      theme.colorScheme.surfaceContainerLow,
+    );
+    expect(
+      theme.colorScheme.surfaceContainerLow,
+      isNot(theme.colorScheme.surface),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'times table centers both columns and places swap on the boundary',
     (tester) async {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
@@ -7,13 +8,14 @@ import '../widgets/number_picker_dialog.dart';
 import '../widgets/number_wheel_picker.dart';
 import 'running_calculator_draft.dart';
 
-class RunningCalculatorPage extends StatelessWidget {
+class RunningCalculatorPage extends StatefulWidget {
   const RunningCalculatorPage({
     super.key,
     required this.draft,
     required this.onChanged,
     required this.vma,
     required this.onVmaChanged,
+    this.onNavigatePage,
   });
 
   final RunningCalculatorDraft draft;
@@ -22,6 +24,119 @@ class RunningCalculatorPage extends StatelessWidget {
   /// Calculator-only VMA, initially copied from the user's saved VMA.
   final double? vma;
   final ValueChanged<double> onVmaChanged;
+
+  /// Moves to the adjacent app page when a web user presses an arrow key.
+  final ValueChanged<int>? onNavigatePage;
+
+  @override
+  State<RunningCalculatorPage> createState() => _RunningCalculatorPageState();
+}
+
+class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
+  final _tileFocusNodes = List.generate(
+    4,
+    (_) => FocusNode(skipTraversal: true),
+  );
+  int _columnCount = 1;
+  int _activeTileIndex = 0;
+  bool _dialogOpen = false;
+
+  RunningCalculatorDraft get draft => widget.draft;
+  double? get vma => widget.vma;
+  ValueChanged<RunningCalculatorDraft> get onChanged => widget.onChanged;
+  ValueChanged<double> get onVmaChanged => widget.onVmaChanged;
+
+  @override
+  void dispose() {
+    for (final node in _tileFocusNodes) {
+      node.dispose();
+    }
+    super.dispose();
+  }
+
+  KeyEventResult _onTileKey(int index, KeyEvent event) {
+    if (!kIsWeb ||
+        _dialogOpen ||
+        event is! KeyDownEvent ||
+        _hasTextOrMenuFocus()) {
+      return KeyEventResult.ignored;
+    }
+    final key = event.logicalKey;
+    if (key == LogicalKeyboardKey.digit1 || key == LogicalKeyboardKey.numpad1) {
+      _focusTile(0);
+    } else if (key == LogicalKeyboardKey.digit2 ||
+        key == LogicalKeyboardKey.numpad2) {
+      _focusTile(1);
+    } else if (key == LogicalKeyboardKey.digit3 ||
+        key == LogicalKeyboardKey.numpad3) {
+      _focusTile(2);
+    } else if (key == LogicalKeyboardKey.digit4 ||
+        key == LogicalKeyboardKey.numpad4) {
+      _focusTile(3);
+    } else if (key == LogicalKeyboardKey.arrowUp) {
+      return _focusTile(index - _columnCount)
+          ? KeyEventResult.handled
+          : KeyEventResult.ignored;
+    } else if (key == LogicalKeyboardKey.arrowDown) {
+      return _focusTile(index + _columnCount)
+          ? KeyEventResult.handled
+          : KeyEventResult.ignored;
+    } else if (key == LogicalKeyboardKey.arrowLeft ||
+        key == LogicalKeyboardKey.arrowRight) {
+      final direction = key == LogicalKeyboardKey.arrowLeft ? -1 : 1;
+      if (widget.onNavigatePage != null) {
+        widget.onNavigatePage!(direction);
+      } else {
+        return _focusTile(index + direction)
+            ? KeyEventResult.handled
+            : KeyEventResult.ignored;
+      }
+    } else if (key == LogicalKeyboardKey.enter ||
+        key == LogicalKeyboardKey.numpadEnter) {
+      _editTile(index, autofocusInput: true);
+    } else {
+      return KeyEventResult.ignored;
+    }
+    return KeyEventResult.handled;
+  }
+
+  bool _hasTextOrMenuFocus() {
+    final context = FocusManager.instance.primaryFocus?.context;
+    if (context == null) return false;
+    var isEditing = false;
+    context.visitAncestorElements((element) {
+      final widget = element.widget;
+      if (widget is EditableText ||
+          widget is TextField ||
+          widget is DropdownButton<RunningMeasure>) {
+        isEditing = true;
+        return false;
+      }
+      return true;
+    });
+    return isEditing;
+  }
+
+  bool _focusTile(int index) {
+    if (index < 0 || index >= _tileFocusNodes.length) return false;
+    _activeTileIndex = index;
+    _tileFocusNodes[index].requestFocus();
+    return true;
+  }
+
+  void _editTile(int index, {bool autofocusInput = false}) {
+    if (_dialogOpen) return;
+    _tileFocusNodes[index].requestFocus();
+    _dialogOpen = true;
+    final measure = draft.measureAt(index);
+    final Future<void> dialog;
+    if (measure == RunningMeasure.intensity && !isPositiveFinite(vma)) {
+      dialog = _editVma(context);
+    } else {
+      dialog = _editValue(context, index, autofocusInput: autofocusInput);
+    }
+    dialog.whenComplete(() => _dialogOpen = false);
+  }
 
   Future<void> _editVma(BuildContext context) => showDialog<void>(
     context: context,
@@ -33,7 +148,11 @@ class RunningCalculatorPage extends StatelessWidget {
     ),
   );
 
-  Future<void> _editValue(BuildContext context, int index) {
+  Future<void> _editValue(
+    BuildContext context,
+    int index, {
+    bool autofocusInput = false,
+  }) {
     final measure = draft.measureAt(index);
     final current = draft.displayValueAt(index, vma);
     final initial =
@@ -57,6 +176,7 @@ class RunningCalculatorPage extends StatelessWidget {
             minValue: double.minPositive,
             formatValue: (value) => _formatValue(measure, value),
             parseInput: (input, _) => _pickerValue(measure, input, vma),
+            autofocusInput: autofocusInput,
             inputKeyboardType:
                 measure == RunningMeasure.time || measure == RunningMeasure.pace
                 ? TextInputType.text
@@ -74,45 +194,67 @@ class RunningCalculatorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              key: const ValueKey('calculator-vma'),
-              onPressed: () => _editVma(context),
-              icon: const Icon(Icons.edit_outlined, size: 18),
-              label: Text(
-                !isPositiveFinite(vma) ? strings.setVma : strings.yourVma(vma!),
+    return Focus(
+      onKeyEvent: (_, event) => _onTileKey(_activeTileIndex, event),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                key: const ValueKey('calculator-vma'),
+                onPressed: () => _editVma(context),
+                icon: const Icon(Icons.edit_outlined, size: 18),
+                label: Text(
+                  !isPositiveFinite(vma)
+                      ? strings.setVma
+                      : strings.yourVma(vma!),
+                ),
               ),
             ),
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final width = constraints.maxWidth >= 560
-                  ? (constraints.maxWidth - 12) / 2
-                  : constraints.maxWidth;
-              return Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  for (var index = 0; index < 4; index++)
-                    SizedBox(width: width, child: _tile(context, index)),
-                ],
-              );
-            },
-          ),
-          if (draft.calculate(vma) == null) ...[
-            const SizedBox(height: 12),
-            Text(
-              strings['calculatorIncomplete'],
-              key: const ValueKey('calculator-incomplete'),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                _columnCount = constraints.maxWidth >= 560 ? 2 : 1;
+                final width = _columnCount == 2
+                    ? ((constraints.maxWidth - 12) / 2).clamp(0, 360).toDouble()
+                    : constraints.maxWidth;
+                return Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 12,
+                  runSpacing: 12,
+                  children: [
+                    for (var index = 0; index < 4; index++)
+                      SizedBox(
+                        width: width,
+                        child: Focus(
+                          focusNode: _tileFocusNodes[index],
+                          autofocus: kIsWeb && index == 0,
+                          onFocusChange: (hasFocus) {
+                            if (hasFocus) {
+                              _activeTileIndex = index;
+                              setState(() {});
+                            } else if (mounted) {
+                              setState(() {});
+                            }
+                          },
+                          child: _tile(context, index),
+                        ),
+                      ),
+                  ],
+                );
+              },
             ),
+            if (draft.calculate(vma) == null) ...[
+              const SizedBox(height: 12),
+              Text(
+                strings['calculatorIncomplete'],
+                key: const ValueKey('calculator-incomplete'),
+              ),
+            ],
+            const SizedBox(height: 24),
           ],
-          const SizedBox(height: 24),
-        ],
+        ),
       ),
     );
   }
@@ -141,10 +283,19 @@ class RunningCalculatorPage extends StatelessWidget {
         : invalid
         ? strings['calculatorInvalid']
         : null;
-    void edit() => missingVma ? _editVma(context) : _editValue(context, index);
+    void edit() => _editTile(index);
 
     return Card(
       margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: _tileFocusNodes[index].hasFocus
+              ? colors.primary
+              : Colors.transparent,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

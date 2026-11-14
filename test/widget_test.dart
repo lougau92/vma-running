@@ -5,12 +5,15 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:app_feedback/app_feedback.dart' show UnavailableFeedbackSender;
 import 'package:vma_running/vma_app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const VmaApp());
+    await tester.pumpWidget(
+      const VmaApp(feedbackSender: UnavailableFeedbackSender()),
+    );
   });
 }

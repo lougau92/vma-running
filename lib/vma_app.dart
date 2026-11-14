@@ -6,7 +6,6 @@ import 'package:app_feedback/app_feedback.dart'
     show
         FeedbackSender,
         SupabaseFeedbackSender,
-        UnavailableFeedbackSender,
         FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,9 +19,10 @@ import 'vma_home.dart';
 import 'feedback_setup.dart';
 
 class VmaApp extends StatefulWidget {
-  const VmaApp({super.key, this.feedbackSender});
+  const VmaApp({super.key, this.feedbackSender, this.feedbackSenderLoader});
 
   final FeedbackSender? feedbackSender;
+  final Future<FeedbackSender> Function()? feedbackSenderLoader;
 
   @override
   State<VmaApp> createState() => _VmaAppState();
@@ -33,32 +33,40 @@ class _VmaAppState extends State<VmaApp> {
   AppSettings _settings = const AppSettings();
   bool _loading = true;
   PackageInfo? _packageInfo;
-  FeedbackSender _feedbackSender = const UnavailableFeedbackSender();
+  FeedbackSender? _feedbackSender;
 
   @override
   void initState() {
     super.initState();
+    _feedbackSender = widget.feedbackSender;
     _loadSettings();
+    if (_feedbackSender == null) _loadFeedbackSender();
     _logPackageInfo();
   }
 
   Future<void> _loadSettings() async {
     final loaded = await _storage.load();
-    final feedback = widget.feedbackSender ?? await loadFeedbackSender();
-    if (!mounted) {
-      _closeFeedback(feedback);
-      return;
-    }
+    if (!mounted) return;
     setState(() {
       _settings = loaded;
-      _feedbackSender = feedback;
       _loading = false;
     });
   }
 
+  Future<void> _loadFeedbackSender() async {
+    final load = widget.feedbackSenderLoader ?? loadFeedbackSender;
+    final feedback = await load();
+    if (!mounted) {
+      _closeFeedback(feedback);
+      return;
+    }
+    setState(() => _feedbackSender = feedback);
+  }
+
   @override
   void dispose() {
-    _closeFeedback(_feedbackSender);
+    final feedback = _feedbackSender;
+    if (feedback != null) _closeFeedback(feedback);
     super.dispose();
   }
 

@@ -19,7 +19,7 @@ class VmaSettingsPage extends StatelessWidget {
     this.feedbackSender = const UnavailableFeedbackSender(),
   });
 
-  final FeedbackSender feedbackSender;
+  final FeedbackSender? feedbackSender;
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
   final ValueChanged<double>? onVmaChanged;
@@ -38,7 +38,9 @@ class VmaSettingsPage extends StatelessWidget {
       child: DecoratedScaffold(
         appBar: AppBar(
           title: Text(strings.settingsTab),
-          actions: [FeedbackButton(sender: feedbackSender)],
+          actions: [
+            if (feedbackSender != null) FeedbackButton(sender: feedbackSender!),
+          ],
         ),
         body: VmaSettingsView(
           settings: settings,

@@ -56,7 +56,7 @@ class VmaHomePage extends StatefulWidget {
     this.loader,
   });
 
-  final FeedbackSender feedbackSender;
+  final FeedbackSender? feedbackSender;
   final FeatureFlags features;
   final RemoteAssetLoader? loader;
   final AppSettings settings;
@@ -212,7 +212,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
             ),
           ),
           actions: [
-            FeedbackButton(sender: widget.feedbackSender),
+            if (widget.feedbackSender != null)
+              FeedbackButton(sender: widget.feedbackSender!),
             IconButton(
               icon: const Icon(Icons.settings),
               tooltip: strings.settingsTab,

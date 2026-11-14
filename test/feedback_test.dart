@@ -1,3 +1,4 @@
+import 'dart:async' show Completer;
 import 'dart:convert' show jsonEncode, utf8;
 import 'dart:typed_data' show ByteData, Uint8List;
 
@@ -12,10 +13,12 @@ import 'package:flutter/services.dart' show CachingAssetBundle;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/app_settings.dart';
 import 'package:vma_running/feedback_setup.dart';
 import 'package:vma_running/vma_settings_page.dart';
+import 'package:vma_running/vma_app.dart';
 
 class _Bundle extends CachingAssetBundle {
   _Bundle(this.config);
@@ -108,4 +111,38 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('settings appear while feedback sender is still loading', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({'user_vma': 18.0});
+    PackageInfo.setMockInitialValues(
+      appName: 'VMA',
+      packageName: 'vma_running',
+      version: '1.0.0',
+      buildNumber: '1',
+      buildSignature: '',
+    );
+    final pendingSender = Completer<FeedbackSender>();
+    await tester.pumpWidget(
+      VmaApp(feedbackSenderLoader: () => pendingSender.future),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byIcon(Icons.settings), findsOneWidget);
+    expect(find.byIcon(Icons.feedback_outlined), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('vma-edit')), findsOneWidget);
+    expect(find.byIcon(Icons.feedback_outlined), findsNothing);
+
+    pendingSender.complete(_MemorySender());
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.feedback_outlined), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.feedback_outlined), findsOneWidget);
+  });
 }

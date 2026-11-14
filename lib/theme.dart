@@ -76,42 +76,16 @@ class EnjambeeTheme {
       brightness: Brightness.light,
     );
 
-    return ThemeData(
+    return _buildTheme(
       colorScheme: colorScheme,
       scaffoldBackgroundColor: white,
-      appBarTheme: const AppBarTheme(
-        backgroundColor: white,
-        foregroundColor: navy,
-        elevation: 0,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: orange,
-          foregroundColor: white,
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
-          ),
-        ),
-      ),
-      cardTheme: CardThemeData(
-        color: navy.withOpacity(0.05),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      ),
-      textTheme: const TextTheme(
-        headlineSmall: TextStyle(
-          color: navy,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0.2,
-        ),
-        bodyMedium: TextStyle(color: navy),
-        bodyLarge: TextStyle(color: navy),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: navy.withOpacity(0.04),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-      ),
+      appBarBackgroundColor: white,
+      appBarForegroundColor: navy,
+      buttonBackgroundColor: orange,
+      buttonForegroundColor: white,
+      cardColor: const Color(0xFFFFF5EE),
+      textColor: navy,
+      inputFillColor: white,
     );
   }
 }
@@ -160,9 +134,9 @@ class SummitTheme {
       appBarForegroundColor: colorScheme.primary,
       buttonBackgroundColor: blue,
       buttonForegroundColor: Colors.white,
-      cardColor: const Color(0xFFE4EEFB),
+      cardColor: const Color(0xFFF0F6FF),
       textColor: const Color(0xFF0C1D37),
-      inputFillColor: const Color(0xFFDCE9FB),
+      inputFillColor: Colors.white,
     );
   }
 }
@@ -212,9 +186,9 @@ class LagoonTheme {
       appBarForegroundColor: deepTeal,
       buttonBackgroundColor: teal,
       buttonForegroundColor: Colors.white,
-      cardColor: const Color(0xFFD9F0EA),
+      cardColor: const Color(0xFFECF8F3),
       textColor: const Color(0xFF0E2B2A),
-      inputFillColor: const Color(0xFFDCEFEA),
+      inputFillColor: Colors.white,
     );
   }
 }
@@ -261,6 +235,35 @@ ThemeData _buildTheme({
   required Color textColor,
   required Color inputFillColor,
 }) {
+  final isLight = colorScheme.brightness == Brightness.light;
+  if (isLight) {
+    // Keep surfaces opaque and pair every default text style with the ink color.
+    // Translucent Material cards can pick up a muddy gray elevation shadow.
+    colorScheme = colorScheme.copyWith(
+      surface: scaffoldBackgroundColor,
+      surfaceContainerLowest: inputFillColor,
+      surfaceContainerLow: cardColor,
+      surfaceContainer: cardColor,
+      surfaceContainerHigh: cardColor,
+      surfaceContainerHighest: cardColor,
+      onSurface: textColor,
+      onSurfaceVariant: Color.alphaBlend(
+        textColor.withValues(alpha: 0.78),
+        scaffoldBackgroundColor,
+      ),
+      outline: Color.alphaBlend(
+        textColor.withValues(alpha: 0.35),
+        scaffoldBackgroundColor,
+      ),
+      outlineVariant: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.18),
+        scaffoldBackgroundColor,
+      ),
+    );
+  }
+  final textTheme = ThemeData(
+    colorScheme: colorScheme,
+  ).textTheme.apply(bodyColor: textColor, displayColor: textColor);
   return ThemeData(
     colorScheme: colorScheme,
     scaffoldBackgroundColor: scaffoldBackgroundColor,
@@ -279,20 +282,31 @@ ThemeData _buildTheme({
     ),
     cardTheme: CardThemeData(
       color: cardColor,
+      elevation: isLight ? 0 : null,
+      surfaceTintColor: isLight ? Colors.transparent : null,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     ),
-    textTheme: TextTheme(
-      headlineSmall: TextStyle(
-        color: textColor,
+    textTheme: textTheme.copyWith(
+      headlineSmall: textTheme.headlineSmall?.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: 0.2,
       ),
-      bodyMedium: TextStyle(color: textColor),
-      bodyLarge: TextStyle(color: textColor),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: inputFillColor,
+      labelStyle: isLight
+          ? TextStyle(color: colorScheme.onSurfaceVariant)
+          : null,
+      helperStyle: isLight
+          ? TextStyle(color: colorScheme.onSurfaceVariant)
+          : null,
+      enabledBorder: isLight
+          ? OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: colorScheme.outlineVariant),
+            )
+          : null,
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
     ),
   );

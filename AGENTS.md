@@ -21,3 +21,11 @@ Keep app navigation and Firebase integration in this checkout.
 `assets/feedback.json` intentionally contains only public client configuration.
 Never add an admin key. Run `flutter analyze`, `flutter test`, and a web build
 when changing this integration.
+
+## Visual styling
+
+In light themes, use opaque white or pale brand-tinted surfaces with the theme's
+navy/colored ink. Avoid neutral gray panels with black text. Define surface and
+foreground pairs in `lib/theme.dart`, including all text styles, labels, and
+helper text; new widgets should inherit those theme values. Keep light cards
+opaque and avoid elevation shadows that muddy their background color.

@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/presets.dart';
+import 'package:vma_running/vma_settings_dialog.dart';
 import 'package:vma_running/vma_times_settings_dialog.dart';
 
 Widget _app(Future<void> Function(BuildContext) edit) => MaterialApp(
@@ -32,6 +33,56 @@ CupertinoPicker _picker(WidgetTester tester, String key) =>
     );
 
 void main() {
+  for (final size in [const Size(800, 700), const Size(360, 800)]) {
+    testWidgets('intensity wheels adapt to $size and preserve values', (
+      tester,
+    ) async {
+      tester.view.physicalSize = size;
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      VmaTableSettings? result;
+      await tester.pumpWidget(
+        _app((context) async {
+          result = await showVmaSettingsDialog(
+            context,
+            initialSettings: const VmaTableSettings(
+              minPercent: 60,
+              maxPercent: 120,
+              step: 5,
+            ),
+          );
+        }),
+      );
+      await tester.tap(find.text('Edit'));
+      await tester.pumpAndSettle();
+      final min = find.byKey(const ValueKey('intensity-min-picker'));
+      final max = find.byKey(const ValueKey('intensity-max-picker'));
+      final step = find.byKey(const ValueKey('intensity-step-picker'));
+      expect(tester.getTopLeft(min).dy, tester.getTopLeft(max).dy);
+      if (size.width > 600) {
+        expect(tester.getTopLeft(step).dy, tester.getTopLeft(min).dy);
+        expect(
+          tester.getTopLeft(step).dx,
+          greaterThan(tester.getTopLeft(max).dx),
+        );
+      } else {
+        expect(
+          tester.getTopLeft(step).dy,
+          greaterThan(tester.getBottomLeft(min).dy),
+        );
+      }
+      _picker(tester, 'intensity-step-picker').scrollController!.jumpToItem(9);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      expect(result!.minPercent, 60);
+      expect(result!.maxPercent, 120);
+      expect(result!.step, 10);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('distance bounds use wheels and reject reversed bounds', (
     tester,
   ) async {

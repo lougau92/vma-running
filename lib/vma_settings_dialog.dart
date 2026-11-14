@@ -62,61 +62,77 @@ class _IntensityRangePickerState extends State<_IntensityRangePicker> {
     return nearestIndex;
   }
 
+  Widget _picker(
+    String id,
+    String label,
+    double value,
+    double width,
+    ValueChanged<double> update,
+  ) => SizedBox(
+    width: width,
+    child: NumberWheelPicker(
+      key: ValueKey('intensity-$id-picker'),
+      label: label,
+      initialIndex: _index(value),
+      itemCount: _values.length,
+      formatItem: (i) => _formatPercent(_values[i]),
+      parseInput: _indexForInput,
+      onChanged: (i) => setState(() {
+        update(_values[i]);
+        _error = null;
+      }),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
     return AlertDialog(
       title: Text(strings.adjustIntensity),
       content: SizedBox(
-        width: 360,
+        width: 480,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: NumberWheelPicker(
-                    key: const ValueKey('intensity-min-picker'),
-                    label: strings.minPercent,
-                    initialIndex: _index(_min),
-                    itemCount: _values.length,
-                    formatItem: (i) => _formatPercent(_values[i]),
-                    parseInput: _indexForInput,
-                    onChanged: (i) => setState(() {
-                      _min = _values[i];
-                      _error = null;
-                    }),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: NumberWheelPicker(
-                    key: const ValueKey('intensity-max-picker'),
-                    label: strings.maxPercent,
-                    initialIndex: _index(_max),
-                    itemCount: _values.length,
-                    formatItem: (i) => _formatPercent(_values[i]),
-                    parseInput: _indexForInput,
-                    onChanged: (i) => setState(() {
-                      _max = _values[i];
-                      _error = null;
-                    }),
-                  ),
-                ),
-              ],
-            ),
-            NumberWheelPicker(
-              key: const ValueKey('intensity-step-picker'),
-              label: strings.stepPercent,
-              initialIndex: _index(_step),
-              itemCount: _values.length,
-              formatItem: (i) => _formatPercent(_values[i]),
-              parseInput: _indexForInput,
-              onChanged: (i) => setState(() {
-                _step = _values[i];
-                _error = null;
-              }),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                const spacing = 8.0;
+                final minWidth =
+                    112 * MediaQuery.textScalerOf(context).scale(14) / 14;
+                final columns =
+                    ((constraints.maxWidth + spacing) / (minWidth + spacing))
+                        .floor()
+                        .clamp(1, 3);
+                final width =
+                    (constraints.maxWidth - spacing * (columns - 1)) / columns;
+                return Wrap(
+                  spacing: spacing,
+                  runSpacing: 16,
+                  children: [
+                    _picker(
+                      'min',
+                      strings.minPercent,
+                      _min,
+                      width,
+                      (value) => _min = value,
+                    ),
+                    _picker(
+                      'max',
+                      strings.maxPercent,
+                      _max,
+                      width,
+                      (value) => _max = value,
+                    ),
+                    _picker(
+                      'step',
+                      strings.stepPercent,
+                      _step,
+                      width,
+                      (value) => _step = value,
+                    ),
+                  ],
+                );
+              },
             ),
             if (_error != null)
               Text(

@@ -1,9 +1,5 @@
 import 'package:app_feedback/app_feedback.dart'
-    show
-        FeedbackButton,
-        FeedbackSender,
-        UnavailableFeedbackSender,
-        FeedbackContextScope;
+    show FeedbackSender, UnavailableFeedbackSender, FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
@@ -11,6 +7,8 @@ import 'calculator/running_calculator_draft.dart' show RunningCalculatorDraft;
 import 'calculator/running_calculator_page.dart' show RunningCalculatorPage;
 import 'feature_flags.dart';
 import 'widgets/decorated_scaffold.dart';
+import 'widgets/home_navigation_bar.dart';
+import 'widgets/home_page_switcher.dart';
 import 'presets.dart';
 import 'running/running.dart';
 import 'vma_distance_dialog.dart';
@@ -20,14 +18,12 @@ import 'vma_settings_dialog.dart';
 import 'remote_asset_loader.dart';
 import 'vma_storage.dart';
 import 'vma_settings_page.dart';
-import 'vma_table.dart';
 import 'vma_times_settings_dialog.dart';
-import 'vma_times_table.dart';
 import 'vma_challenge_table.dart';
 import 'vma_training_plan.dart';
 import 'widgets/vma_celebration_overlay.dart';
-import 'widgets/page_swipe_region.dart';
-import 'widgets/intensity_pace_control.dart';
+import 'widgets/vma_home_app_bar.dart';
+import 'widgets/vma_home_page_views.dart';
 
 enum _HomePage {
   intensity('intensity'),
@@ -189,52 +185,34 @@ class _VmaHomePageState extends State<VmaHomePage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return FeedbackContextScope(
       id: 'home',
       child: DecoratedScaffold(
-        appBar: AppBar(
-          title: Container(
-            width: 38,
-            height: 38,
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 1.5,
-              ),
-            ),
-            child: Image.asset(
-              'assets/enjambee_img/logo-header-minimized.png',
-              fit: BoxFit.contain,
-            ),
-          ),
-          actions: [
-            if (widget.feedbackSender != null)
-              FeedbackButton(sender: widget.feedbackSender!),
-            IconButton(
-              icon: const Icon(Icons.settings),
-              tooltip: strings.settingsTab,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    settings: const RouteSettings(name: '/settings'),
-                    builder: (_) => VmaSettingsPage(
-                      feedbackSender: widget.feedbackSender,
-                      settings: widget.settings,
-                      onVmaChanged: _setVma,
-                      onSettingsChanged: widget.onSettingsChanged,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ],
+        appBar: VmaHomeAppBar(
+          feedbackSender: widget.feedbackSender,
+          onSettingsPressed: _openSettingsPage,
         ),
         body: _buildPageBody(strings),
-        bottomNavigationBar: _buildBottomNavigation(strings, isDark),
+        bottomNavigationBar: HomeNavigationBar(
+          items: _navigationItems(strings),
+          currentIndex: _pages.indexOf(_selectedPage),
+          onTap: (index) => _selectPage(_pages[index]),
+        ),
+      ),
+    );
+  }
+
+  void _openSettingsPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        settings: const RouteSettings(name: '/settings'),
+        builder: (_) => VmaSettingsPage(
+          feedbackSender: widget.feedbackSender,
+          settings: widget.settings,
+          onVmaChanged: _setVma,
+          onSettingsChanged: widget.onSettingsChanged,
+        ),
       ),
     );
   }
@@ -245,8 +223,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
     }
 
     final pages = _pages;
-    return PageSwipeRegion(
+    return HomePageSwitcher(
       pageIndex: pages.indexOf(_selectedPage),
+      pageCount: pages.length,
+      visitedPageIndices: {
+        for (final page in _visitedPages) pages.indexOf(page),
+      },
       allowTableEdgeSwipes:
           _selectedPage == _HomePage.intensity ||
           _selectedPage == _HomePage.times,
@@ -254,21 +236,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
         final next = pages.indexOf(_selectedPage) + direction;
         if (next >= 0 && next < pages.length) _selectPage(pages[next]);
       },
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          for (final page in pages)
-            if (_visitedPages.contains(page))
-              Offstage(
-                key: ValueKey(page),
-                offstage: page != _selectedPage,
-                child: TickerMode(
-                  enabled: page == _selectedPage,
-                  child: _buildPage(page, strings),
-                ),
-              ),
-        ],
-      ),
+      pageBuilder: (_, index) => _buildPage(pages[index], strings),
     );
   }
 
@@ -359,23 +327,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
     },
   };
 
-  BottomNavigationBar _buildBottomNavigation(
-    AppLocalizations strings,
-    bool isDark,
-  ) {
-    final theme = Theme.of(context);
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      backgroundColor: isDark
-          ? theme.colorScheme.secondary
-          : theme.colorScheme.surface,
-      selectedItemColor: theme.colorScheme.primary,
-      unselectedItemColor: isDark
-          ? Colors.white70
-          : theme.colorScheme.onSurface,
-      currentIndex: _pages.indexOf(_selectedPage),
-      onTap: (idx) => _selectPage(_pages[idx]),
-      items: _pages.map((page) {
+  List<BottomNavigationBarItem> _navigationItems(AppLocalizations strings) =>
+      _pages.map((page) {
         final (icon, label) = switch (page) {
           _HomePage.intensity => (Icons.analytics, strings.intensityTab),
           _HomePage.times => (Icons.timer, strings.timesTab),
@@ -394,9 +347,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
           _HomePage.rankings => (Icons.emoji_events, strings.challengeTab),
         };
         return BottomNavigationBarItem(icon: Icon(icon), label: label);
-      }).toList(),
-    );
-  }
+      }).toList();
 
   Future<void> _openTableSettingsDialog() async {
     await showVmaSettingsDialog(
@@ -505,66 +456,38 @@ class _VmaHomePageState extends State<VmaHomePage> {
   );
 
   Widget _buildChallengeBody() {
-    return _wrapCenteredWidth(VmaChallengeTable(loader: _remoteLoader));
+    return CenteredWidth(child: VmaChallengeTable(loader: _remoteLoader));
   }
 
   Widget _buildPaceBody() {
-    return _wrapCenteredWidth(
-      VmaPaceTable(
-        entries: _paceCalculator.buildTable(
-          _vma!,
-          minPercent: _minPercent,
-          maxPercent: _maxPercent,
-          step: _step,
-          distanceMeters: _distanceMeters,
-        ),
-        onEditPercentages: _openTableSettingsDialog,
+    return VmaIntensityPageView(
+      entries: _paceCalculator.buildTable(
+        _vma!,
+        minPercent: _minPercent,
+        maxPercent: _maxPercent,
+        step: _step,
         distanceMeters: _distanceMeters,
-        onEditDistance: _openDistanceDialog,
       ),
+      onEditPercentages: _openTableSettingsDialog,
+      distanceMeters: _distanceMeters,
+      onEditDistance: _openDistanceDialog,
     );
   }
 
   Widget _buildTimesBody() {
     final speed = RunningSpeed.fromVma(_vma, _timesPercent);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        _wrapCenteredWidth(
-          IntensityPaceControl(
-            percent: _timesPercent,
-            speed: speed,
-            onChanged: (value) => setState(() => _timesPercent = value),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Expanded(
-          child: _wrapCenteredWidth(
-            VmaTimesTable(
-              speed: speed,
-              minDistanceMeters: _timesMinDistance,
-              maxDistanceMeters: _timesMaxDistance,
-              minTimeSeconds: _timesMinSeconds,
-              maxTimeSeconds: _timesMaxSeconds,
-              customDistances: _timesCustomDistances,
-              customTimes: _timesCustomSeconds,
-              onEditDistances: _openDistancesSettingDialog,
-              onEditTimes: _openTimesSettingsDialog,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _wrapCenteredWidth(Widget child, {double maxWidth = 900}) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: maxWidth),
-        child: child,
-      ),
+    return VmaTimesPageView(
+      speed: speed,
+      percent: _timesPercent,
+      minDistanceMeters: _timesMinDistance,
+      maxDistanceMeters: _timesMaxDistance,
+      minTimeSeconds: _timesMinSeconds,
+      maxTimeSeconds: _timesMaxSeconds,
+      customDistances: _timesCustomDistances,
+      customTimes: _timesCustomSeconds,
+      onPercentChanged: (value) => setState(() => _timesPercent = value),
+      onEditDistances: _openDistancesSettingDialog,
+      onEditTimes: _openTimesSettingsDialog,
     );
   }
 }

@@ -16,6 +16,7 @@ import 'package:vma_running/vma_challenge_table.dart';
 import 'package:vma_running/vma_home.dart';
 import 'package:vma_running/vma_times_table.dart';
 import 'package:vma_running/vma_training_plan.dart';
+import 'package:vma_running/widgets/vma_celebration_overlay.dart';
 
 class _Loader extends RemoteAssetLoader {
   final reads = <String>[];
@@ -190,6 +191,70 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  for (final whole in [16, 17, 19]) {
+    testWidgets('settings celebrates VMA ${whole + 1} only when changed', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(360, 668);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      await tester.pumpWidget(_app(_Loader(), const FeatureFlags()));
+      await tester.pumpAndSettle();
+      expect(find.byType(VmaCelebrationOverlay), findsNothing);
+
+      await tester.tap(find.byIcon(Icons.settings));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('vma-edit')));
+      await tester.pumpAndSettle();
+      tester
+          .widget<CupertinoPicker>(
+            find.descendant(
+              of: find.byKey(const ValueKey('number-whole-picker')),
+              matching: find.byType(CupertinoPicker),
+            ),
+          )
+          .scrollController!
+          .jumpToItem(whole);
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(10, 10));
+      // Observe the animation while settings is still the active route.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(
+        find.byType(VmaCelebrationOverlay),
+        whole == 17 ? findsNothing : findsOneWidget,
+      );
+      if (whole != 17) {
+        final trophy = find.byIcon(Icons.emoji_events_rounded);
+        expect(trophy, findsOneWidget);
+        expect(
+          tester.getRect(trophy).overlaps(const Rect.fromLTWH(0, 0, 360, 668)),
+          isTrue,
+        );
+        expect(
+          tester
+              .widget<FadeTransition>(
+                find.ancestor(
+                  of: trophy,
+                  matching: find.byType(FadeTransition),
+                ),
+              )
+              .opacity
+              .value,
+          greaterThan(0),
+        );
+      }
+      expect(
+        (await SharedPreferences.getInstance()).getDouble('user_vma'),
+        whole + 1.0,
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(VmaCelebrationOverlay), findsNothing);
+      expect(tester.takeException(), isNull);
+    });
+  }
 
   testWidgets('VMA settings update targets and persist after reopening', (
     tester,

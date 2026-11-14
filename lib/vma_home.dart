@@ -101,12 +101,12 @@ class _VmaHomePageState extends State<VmaHomePage> {
   }
 
   void _setVma(double value) {
-    final improved = _vma != null && value > _vma!;
+    final changed = _vma != null && value != _vma;
     setState(() => _vma = value);
-    if (improved) _celebrateVmaImprovement();
+    if (changed) _celebrateVmaChange();
   }
 
-  void _celebrateVmaImprovement() {
+  void _celebrateVmaChange() {
     _celebrationEntry?.remove();
     late OverlayEntry entry;
     entry = OverlayEntry(

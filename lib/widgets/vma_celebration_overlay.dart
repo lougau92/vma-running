@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// A short visual-only celebration for an improved VMA.
+/// A short visual-only celebration for a newly recorded VMA.
 class VmaCelebrationOverlay extends StatefulWidget {
   const VmaCelebrationOverlay({super.key, required this.onComplete});
 

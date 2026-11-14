@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../app_localizations.dart' show AppLocalizations;
-import '../running/running.dart' show isPositiveFinite, parseRunningValue;
+import '../app_localizations.dart' show AppLocalizations, DynamicStrings;
+import '../running/running.dart' show isPositiveFinite;
 import 'running_calculator_draft.dart';
 
 class RunningCalculatorPage extends StatelessWidget {

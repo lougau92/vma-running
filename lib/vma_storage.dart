@@ -26,18 +26,18 @@ class VmaStorage {
     final value = initialValue != null && initialValue.isFinite
         ? initialValue.clamp(1.0, 99.99)
         : 18.0;
-    final selected = await showDialog<double>(
+    var selected = (value * 100).round() / 100;
+    await showDialog<void>(
       context: context,
       builder: (_) => NumberPickerDialog(
         title: strings.enterVmaTitle,
         initialValue: value,
         formatValue: strings.yourVma,
+        onChanged: (value) => selected = value,
       ),
     );
 
-    if (selected != null) {
-      await save(selected, prefs: prefs);
-    }
+    await save(selected, prefs: prefs);
 
     return selected;
   }

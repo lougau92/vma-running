@@ -143,14 +143,7 @@ class _NumberWheelPickerState extends State<NumberWheelPicker> {
                     borderRadius: BorderRadius.circular(8),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(child: text),
-                          const SizedBox(width: 4),
-                          const Icon(Icons.edit_outlined, size: 14),
-                        ],
-                      ),
+                      child: text,
                     ),
                   ),
                 ),

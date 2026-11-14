@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import '../app_localizations.dart';
 import 'number_wheel_picker.dart';
 
-/// Edits a decimal draft; the caller decides how to apply the saved value.
+/// Edits a decimal value; the caller applies it when the dialog closes.
 class NumberPickerDialog extends StatefulWidget {
   const NumberPickerDialog({
     super.key,
     required this.title,
     required this.initialValue,
     required this.formatValue,
+    required this.onChanged,
     this.minWhole = 1,
     this.maxWhole = 99,
   }) : assert(minWhole <= maxWhole),
@@ -17,6 +18,7 @@ class NumberPickerDialog extends StatefulWidget {
   final String title;
   final double initialValue;
   final String Function(double) formatValue;
+  final ValueChanged<double> onChanged;
   final int minWhole;
   final int maxWhole;
 
@@ -31,6 +33,14 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
   );
   late int _whole = _initial ~/ 100;
   late int _fraction = _initial % 100;
+
+  void _updateValue({int? whole, int? fraction}) {
+    setState(() {
+      _whole = whole ?? _whole;
+      _fraction = fraction ?? _fraction;
+    });
+    widget.onChanged(_whole + _fraction / 100);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +77,7 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
                       return value - widget.minWhole;
                     },
                     onChanged: (index) =>
-                        setState(() => _whole = index + widget.minWhole),
+                        _updateValue(whole: index + widget.minWhole),
                   ),
                 ),
                 SizedBox(height: 180, child: Center(child: Text(separator))),
@@ -84,7 +94,7 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
                           ? value
                           : null;
                     },
-                    onChanged: (index) => setState(() => _fraction = index),
+                    onChanged: (index) => _updateValue(fraction: index),
                   ),
                 ),
               ],
@@ -92,16 +102,6 @@ class _NumberPickerDialogState extends State<NumberPickerDialog> {
           ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(strings.cancel),
-        ),
-        FilledButton(
-          onPressed: () => Navigator.of(context).pop(_whole + _fraction / 100),
-          child: Text(strings.save),
-        ),
-      ],
     );
   }
 }

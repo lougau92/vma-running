@@ -268,4 +268,47 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets(
+    'only completed manual values are remembered, including route dismissal',
+    (tester) async {
+      final remembered = <double>[];
+      DistanceRange? live;
+      await tester.pumpWidget(
+        _app((context) async {
+          await showDistancesSettingsDialog(
+            context,
+            initialMin: 100,
+            initialMax: 1000,
+            onChanged: (value) => live = value,
+            onCustomValueAdded: remembered.add,
+          );
+        }),
+      );
+      await tester.tap(find.text('Edit'));
+      await tester.pumpAndSettle();
+      await _typeValue(tester, 'range-min-picker', '1');
+      await tester.enterText(find.byType(TextField), '13');
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '137');
+      await tester.pumpAndSettle();
+      expect(live!.min, 137);
+      expect(remembered, isEmpty);
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pumpAndSettle();
+      expect(remembered, [137]);
+      await _typeValue(tester, 'range-max-picker', '0.875');
+      expect(live!.max, 875);
+      expect(remembered, [137]);
+      await tester.tap(
+        find.text(AppLocalizations(const Locale('en')).distanceRange),
+      );
+      await tester.pumpAndSettle();
+      expect(remembered, [137, 875]);
+      await _typeValue(tester, 'range-max-picker', '876 m');
+      await _dismiss(tester);
+      expect(remembered, [137, 875, 876]);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }

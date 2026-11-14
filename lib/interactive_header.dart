@@ -8,6 +8,7 @@ class InteractiveHeader extends StatelessWidget {
     this.onTap,
     this.tooltip,
     this.compact = false,
+    this.emphasized = false,
   });
 
   final String label;
@@ -15,6 +16,7 @@ class InteractiveHeader extends StatelessWidget {
   final VoidCallback? onTap;
   final String? tooltip;
   final bool compact;
+  final bool emphasized;
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +24,13 @@ class InteractiveHeader extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final enabled = onTap != null;
 
-    final resolvedTextColor = enabled
+    final resolvedTextColor = enabled || emphasized
         ? colorScheme.primary
-        : theme.textTheme.bodyMedium?.color ?? colorScheme.onSurface;
+        : colorScheme.onSurfaceVariant;
 
     final labelStyle = theme.textTheme.bodyMedium?.copyWith(
       fontWeight: FontWeight.w600,
-      color: resolvedTextColor.withValues(alpha: enabled ? 1 : 0.7),
+      color: resolvedTextColor,
     );
 
     final content = AnimatedContainer(
@@ -66,6 +68,8 @@ class InteractiveHeader extends StatelessWidget {
     final child = tooltip == null
         ? content
         : Tooltip(message: tooltip!, child: content);
+
+    if (!enabled) return child;
 
     return InkWell(
       onTap: onTap,

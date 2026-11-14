@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
 import '../running/running.dart';
+import 'intensity_runner.dart';
 
 class IntensityPaceControl extends StatelessWidget {
   const IntensityPaceControl({
@@ -69,6 +70,8 @@ class IntensityPaceControl extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 4),
+            IntensityRunner(percent: percent),
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
                 trackHeight: 8,

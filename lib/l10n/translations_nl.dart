@@ -1,5 +1,6 @@
 class TranslationsNl {
   static const Map<String, String> values = {
+    'resetCustomRows': 'Aangepaste rijen wissen',
     "calculatorTab": "Rekenhulp",
     "calculatorHelp":
         "Kies vier waarden om te tonen. Vul twee onafhankelijke waarden in; tik op een berekende waarde om een invoer te vervangen.",

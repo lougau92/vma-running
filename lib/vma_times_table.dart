@@ -15,6 +15,8 @@ class VmaTimesTable extends StatefulWidget {
     required this.maxTimeSeconds,
     required this.onEditDistances,
     required this.onEditTimes,
+    this.customDistances = const [],
+    this.customTimes = const [],
   });
 
   final RunningSpeed? speed;
@@ -24,6 +26,8 @@ class VmaTimesTable extends StatefulWidget {
   final double maxTimeSeconds;
   final VoidCallback onEditDistances;
   final VoidCallback onEditTimes;
+  final List<double> customDistances;
+  final List<double> customTimes;
 
   @override
   State<VmaTimesTable> createState() => _VmaTimesTableState();
@@ -47,88 +51,114 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     final colors = Theme.of(context).colorScheme;
     final data = _distanceFirst ? _buildDistances() : _buildTimes();
 
-    final distanceHeader = SizedBox(
-      width: 170,
-      child: InteractiveHeader(
-        label: strings.distance,
-        icon: Icons.straighten,
-        onTap: _distanceFirst ? widget.onEditDistances : null,
-        tooltip: strings.distance,
-        compact: true,
-      ),
-    );
+    final textScale = MediaQuery.textScalerOf(context).scale(14) / 14;
+    final distanceWidth = 100.0 * textScale;
+    final timeWidth = 140.0 * textScale;
+    const margin = 12.0;
+    const spacing = 32.0;
+    const headingHeight = 72.0;
+    final firstWidth = _distanceFirst ? distanceWidth : timeWidth;
+    final tableWidth = distanceWidth + timeWidth + spacing + margin * 2;
 
-    final timeHeader = SizedBox(
-      width: 140,
-      child: InteractiveHeader(
-        label: strings.time,
-        icon: Icons.schedule,
-        onTap: !_distanceFirst ? widget.onEditTimes : null,
-        tooltip: strings.time,
-        compact: true,
-      ),
-    );
-
-    final swapColumn = DataColumn(
-      label: SizedBox(
-        width: 36,
-        child: IconButton(
-          padding: EdgeInsets.zero,
-          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-          onPressed: () => setState(() => _distanceFirst = !_distanceFirst),
-          icon: const Icon(Icons.swap_horiz),
-          tooltip: '${strings.distance} ⇄ ${strings.time}',
+    Widget header(String label, double width, VoidCallback? edit) => SizedBox(
+      width: width,
+      child: Center(
+        child: InteractiveHeader(
+          label: label,
+          onTap: edit,
+          tooltip: label,
+          compact: true,
         ),
       ),
     );
-
     final distanceColumn = DataColumn(
-      label: distanceHeader,
-      headingRowAlignment: _distanceFirst
-          ? MainAxisAlignment.center
-          : MainAxisAlignment.start,
+      label: header(
+        strings.distance,
+        distanceWidth,
+        _distanceFirst ? widget.onEditDistances : null,
+      ),
+      headingRowAlignment: MainAxisAlignment.center,
     );
     final timeColumn = DataColumn(
-      label: timeHeader,
-      headingRowAlignment: !_distanceFirst
-          ? MainAxisAlignment.center
-          : MainAxisAlignment.start,
+      label: header(
+        strings.time,
+        timeWidth,
+        !_distanceFirst ? widget.onEditTimes : null,
+      ),
+      headingRowAlignment: MainAxisAlignment.center,
     );
-
-    final columns = [
-      swapColumn,
-      _distanceFirst ? distanceColumn : timeColumn,
-      _distanceFirst ? timeColumn : distanceColumn,
-    ];
+    final table = SizedBox(
+      width: tableWidth,
+      child: Stack(
+        children: [
+          DataTable(
+            columnSpacing: spacing,
+            horizontalMargin: margin,
+            headingRowHeight: headingHeight,
+            columns: [
+              _distanceFirst ? distanceColumn : timeColumn,
+              _distanceFirst ? timeColumn : distanceColumn,
+            ],
+            rows: [
+              for (var index = 0; index < data.length; index++)
+                DataRow(
+                  color: WidgetStatePropertyAll(
+                    index.isEven ? colors.surface : colors.surfaceContainerLow,
+                  ),
+                  cells: _buildRow(
+                    data[index],
+                    strings,
+                    distanceWidth,
+                    timeWidth,
+                  ),
+                ),
+            ],
+          ),
+          // The target straddles the heading boundary; it needs no empty column.
+          Positioned(
+            left: margin + firstWidth + spacing / 2 - 22,
+            top: (headingHeight - 44) / 2,
+            child: Material(
+              color: colors.surface,
+              shape: CircleBorder(
+                side: BorderSide(color: colors.outlineVariant),
+              ),
+              child: IconButton(
+                key: const ValueKey('times-swap-columns'),
+                constraints: const BoxConstraints.tightFor(
+                  width: 44,
+                  height: 44,
+                ),
+                padding: EdgeInsets.zero,
+                style: IconButton.styleFrom(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                onPressed: () =>
+                    setState(() => _distanceFirst = !_distanceFirst),
+                icon: Icon(Icons.swap_horiz, color: colors.primary),
+                tooltip: '${strings.distance} ⇄ ${strings.time}',
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
 
     return FeedbackContextScope(
       id: 'times-table',
       data: {'mode': _distanceFirst ? 'distance-first' : 'time-first'},
-      child: Scrollbar(
-        thumbVisibility: true,
-        controller: _verticalController,
-        child: SingleChildScrollView(
+      child: LayoutBuilder(
+        builder: (context, constraints) => Scrollbar(
+          thumbVisibility: true,
           controller: _verticalController,
-          scrollDirection: Axis.vertical,
           child: SingleChildScrollView(
-            controller: _horizontalController,
-            scrollDirection: Axis.horizontal,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minWidth: 320),
-              child: DataTable(
-                columnSpacing: 16,
-                columns: columns,
-                rows: [
-                  for (var index = 0; index < data.length; index++)
-                    DataRow(
-                      color: WidgetStatePropertyAll(
-                        index.isEven
-                            ? colors.surface
-                            : colors.surfaceContainerLow,
-                      ),
-                      cells: _buildRow(data[index], strings),
-                    ),
-                ],
+            controller: _verticalController,
+            child: SingleChildScrollView(
+              controller: _horizontalController,
+              scrollDirection: Axis.horizontal,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                child: Align(alignment: Alignment.topCenter, child: table),
               ),
             ),
           ),
@@ -137,33 +167,37 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
     );
   }
 
-  List<DataCell> _buildRow(double value, AppLocalizations strings) {
+  List<DataCell> _buildRow(
+    double value,
+    AppLocalizations strings,
+    double distanceWidth,
+    double timeWidth,
+  ) {
     final split = _distanceFirst
         ? widget.speed?.forDistance(value)
         : widget.speed?.forDuration(value);
     final meters = _distanceFirst ? value : split?.distanceMeters;
     final seconds = _distanceFirst ? split?.seconds : value;
     final distanceCell = DataCell(
-      Align(
-        alignment: _distanceFirst ? Alignment.center : Alignment.centerLeft,
-        child: Text(meters == null ? '-' : strings.distanceShort(meters)),
+      SizedBox(
+        width: distanceWidth,
+        child: Center(
+          child: Text(meters == null ? '-' : strings.distanceShort(meters)),
+        ),
       ),
     );
     final timeCell = DataCell(
-      Align(
-        alignment: !_distanceFirst ? Alignment.center : Alignment.centerLeft,
-        child: Text(formatRunningDuration(seconds)),
+      SizedBox(
+        width: timeWidth,
+        child: Center(child: Text(formatRunningDuration(seconds))),
       ),
     );
-    const spacer = DataCell(SizedBox.shrink());
-    return _distanceFirst
-        ? [spacer, distanceCell, timeCell]
-        : [spacer, timeCell, distanceCell];
+    return _distanceFirst ? [distanceCell, timeCell] : [timeCell, distanceCell];
   }
 
   List<double> _buildDistances() {
     return _filterRange(
-      presetDistances(),
+      mergePresetValues(presetDistances(), widget.customDistances),
       widget.minDistanceMeters,
       widget.maxDistanceMeters,
     );
@@ -171,7 +205,7 @@ class _VmaTimesTableState extends State<VmaTimesTable> {
 
   List<double> _buildTimes() {
     return _filterRange(
-      presetTimesSeconds(),
+      mergePresetValues(presetTimesSeconds(), widget.customTimes),
       widget.minTimeSeconds,
       widget.maxTimeSeconds,
     );

@@ -57,3 +57,12 @@ List<double> presetTimesSeconds() {
   ];
   return minutes.map((m) => (m * 60).toDouble()).toList();
 }
+
+/// Merges saved numeric rows without losing their precision or range membership.
+List<double> mergePresetValues(
+  Iterable<double> presets,
+  Iterable<double> custom,
+) => {
+  ...presets,
+  ...custom,
+}.where((value) => value.isFinite && value > 0).toList()..sort();

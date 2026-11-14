@@ -1,5 +1,6 @@
 class TranslationsFr {
   static const Map<String, String> values = {
+    'resetCustomRows': 'Effacer les lignes personnalisées',
     "calculatorTab": "Calculateur",
     "calculatorHelp":
         "Choisissez quatre mesures à afficher. Saisissez deux valeurs indépendantes ; touchez une valeur calculée pour remplacer une entrée.",

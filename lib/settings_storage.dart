@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'app_settings.dart';
 import 'theme.dart';
+import 'presets.dart';
 
 class SettingsStorage {
   static const _localeKey = 'settings_locale';
@@ -11,6 +12,8 @@ class SettingsStorage {
   static const _timesMaxSecondsKey = 'times_max_seconds';
   static const _timesMinDistanceKey = 'times_min_distance';
   static const _timesMaxDistanceKey = 'times_max_distance';
+  static const _timesCustomDistancesKey = 'times_custom_distances';
+  static const _timesCustomSecondsKey = 'times_custom_seconds';
 
   Future<AppSettings> load() async {
     final prefs = await SharedPreferences.getInstance();
@@ -31,6 +34,8 @@ class SettingsStorage {
       timesMaxSeconds: prefs.getDouble(_timesMaxSecondsKey),
       timesMinDistance: prefs.getDouble(_timesMinDistanceKey),
       timesMaxDistance: prefs.getDouble(_timesMaxDistanceKey),
+      timesCustomDistances: _readValues(prefs, _timesCustomDistancesKey),
+      timesCustomSeconds: _readValues(prefs, _timesCustomSecondsKey),
     );
   }
 
@@ -39,19 +44,49 @@ class SettingsStorage {
     await prefs.setString(_localeKey, settings.localeCode ?? 'system');
     await prefs.setString(_themeKey, settings.themeMode.name);
     await prefs.setString(_themeIdKey, settings.themeId);
-    _writeNullableDouble(prefs, _timesMinSecondsKey, settings.timesMinSeconds);
-    _writeNullableDouble(prefs, _timesMaxSecondsKey, settings.timesMaxSeconds);
-    _writeNullableDouble(
+    await _writeNullableDouble(
+      prefs,
+      _timesMinSecondsKey,
+      settings.timesMinSeconds,
+    );
+    await _writeNullableDouble(
+      prefs,
+      _timesMaxSecondsKey,
+      settings.timesMaxSeconds,
+    );
+    await _writeNullableDouble(
       prefs,
       _timesMinDistanceKey,
       settings.timesMinDistance,
     );
-    _writeNullableDouble(
+    await _writeNullableDouble(
       prefs,
       _timesMaxDistanceKey,
       settings.timesMaxDistance,
     );
+    await prefs.setStringList(
+      _timesCustomDistancesKey,
+      mergePresetValues(
+        const [],
+        settings.timesCustomDistances,
+      ).map((value) => value.toString()).toList(),
+    );
+    await prefs.setStringList(
+      _timesCustomSecondsKey,
+      mergePresetValues(
+        const [],
+        settings.timesCustomSeconds,
+      ).map((value) => value.toString()).toList(),
+    );
   }
+
+  List<double> _readValues(SharedPreferences prefs, String key) =>
+      mergePresetValues(
+        const [],
+        (prefs.getStringList(key) ?? const [])
+            .map(double.tryParse)
+            .whereType<double>(),
+      );
 
   ThemeMode _parseTheme(String? raw) {
     switch (raw) {

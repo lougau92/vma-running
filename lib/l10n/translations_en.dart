@@ -1,5 +1,6 @@
 class TranslationsEn {
   static const Map<String, String> values = {
+    'resetCustomRows': 'Reset custom rows',
     "calculatorTab": "Calculator",
     "calculatorHelp":
         "Choose four measures to display. Enter two independent values; tap a calculated value to replace an input.",

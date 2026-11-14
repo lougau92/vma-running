@@ -132,6 +132,17 @@ class RunningCalculatorPage extends StatelessWidget {
       for (var other = 0; other < 4; other++)
         if (other != index) draft.measureAt(other),
     ];
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final status =
+        strings[isInput ? 'calculatorInput' : 'calculatorCalculated'];
+    final error = missingVma
+        ? strings['calculatorNeedsVma']
+        : invalid
+        ? strings['calculatorInvalid']
+        : null;
+    void edit() => missingVma ? _editVma(context) : _editValue(context, index);
+
     return Card(
       margin: EdgeInsets.zero,
       child: Padding(
@@ -142,35 +153,49 @@ class RunningCalculatorPage extends StatelessWidget {
             Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<RunningMeasure>(
-                    key: ValueKey('calculator-measure-$index-${measure.name}'),
-                    initialValue: measure,
-                    isExpanded: true,
-                    decoration: InputDecoration(
-                      labelText: strings['calculatorType'],
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: colors.primaryContainer,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                    items: [
-                      for (final option in RunningMeasure.values)
-                        if (!otherMeasures.contains(option))
-                          DropdownMenuItem(
-                            value: option,
-                            child: Text(_label(strings, option)),
-                          ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) onChanged(draft.select(index, value));
-                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: DropdownButton<RunningMeasure>(
+                        key: ValueKey(
+                          'calculator-measure-$index-${measure.name}',
+                        ),
+                        value: measure,
+                        isExpanded: true,
+                        isDense: true,
+                        underline: const SizedBox.shrink(),
+                        iconSize: 18,
+                        iconEnabledColor: colors.onPrimaryContainer,
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: colors.onPrimaryContainer,
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        items: [
+                          for (final option in RunningMeasure.values)
+                            if (!otherMeasures.contains(option))
+                              DropdownMenuItem(
+                                value: option,
+                                child: Text(_label(strings, option)),
+                              ),
+                        ],
+                        onChanged: (value) {
+                          if (value != null) {
+                            onChanged(draft.select(index, value));
+                          }
+                        },
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Tooltip(
-                  message:
-                      strings[isInput
-                          ? 'calculatorInput'
-                          : 'calculatorCalculated'],
-                  child: Icon(
-                    isInput ? Icons.edit_outlined : Icons.functions,
-                    color: Theme.of(context).colorScheme.primary,
+                Text(
+                  status,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: colors.onSurfaceVariant,
                   ),
                 ),
               ],
@@ -178,30 +203,26 @@ class RunningCalculatorPage extends StatelessWidget {
             const SizedBox(height: 12),
             Semantics(
               button: true,
-              label: _label(strings, measure),
+              label: '${_label(strings, measure)}, $status',
               value: value,
-              child: InkWell(
-                key: ValueKey('calculator-value-$index'),
-                onTap: missingVma
-                    ? () => _editVma(context)
-                    : () => _editValue(context, index),
-                borderRadius: BorderRadius.circular(12),
-                child: InputDecorator(
-                  isEmpty: value.isEmpty,
-                  decoration: InputDecoration(
-                    labelText: _label(strings, measure),
-                    errorText: missingVma
-                        ? strings['calculatorNeedsVma']
-                        : invalid
-                        ? strings['calculatorInvalid']
-                        : null,
-                    errorMaxLines: 2,
-                    suffixIcon: const Icon(Icons.edit_outlined),
-                  ),
-                  child: Text(
-                    value,
-                    key: ValueKey('calculator-display-$index'),
-                    style: Theme.of(context).textTheme.titleMedium,
+              hint: error,
+              onTap: edit,
+              child: ExcludeSemantics(
+                child: InkWell(
+                  key: ValueKey('calculator-value-$index'),
+                  onTap: edit,
+                  borderRadius: BorderRadius.circular(12),
+                  child: InputDecorator(
+                    isEmpty: value.isEmpty,
+                    decoration: InputDecoration(
+                      errorText: error,
+                      errorMaxLines: 2,
+                    ),
+                    child: Text(
+                      value,
+                      key: ValueKey('calculator-display-$index'),
+                      style: theme.textTheme.headlineMedium,
+                    ),
                   ),
                 ),
               ),

@@ -50,21 +50,11 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
         2 => widget.onEditDistance,
         _ => null,
       };
-      final label = onTap == null
-          ? Text(
-              labels[column],
-              style: column == _columnOrder.first
-                  ? TextStyle(
-                      color: colors.primary,
-                      fontWeight: FontWeight.w600,
-                    )
-                  : null,
-            )
-          : InteractiveHeader(
-              label: labels[column],
-              onTap: onTap,
-              tooltip: labels[column],
-            );
+      final label = InteractiveHeader(
+        label: labels[column],
+        onTap: onTap,
+        emphasized: column == _columnOrder.first,
+      );
       Widget feedback() => Material(
         color: colors.surfaceContainerLow,
         borderRadius: BorderRadius.circular(12),
@@ -92,31 +82,7 @@ class _VmaPaceTableState extends State<VmaPaceTable> {
               color: candidates.isEmpty ? null : colors.primaryContainer,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // A dedicated handle makes reordering discoverable and keeps
-                // its horizontal drag separate from tapping the edit label.
-                Draggable<int>(
-                  data: column,
-                  axis: Axis.horizontal,
-                  affinity: Axis.horizontal,
-                  feedback: feedback(),
-                  childWhenDragging: const SizedBox(width: 32, height: 40),
-                  child: SizedBox(
-                    key: ValueKey('pace-column-handle-$column'),
-                    width: 32,
-                    height: 40,
-                    child: Icon(
-                      Icons.drag_indicator,
-                      color: colors.onSurfaceVariant,
-                      size: 18,
-                    ),
-                  ),
-                ),
-                label,
-              ],
-            ),
+            child: label,
           ),
         ),
       );

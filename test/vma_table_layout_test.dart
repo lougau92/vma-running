@@ -99,13 +99,12 @@ void main() {
     expect(distanceEdits, 1);
 
     Future<void> moveTo(int source, int target) async {
-      final handle = find.byKey(ValueKey('pace-column-handle-$source'));
+      final handle = find.byKey(ValueKey('pace-column-$source'));
       final destination = tester.getCenter(
         find.byKey(ValueKey('pace-column-$target')),
       );
       final gesture = await tester.startGesture(tester.getCenter(handle));
-      await gesture.moveBy(const Offset(-24, 0));
-      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 600));
       await gesture.moveTo(destination);
       await tester.pump();
       await gesture.up();
@@ -125,6 +124,7 @@ void main() {
     expect(pinnedValue(), '60%');
     expect(intensityEdits, 1);
     expect(distanceEdits, 1);
+    expect(find.byIcon(Icons.drag_indicator), findsNothing);
     expect(tester.takeException(), isNull);
   });
 
@@ -159,45 +159,58 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('times table centers the first value column in both modes', (
-    tester,
-  ) async {
-    await tester.pumpWidget(
-      _app(
-        VmaTimesTable(
-          speed: RunningSpeed.fromKmh(15),
-          minDistanceMeters: 100,
-          maxDistanceMeters: 400,
-          minTimeSeconds: 60,
-          maxTimeSeconds: 300,
-          onEditDistances: () {},
-          onEditTimes: () {},
+  testWidgets(
+    'times table centers both columns and places swap on the boundary',
+    (tester) async {
+      await tester.pumpWidget(
+        _app(
+          VmaTimesTable(
+            speed: RunningSpeed.fromKmh(15),
+            minDistanceMeters: 100,
+            maxDistanceMeters: 400,
+            minTimeSeconds: 60,
+            maxTimeSeconds: 300,
+            onEditDistances: () {},
+            onEditTimes: () {},
+          ),
         ),
-      ),
-    );
-    void checkTable() {
-      final table = tester.widget<DataTable>(find.byType(DataTable));
-      expect(
-        (table.rows.first.cells[1].child as Align).alignment,
-        Alignment.center,
       );
-      expect(
-        (table.rows.first.cells[2].child as Align).alignment,
-        Alignment.centerLeft,
-      );
-      final colors = EnjambeeTheme.lightTheme().colorScheme;
-      expect(table.rows[0].color!.resolve({}), colors.surface);
-      expect(table.rows[1].color!.resolve({}), colors.surfaceContainerLow);
-      expect(table.columns[1].headingRowAlignment, MainAxisAlignment.center);
-    }
+      void checkTable() {
+        final table = tester.widget<DataTable>(find.byType(DataTable));
+        expect(table.columns, hasLength(2));
+        expect(table.rows.first.cells, hasLength(2));
+        for (final cell in table.rows.first.cells) {
+          expect((cell.child as SizedBox).child, isA<Center>());
+        }
+        final firstCell = table.rows.first.cells[0].child;
+        final secondCell = table.rows.first.cells[1].child;
+        final first = tester.getRect(find.byWidget(firstCell));
+        final second = tester.getRect(find.byWidget(secondCell));
+        final button = tester.getRect(
+          find.byKey(const ValueKey('times-swap-columns')),
+        );
+        expect(button.width, greaterThanOrEqualTo(44));
+        expect(
+          button.center.dx,
+          closeTo((first.right + second.left) / 2, 0.01),
+        );
+        expect(button.left, lessThan(first.right));
+        expect(button.right, greaterThan(second.left));
+        final colors = EnjambeeTheme.lightTheme().colorScheme;
+        expect(table.rows[0].color!.resolve({}), colors.surface);
+        expect(table.rows[1].color!.resolve({}), colors.surfaceContainerLow);
+        expect(table.columns[0].headingRowAlignment, MainAxisAlignment.center);
+        expect(table.columns[1].headingRowAlignment, MainAxisAlignment.center);
+      }
 
-    checkTable();
-    await tester.tap(find.byIcon(Icons.swap_horiz));
-    await tester.pump();
-    checkTable();
-    expect(find.byIcon(Icons.touch_app), findsNothing);
-    expect(tester.takeException(), isNull);
-  });
+      checkTable();
+      await tester.tap(find.byIcon(Icons.swap_horiz));
+      await tester.pump();
+      checkTable();
+      expect(find.byIcon(Icons.touch_app), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
 
 List<VmaPaceEntry> _entries() => VmaPaceCalculator().buildTable(

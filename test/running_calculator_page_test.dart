@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -53,6 +54,68 @@ Future<void> _edit(
 }
 
 void main() {
+  testWidgets('compact selectors carry units while value tiles stay clear', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    var draft = const RunningCalculatorDraft();
+    await tester.pumpWidget(
+      _app(
+        StatefulBuilder(
+          builder: (context, setState) => RunningCalculatorPage(
+            draft: draft,
+            vma: 18,
+            onVmaChanged: (_) {},
+            onChanged: (value) => setState(() => draft = value),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Input'), findsNWidgets(2));
+    expect(find.text('Calculated'), findsNWidgets(2));
+    expect(
+      find.descendant(
+        of: find.byType(Card),
+        matching: find.byIcon(Icons.edit_outlined),
+      ),
+      findsNothing,
+    );
+    final selector = find.byKey(
+      const ValueKey('calculator-measure-0-distance'),
+    );
+    final value = find.byKey(const ValueKey('calculator-value-0'));
+    expect(
+      tester.getSize(selector).height,
+      lessThan(tester.getSize(value).height),
+    );
+    expect(
+      find.descendant(of: value, matching: find.textContaining('km')),
+      findsNothing,
+    );
+    final decorator = tester.widget<InputDecorator>(
+      find.descendant(of: value, matching: find.byType(InputDecorator)),
+    );
+    expect(decorator.decoration.labelText, isNull);
+    final valueSemantics = tester.getSemantics(
+      find.bySemanticsLabel('Distance (km), Input'),
+    );
+    expect(valueSemantics.value, '5');
+    expect(
+      valueSemantics.getSemanticsData().hasAction(SemanticsAction.tap),
+      isTrue,
+    );
+
+    await tester.tap(selector);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Intensity (% VMA)').last);
+    await tester.pumpAndSettle();
+    expect(draft.first, RunningMeasure.intensity);
+    expect(_display(tester, 0), '100');
+    expect(find.bySemanticsLabel('Intensity (% VMA), Input'), findsOneWidget);
+    semantics.dispose();
+  });
+
   testWidgets(
     'wheel typing updates calculations and preserves comma decimals',
     (tester) async {

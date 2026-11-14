@@ -10,6 +10,8 @@ class AppSettings {
     this.timesMaxSeconds,
     this.timesMinDistance,
     this.timesMaxDistance,
+    this.timesCustomDistances = const [],
+    this.timesCustomSeconds = const [],
   });
 
   final String? localeCode;
@@ -19,6 +21,8 @@ class AppSettings {
   final double? timesMaxSeconds;
   final double? timesMinDistance;
   final double? timesMaxDistance;
+  final List<double> timesCustomDistances;
+  final List<double> timesCustomSeconds;
 
   AppSettings copyWith({
     Object? localeCode = _unset,
@@ -28,6 +32,8 @@ class AppSettings {
     Object? timesMaxSeconds = _unset,
     Object? timesMinDistance = _unset,
     Object? timesMaxDistance = _unset,
+    List<double>? timesCustomDistances,
+    List<double>? timesCustomSeconds,
   }) {
     return AppSettings(
       localeCode: _resolve<String?>(localeCode, this.localeCode),
@@ -43,6 +49,8 @@ class AppSettings {
         timesMaxDistance,
         this.timesMaxDistance,
       ),
+      timesCustomDistances: timesCustomDistances ?? this.timesCustomDistances,
+      timesCustomSeconds: timesCustomSeconds ?? this.timesCustomSeconds,
     );
   }
 

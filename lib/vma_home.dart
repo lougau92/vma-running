@@ -96,6 +96,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
   double _timesMinSeconds = presetTimesSeconds().first;
   double _timesMaxSeconds = presetTimesSeconds().last;
   double _timesPercent = 100;
+  late List<double> _timesCustomDistances;
+  late List<double> _timesCustomSeconds;
 
   @override
   void dispose() {
@@ -149,6 +151,14 @@ class _VmaHomePageState extends State<VmaHomePage> {
     _timesMaxDistance = widget.settings.timesMaxDistance ?? _timesMaxDistance;
     _timesMinSeconds = widget.settings.timesMinSeconds ?? _timesMinSeconds;
     _timesMaxSeconds = widget.settings.timesMaxSeconds ?? _timesMaxSeconds;
+    _timesCustomDistances = mergePresetValues(
+      const [],
+      widget.settings.timesCustomDistances,
+    );
+    _timesCustomSeconds = mergePresetValues(
+      const [],
+      widget.settings.timesCustomSeconds,
+    );
     _loadVma();
   }
 
@@ -402,6 +412,9 @@ class _VmaHomePageState extends State<VmaHomePage> {
       context,
       initialMin: _timesMinDistance,
       initialMax: _timesMaxDistance,
+      customValues: _timesCustomDistances,
+      onCustomValueAdded: (value) => _rememberCustomRow(value, distance: true),
+      onResetCustomValues: () => _resetCustomRows(distance: true),
       onChanged: (range) {
         if (!mounted) return;
         setState(() {
@@ -410,6 +423,7 @@ class _VmaHomePageState extends State<VmaHomePage> {
         });
       },
     );
+    if (mounted) _persistTimesSettings();
   }
 
   Future<void> _openTimesSettingsDialog() async {
@@ -417,6 +431,9 @@ class _VmaHomePageState extends State<VmaHomePage> {
       context,
       initialMinSeconds: _timesMinSeconds,
       initialMaxSeconds: _timesMaxSeconds,
+      customValues: _timesCustomSeconds,
+      onCustomValueAdded: (value) => _rememberCustomRow(value, distance: false),
+      onResetCustomValues: () => _resetCustomRows(distance: false),
       onChanged: (range) {
         if (!mounted) return;
         setState(() {
@@ -425,7 +442,47 @@ class _VmaHomePageState extends State<VmaHomePage> {
         });
       },
     );
+    if (mounted) _persistTimesSettings();
   }
+
+  void _rememberCustomRow(double value, {required bool distance}) {
+    if (!mounted) return;
+    final presets = distance ? presetDistances() : presetTimesSeconds();
+    final current = distance ? _timesCustomDistances : _timesCustomSeconds;
+    if (presets.contains(value) || current.contains(value)) return;
+    setState(() {
+      final next = mergePresetValues(current, [value]);
+      if (distance) {
+        _timesCustomDistances = next;
+      } else {
+        _timesCustomSeconds = next;
+      }
+    });
+    _persistTimesSettings();
+  }
+
+  void _resetCustomRows({required bool distance}) {
+    if (!mounted) return;
+    setState(() {
+      if (distance) {
+        _timesCustomDistances = [];
+      } else {
+        _timesCustomSeconds = [];
+      }
+    });
+    _persistTimesSettings();
+  }
+
+  void _persistTimesSettings() => widget.onSettingsChanged(
+    widget.settings.copyWith(
+      timesMinDistance: _timesMinDistance,
+      timesMaxDistance: _timesMaxDistance,
+      timesMinSeconds: _timesMinSeconds,
+      timesMaxSeconds: _timesMaxSeconds,
+      timesCustomDistances: _timesCustomDistances,
+      timesCustomSeconds: _timesCustomSeconds,
+    ),
+  );
 
   Widget _buildChallengeBody() {
     return _wrapCenteredWidth(VmaChallengeTable(loader: _remoteLoader));
@@ -470,6 +527,8 @@ class _VmaHomePageState extends State<VmaHomePage> {
               maxDistanceMeters: _timesMaxDistance,
               minTimeSeconds: _timesMinSeconds,
               maxTimeSeconds: _timesMaxSeconds,
+              customDistances: _timesCustomDistances,
+              customTimes: _timesCustomSeconds,
               onEditDistances: _openDistancesSettingDialog,
               onEditTimes: _openTimesSettingsDialog,
             ),

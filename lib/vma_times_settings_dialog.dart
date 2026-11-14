@@ -21,6 +21,9 @@ Future<DistanceRange?> showDistancesSettingsDialog(
   required double initialMin,
   required double initialMax,
   ValueChanged<DistanceRange>? onChanged,
+  List<double> customValues = const [],
+  ValueChanged<double>? onCustomValueAdded,
+  VoidCallback? onResetCustomValues,
 }) async {
   final strings = AppLocalizations.of(context);
   var selected = RangeValues(initialMin, initialMax);
@@ -28,7 +31,10 @@ Future<DistanceRange?> showDistancesSettingsDialog(
     context: context,
     builder: (_) => NumberRangePickerDialog(
       title: strings.distanceRange,
-      values: presetDistances(),
+      values: mergePresetValues(presetDistances(), customValues),
+      resetValues: presetDistances(),
+      onInputCompleted: onCustomValueAdded,
+      onReset: onResetCustomValues,
       initialMin: initialMin,
       initialMax: initialMax,
       formatValue: strings.distanceShort,
@@ -54,6 +60,9 @@ Future<TimeRange?> showTimesSettingsDialog(
   required double initialMinSeconds,
   required double initialMaxSeconds,
   ValueChanged<TimeRange>? onChanged,
+  List<double> customValues = const [],
+  ValueChanged<double>? onCustomValueAdded,
+  VoidCallback? onResetCustomValues,
 }) async {
   final strings = AppLocalizations.of(context);
   var selected = RangeValues(initialMinSeconds, initialMaxSeconds);
@@ -61,7 +70,10 @@ Future<TimeRange?> showTimesSettingsDialog(
     context: context,
     builder: (_) => NumberRangePickerDialog(
       title: strings.timeRange,
-      values: presetTimesSeconds(),
+      values: mergePresetValues(presetTimesSeconds(), customValues),
+      resetValues: presetTimesSeconds(),
+      onInputCompleted: onCustomValueAdded,
+      onReset: onResetCustomValues,
       initialMin: initialMinSeconds,
       initialMax: initialMaxSeconds,
       formatValue: (seconds) => formatElapsed(seconds.toInt()),

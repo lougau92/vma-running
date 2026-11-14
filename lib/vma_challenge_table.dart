@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
-import 'content_refresh_button.dart' show ContentRefreshButton, refreshContent;
-import 'interactive_header.dart';
+import 'content_refresh.dart' show refreshContent;
+import 'widgets/content_refresh_button.dart' show ContentRefreshButton;
+import 'widgets/interactive_header.dart';
 import 'remote_asset_loader.dart';
 
 class VmaChallengeTable extends StatefulWidget {

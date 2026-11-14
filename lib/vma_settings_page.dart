@@ -7,7 +7,7 @@ import 'package:app_feedback/app_feedback.dart'
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
 import 'app_settings.dart';
-import 'decorated_scaffold.dart';
+import 'widgets/decorated_scaffold.dart';
 import 'vma_settings_view.dart';
 
 class VmaSettingsPage extends StatelessWidget {

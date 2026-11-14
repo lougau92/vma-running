@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
-import 'interactive_header.dart';
+import 'widgets/interactive_header.dart';
 import 'vma_pace.dart';
 
 class VmaPaceTable extends StatefulWidget {

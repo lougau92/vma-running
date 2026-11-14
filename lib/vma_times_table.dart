@@ -1,7 +1,7 @@
 import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/material.dart';
 import 'app_localizations.dart';
-import 'interactive_header.dart';
+import 'widgets/interactive_header.dart';
 import 'presets.dart';
 import 'running/running.dart' show RunningSpeed, formatRunningDuration;
 

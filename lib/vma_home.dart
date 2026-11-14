@@ -10,7 +10,7 @@ import 'app_settings.dart';
 import 'calculator/running_calculator_draft.dart' show RunningCalculatorDraft;
 import 'calculator/running_calculator_page.dart' show RunningCalculatorPage;
 import 'feature_flags.dart';
-import 'decorated_scaffold.dart';
+import 'widgets/decorated_scaffold.dart';
 import 'presets.dart';
 import 'running/running.dart';
 import 'vma_distance_dialog.dart';

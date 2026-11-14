@@ -128,11 +128,14 @@ class _NumberWheelPickerState extends State<NumberWheelPicker> {
               widget.onChanged(index);
             },
             itemBuilder: (context, index) {
-              final text = Text(
-                widget.formatItem(index),
-                style: Theme.of(context).textTheme.titleLarge,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+              final text = FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  widget.formatItem(index),
+                  style: Theme.of(context).textTheme.titleLarge,
+                  maxLines: 1,
+                  softWrap: false,
+                ),
               );
               if (index != _selectedIndex) return Center(child: text);
               return Center(

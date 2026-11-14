@@ -16,6 +16,22 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 2) Fetch deps: `flutter pub get`  
 3) Run: `flutter run -d chrome` (or any connected device)
 
+## Web release updates
+
+`web/app_update.js` owns service-worker registration; the custom Flutter bootstrap
+starts the app without registering Flutter's generated worker. Deployment stamps
+a release-specific cache name. New installations refresh app assets through the
+HTTP cache, and the worker reads only its own release cache. The app checks for
+updates on load, when returning to the tab, and when reconnecting; a completed
+update reloads the app while keeping saved preferences and VMA. A failed precache
+keeps the previous installed release available offline.
+
+Run `npm run test:web` after installing Playwright Chromium. This covers upgrade
+from the legacy worker, retained cookies/preferences, stale HTTP and legacy
+caches, incomplete updates, and offline reloads at `/` and `/vma-running/`.
+Set `CHROME_EXECUTABLE` to use an existing Chrome binary. CI runs these checks
+before building, then runs `tool/sw-offline-test.mjs` against the Flutter build.
+
 ## Firebase configuration
 
 VMA content uses the `vma-training` Firebase project on web, Android, and iOS.

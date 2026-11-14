@@ -1,11 +1,5 @@
-// Offline-first service worker for VMA Running Companion.
-
-// 1. DYNAMIC CACHE NAME (Injected by your build script)
+// The release build stamps this name before Flutter copies the web assets.
 const CACHE_NAME = 'vma-running-cache-v1';
-
-// 2. RELATIVE PATHS (The Fix)
-// Using './' forces the browser to resolve paths relative to the Service Worker's location
-// (e.g., /vma-running/service_worker.js -> /vma-running/index.html)
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -13,121 +7,87 @@ const CORE_ASSETS = [
   './favicon.png',
   './icons/Icon-192.png',
   './icons/Icon-512.png',
+  './app_update.js',
   './flutter_bootstrap.js',
   './main.dart.js',
+  './version.json',
   './assets/AssetManifest.bin.json',
   './assets/FontManifest.json',
+  './assets/fonts/MaterialIcons-Regular.otf',
+  './assets/packages/cupertino_icons/assets/CupertinoIcons.ttf',
+  './assets/assets/feedback.json',
+  './assets/assets/enjambee_img/logo-header-minimized.png',
   './assets/assets/training_plans/training_example.json'
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // atomic: if one fails (404), the whole install fails
-      return cache.addAll(CORE_ASSETS);
-    })
-  );
-  self.skipWaiting();
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    // A new cache must contain the new release, even while the browser's HTTP
+    // cache still considers yesterday's scripts fresh.
+    await cache.addAll(CORE_ASSETS.map((asset) => new Request(
+      new URL(asset, self.registration.scope), { cache: 'reload' }
+    )));
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(
-        keys
-          .filter((key) => key.startsWith('vma-running-cache-') && key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys
+      .filter((key) => key.startsWith('vma-running-cache-') && key !== CACHE_NAME)
+      .map((key) => caches.delete(key)));
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
-
   const url = new URL(request.url);
-  const isSameOrigin = url.origin === self.location.origin;
+  const scope = new URL(self.registration.scope);
+  const appAsset = url.origin === scope.origin && url.pathname.startsWith(scope.pathname);
+  const renderingAsset = request.destination === 'font' ||
+    url.hostname === 'fonts.gstatic.com' || url.pathname.includes('/canvaskit/');
+  // Keep the renderer/fonts available offline; leave remote APIs and other
+  // applications to their own network/cache policies.
+  if (!appAsset && !renderingAsset) return;
 
-  // Fonts (including Google Fonts): cache-first with graceful fallback to avoid noisy errors offline.
-  if (request.destination === 'font' || url.hostname.includes('fonts.gstatic.com')) {
-    event.respondWith(cacheFirst(request, { graceful: true }));
-    return;
-  }
-
-  // App shell / navigation
   if (request.mode === 'navigate') {
-    event.respondWith(
-      (async () => {
-        try {
-          const networkResponse = await fetch(request);
-          return networkResponse;
-        } catch (error) {
-          // CHANGE: Match relative path
-          const cachedShell = await caches.match('./index.html');
-          return cachedShell;
-        }
-      })()
-    );
+    event.respondWith((async () => {
+      try {
+        const response = await fetch(request);
+        if (response.ok) return response;
+      } catch (_) {
+        // Fall back to the shell of the installed release when offline.
+      }
+      const cache = await caches.open(CACHE_NAME);
+      return (await cache.match(new URL('index.html', scope))) || Response.error();
+    })());
     return;
   }
 
-  // --- 2. Fonts & Canvaskit (Cache First, Graceful) ---
-  if (request.destination === 'font' || url.pathname.includes('canvaskit')) {
-    event.respondWith(cacheFirst(request, { graceful: true }));
-    return;
-  }
-
-  // --- 3. Static Assets (Cache First) ---
-  if (
-    isSameOrigin &&
-    (request.destination === 'script' ||
-      request.destination === 'style' ||
-      request.destination === 'image' ||
-      request.destination === 'font' ||
-      url.pathname.endsWith('.json'))
-  ) {
-    event.respondWith(cacheFirst(request));
-    return;
-  }
-
-  // --- 4. Default (Network First) ---
-  event.respondWith(networkFirst(request));
-});
-
-// Helper: Cache First Strategy
-async function cacheFirst(request, { graceful = false } = {}) {
-  // caches.match(request) automatically handles full URLs 
-  // so it will match the absolute keys stored during install.
-  const cached = await caches.match(request);
-  if (cached) return cached;
-  try {
-    const response = await fetch(request);
+  event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
-    cache.put(request, response.clone());
-    return response;
-  } catch (error) {
-    if (graceful) {
-      return new Response('', {
-        status: 200,
-        headers: { 'Content-Type': 'application/octet-stream' }
-      });
-    }
-    throw error;
-  }
-}
-
-// Helper: Network First Strategy
-async function networkFirst(request) {
-  try {
-    const response = await fetch(request);
-    const cache = await caches.open(CACHE_NAME);
-    cache.put(request, response.clone());
-    return response;
-  } catch (error) {
-    const cached = await caches.match(request);
+    // CacheStorage.match searches legacy Flutter caches too. Restrict reads to
+    // this release so they cannot silently supply an obsolete main.dart.js.
+    // package_info_plus adds a timestamp query; its displayed version must
+    // still describe the installed code, including during offline startup.
+    const releaseMetadata = url.pathname === `${scope.pathname}version.json`;
+    const cached = await cache.match(request, { ignoreSearch: releaseMetadata });
     if (cached) return cached;
-    throw error;
-  }
-}
+    // Lazy-loaded app assets also belong to this release; an HTTP-cache hit
+    // from the previous release is just as stale as an old CacheStorage entry.
+    const response = await fetch(request, appAsset ? { cache: 'reload' } : {});
+    if (response.ok || response.type === 'opaque') {
+      try {
+        await cache.put(request, response.clone());
+      } catch (error) {
+        // Quota/storage errors must not discard a successful download.
+        console.debug('Asset could not be cached:', error);
+      }
+    }
+    return response;
+  })());
+});

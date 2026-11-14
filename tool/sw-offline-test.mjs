@@ -16,8 +16,6 @@ const normalizedBasePath = rawBasePath.replace(/\/+$/, '').replace(/^\/+/, '');
 const basePath = normalizedBasePath ? `/${normalizedBasePath}/` : '/';
 const mountDir = normalizedBasePath ? join(root, normalizedBasePath) : null;
 
-const npmCmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-
 const getFreePort = async () => {
   return new Promise((resolve, reject) => {
     const srv = createServer();
@@ -36,7 +34,10 @@ if (mountDir && !existsSync(mountDir)) {
 }
 
 const port = process.env.SW_TEST_PORT || await getFreePort();
-const server = spawn(npmCmd, ['http-server', root, '-p', `${port}`], { stdio: 'inherit' });
+const server = spawn(process.execPath, [
+  join(process.cwd(), 'node_modules', 'http-server', 'bin', 'http-server'),
+  root, '-p', `${port}`,
+], { stdio: 'inherit' });
 
 function cleanup() {
   if (server && server.pid) treeKill(server.pid, 'SIGKILL');
@@ -45,18 +46,6 @@ function cleanup() {
     try { rmSync(mountDir, { recursive: true, force: true }); } catch (e) { }
   }
 
-  // REMOVE SYMLINK (CRITICAL FOR DEPLOY)
-  if (mountDir && existsSync(mountDir)) {
-    console.log('Cleaning up symlink...');
-    try {
-      // unlinkSync works for symlinks, but on Windows junctions sometimes act like dirs
-      // rmSync is safer for recursive cleanup if needed, but unlink usually suffices
-      unlinkSync(mountDir);
-    } catch (e) {
-      // Fallback if unlink fails (e.g. treated as directory)
-      try { rmSync(mountDir, { recursive: true, force: true }); } catch (e2) { }
-    }
-  }
 }
 
 process.on('SIGINT', () => { cleanup(); process.exit(); });
@@ -77,11 +66,15 @@ const waitForServer = async (port) => {
 };
 
 (async () => {
+  let browser;
   try {
     console.log(`Waiting for server on ${host}:${port}...`);
     await waitForServer(port);
 
-    const browser = await chromium.launch({ headless: true });
+    browser = await chromium.launch({
+      headless: true,
+      ...(process.env.CHROME_EXECUTABLE ? { executablePath: process.env.CHROME_EXECUTABLE } : {}),
+    });
     // URL: http://127.0.0.1:8080/vma-running/
     const targetURL = `http://${host}:${port}${basePath}`;
     console.log(`Target URL: ${targetURL}`);
@@ -94,7 +87,17 @@ const waitForServer = async (port) => {
       if (msg.type() === 'error') console.error(`[BROWSER ERROR] ${msg.text()}`);
       else console.log(`[BROWSER LOG] ${msg.text()}`);
     });
+    let offline = false;
+    const offlineAssetErrors = [];
+    page.on('requestfailed', (request) => {
+      if (offline && (request.url().includes('/assets/') || request.url().includes('/canvaskit/'))) {
+        const error = request.failure()?.errorText;
+        if (error !== 'net::ERR_ABORTED') offlineAssetErrors.push(`${error}: ${request.url()}`);
+      }
+    });
+    const pageErrors = [];
     page.on('pageerror', err => {
+      pageErrors.push(err.message);
       console.error(`[BROWSER UNCAUGHT] ${err.message}`);
     });
 
@@ -107,17 +110,23 @@ const waitForServer = async (port) => {
     await page.waitForFunction(async () => {
       if (!navigator.serviceWorker) return false;
       await navigator.serviceWorker.ready;
-      return true;
+      return Boolean(navigator.serviceWorker.controller);
     }, null, { timeout: 10000 }); // 10s timeout for SW specifically
 
+    // First worker takeover reloads the app. Wait for the real Flutter view so
+    // renderer/fonts have also passed through the controlling worker.
+    await page.waitForSelector('flutter-view', { state: 'attached', timeout: 30000 });
     console.log('Service Worker is Ready. Going offline...');
+    offline = true;
     await context.setOffline(true);
 
     const cachedOk = await page.evaluate(async () => {
       try {
         // Use the relative path logic from your SW
         const res = await fetch('./assets/assets/training_plans/training_example.json');
-        return res.ok;
+        if (!res.ok) return false;
+        await res.arrayBuffer();
+        return true;
       } catch (e) {
         return false;
       }
@@ -125,13 +134,18 @@ const waitForServer = async (port) => {
 
     if (!cachedOk) throw new Error('Cached training plan not available offline');
 
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForSelector('flutter-view', { state: 'attached', timeout: 30000 });
+    if (pageErrors.length) throw new Error(`App errors: ${pageErrors.join('; ')}`);
+    if (offlineAssetErrors.length) throw new Error(`Missing offline assets: ${offlineAssetErrors.join('; ')}`);
+    console.log('Offline Flutter restart passed!');
     console.log('Test Passed!');
     await context.setOffline(false);
-    await browser.close();
   } catch (err) {
     console.error('Test Failed:', err);
     process.exitCode = 1;
   } finally {
+    if (browser) await browser.close();
     cleanup();
   }
 })();

@@ -62,3 +62,6 @@ supabase/.temp/
 
 # Generated local DevTools settings
 /devtools_options.yaml
+
+# train data
+tool/mails/

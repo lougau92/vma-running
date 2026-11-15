@@ -1,0 +1,438 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement du jeudi 8 octobre 2026.eml",
+      "subject": "Entraînement du jeudi 8 octobre 2026",
+      "sentAt": "2026-10-06T04:26:53+02:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "club-2026-10-08",
+      "title": "Objectif 3000 — Épisode 7 : 200-400-1500",
+      "sport": "running",
+      "scheduledDate": "2026-10-08",
+      "location": "Stade Fallon",
+      "notes": [
+        {
+          "text": "Bien respecter les pourcentages de VMA.",
+          "category": "instruction"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "label": "Échauffement sur la promenade verte",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "label": "Contenu de la séance (40 min)",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "label": "5 × 200 m",
+                  "count": {
+                    "min": 5,
+                    "max": 5
+                  },
+                  "body": {
+                    "kind": "step",
+                    "label": "200 m",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 200,
+                        "max": 200
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 110,
+                          "max": 110
+                        }
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "label": "Récupération",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 45,
+                        "max": 60
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "step",
+                  "label": "Pause sèche",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "repeat",
+                  "label": "4 × 400 m",
+                  "count": {
+                    "min": 4,
+                    "max": 4
+                  },
+                  "body": {
+                    "kind": "step",
+                    "label": "400 m",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 400,
+                        "max": 400
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "label": "Récupération",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 90,
+                        "max": 90
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "step",
+                  "label": "Pause sèche",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "sequence",
+                  "label": "1500 m",
+                  "children": [
+                    {
+                      "kind": "step",
+                      "label": "1100 m",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1100,
+                          "max": 1100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "label": "Derniers 400 m",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "effort",
+                          "value": "all_out",
+                          "text": "All-out"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "label": "Retour au calme, 2 tours tous ensemble",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              }
+            }
+          }
+        },
+        {
+          "label": "Groupe 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "label": "Échauffement sur la promenade verte",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "label": "Contenu de la séance (40 min)",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "label": "5 × 200 m",
+                  "count": {
+                    "min": 5,
+                    "max": 5
+                  },
+                  "body": {
+                    "kind": "step",
+                    "label": "200 m",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 200,
+                        "max": 200
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 110,
+                          "max": 110
+                        }
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "label": "Récupération",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 45,
+                        "max": 60
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "step",
+                  "label": "Pause sèche",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "repeat",
+                  "label": "4 × 400 m",
+                  "count": {
+                    "min": 4,
+                    "max": 4
+                  },
+                  "body": {
+                    "kind": "step",
+                    "label": "400 m",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 400,
+                        "max": 400
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "label": "Récupération",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 90,
+                        "max": 90
+                      }
+                    }
+                  }
+                },
+                {
+                  "kind": "step",
+                  "label": "Pause sèche",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "sequence",
+                  "label": "1500 m",
+                  "children": [
+                    {
+                      "kind": "step",
+                      "label": "1100 m",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1100,
+                          "max": 1100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "label": "Derniers 400 m",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "effort",
+                          "value": "all_out",
+                          "text": "All-out"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "label": "Retour au calme, 2 tours tous ensemble",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

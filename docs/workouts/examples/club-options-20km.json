@@ -1,0 +1,384 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement de jeudi.eml"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Entraînement avec options 20 km",
+      "sport": "running",
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 900,
+                  "max": 900
+                }
+              },
+              "notes": [
+                {
+                  "text": "Sur la promenade verte du Stade Fallon.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "children": [
+                {
+                  "kind": "choice",
+                  "reason": "Options explicites dans le mail ; choisir une seule proposition pour ce bloc.",
+                  "options": [
+                    {
+                      "label": "8 × 500 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 8,
+                          "max": 8
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 500,
+                              "max": 500
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 80,
+                                "max": 80
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 60,
+                              "max": 60
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "label": "5 × 500 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 5,
+                          "max": 5
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 500,
+                              "max": 500
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 80,
+                                "max": 80
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 60,
+                              "max": 60
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      },
+                      "audience": "Participants aux 20 km"
+                    },
+                    {
+                      "label": "2 × 1000 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 2,
+                          "max": 2
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 1000,
+                              "max": 1000
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 80,
+                                "max": 80
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 120,
+                              "max": 120
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      },
+                      "audience": "Participants aux 20 km"
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                },
+                {
+                  "kind": "choice",
+                  "reason": "Options explicites dans le mail ; choisir une seule proposition pour ce bloc.",
+                  "options": [
+                    {
+                      "label": "8 × 200 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 8,
+                          "max": 8
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 200,
+                              "max": 200
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 90,
+                                "max": 90
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 45,
+                              "max": 45
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "label": "5 × 200 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 5,
+                          "max": 5
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 200,
+                              "max": 200
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 90,
+                                "max": 90
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 45,
+                              "max": 45
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      },
+                      "audience": "Participants aux 20 km"
+                    },
+                    {
+                      "label": "4 × 400 m",
+                      "plan": {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 4,
+                          "max": 4
+                        },
+                        "body": {
+                          "kind": "step",
+                          "role": "effort",
+                          "end": {
+                            "kind": "distance",
+                            "meters": {
+                              "min": 400,
+                              "max": 400
+                            }
+                          },
+                          "targets": [
+                            {
+                              "kind": "numeric",
+                              "metric": "vma_percent",
+                              "value": {
+                                "min": 90,
+                                "max": 90
+                              }
+                            }
+                          ]
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 60,
+                              "max": 60
+                            }
+                          },
+                          "movement": {
+                            "mode": "unspecified"
+                          }
+                        }
+                      },
+                      "audience": "Participants aux 20 km"
+                    }
+                  ]
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "severity": "blocking",
+      "code": "ambiguous",
+      "message": "The email does not specify whether reduced and alternative options must be paired across the two blocks. Choices preserve the local alternatives; confirm allowed combinations before execution. No Groupe 2 is supplied in this email.",
+      "paths": [
+        "/workouts/0/versions/0/main/plan"
+      ]
+    }
+  ]
+}

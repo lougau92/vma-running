@@ -1,0 +1,415 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement du jeudi 5 novembre 2026.eml"
+    },
+    {
+      "type": "review_feedback",
+      "reference": "Conversation: Louis confirmed the one-minute recovery end condition."
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Épisode 3 : 400-400-200-1200",
+      "sport": "running",
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              },
+              "notes": [
+                {
+                  "text": "Échauffement sur la promenade verte",
+                  "category": "instruction"
+                }
+              ]
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "repeat",
+              "count": {
+                "min": 3,
+                "max": 3
+              },
+              "body": {
+                "kind": "sequence",
+                "children": [
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 400,
+                        "max": 400
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 60,
+                        "max": 60
+                      }
+                    },
+                    "movement": {
+                      "mode": "active"
+                    },
+                    "notes": [
+                      {
+                        "text": "200 m indiqué à titre informatif ; la récupération se termine après 1 minute (choix confirmé par Louis).",
+                        "category": "instruction"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 400,
+                        "max": 400
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 60,
+                        "max": 60
+                      }
+                    },
+                    "movement": {
+                      "mode": "active"
+                    },
+                    "notes": [
+                      {
+                        "text": "200 m indiqué à titre informatif ; la récupération se termine après 1 minute (choix confirmé par Louis).",
+                        "category": "instruction"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 200,
+                        "max": 200
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 110,
+                          "max": 110
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 60,
+                        "max": 60
+                      }
+                    },
+                    "movement": {
+                      "mode": "active"
+                    },
+                    "notes": [
+                      {
+                        "text": "200 m indiqué à titre informatif ; la récupération se termine après 1 minute (choix confirmé par Louis).",
+                        "category": "instruction"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 1200,
+                        "max": 1200
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 80,
+                          "max": 85
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "between": {
+                "kind": "step",
+                "role": "recovery",
+                "end": {
+                  "kind": "time",
+                  "seconds": {
+                    "min": 120,
+                    "max": 120
+                  }
+                },
+                "movement": {
+                  "mode": "passive"
+                }
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              },
+              "notes": [
+                {
+                  "text": "Échauffement sur la promenade verte",
+                  "category": "instruction"
+                }
+              ]
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "repeat",
+              "count": {
+                "min": 3,
+                "max": 3
+              },
+              "body": {
+                "kind": "sequence",
+                "children": [
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 400,
+                        "max": 400
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 60,
+                        "max": 60
+                      }
+                    },
+                    "movement": {
+                      "mode": "active"
+                    },
+                    "notes": [
+                      {
+                        "text": "200 m indiqué à titre informatif ; la récupération se termine après 1 minute (choix confirmé par Louis).",
+                        "category": "instruction"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 200,
+                        "max": 200
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 60,
+                        "max": 60
+                      }
+                    },
+                    "movement": {
+                      "mode": "active"
+                    },
+                    "notes": [
+                      {
+                        "text": "200 m indiqué à titre informatif ; la récupération se termine après 1 minute (choix confirmé par Louis).",
+                        "category": "instruction"
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "distance",
+                      "meters": {
+                        "min": 1000,
+                        "max": 1000
+                      }
+                    },
+                    "targets": [
+                      {
+                        "kind": "numeric",
+                        "metric": "vma_percent",
+                        "value": {
+                          "min": 80,
+                          "max": 85
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              "between": {
+                "kind": "step",
+                "role": "recovery",
+                "end": {
+                  "kind": "time",
+                  "seconds": {
+                    "min": 120,
+                    "max": 120
+                  }
+                },
+                "movement": {
+                  "mode": "passive"
+                }
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "notes": [
+        {
+          "text": "Bien respecter les % de VMA très important.",
+          "category": "instruction"
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

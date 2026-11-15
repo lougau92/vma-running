@@ -1,0 +1,203 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement du jeudi 15 octobre 2026.eml",
+      "subject": "Entraînement du jeudi 15 octobre 2026",
+      "sentAt": "2026-10-14T12:44:07+02:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Objectif 3000 — Épisode 8 final : 3000 all out",
+      "sport": "running",
+      "location": "Stade Fallon",
+      "notes": [
+        {
+          "text": "Bien respecter les pourcentages de VMA ; c'est très important.",
+          "category": "instruction"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Groupe 1-2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 4,
+                    "max": 4
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 105,
+                              "max": 110
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        },
+                        "movement": {
+                          "mode": "unspecified"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 400,
+                      "max": 400
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "numeric",
+                      "metric": "vma_percent",
+                      "value": {
+                        "min": 90,
+                        "max": 90
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 90,
+                      "max": 90
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 300,
+                      "max": 300
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 3000,
+                      "max": 3000
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "effort",
+                      "value": "all_out",
+                      "text": "All OUT"
+                    }
+                  ]
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

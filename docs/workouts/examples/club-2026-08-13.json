@@ -1,0 +1,374 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement de demain, jeudi 13_08_2026.eml",
+      "subject": "Entraînement de demain, jeudi 13/08/2026",
+      "sentAt": "2026-08-12T17:53:16+02:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Entraînement du 13 août 2026",
+      "sport": "running",
+      "scheduledDate": "2026-08-13",
+      "location": "Stade Fallon",
+      "notes": [
+        {
+          "text": "Bien respecter les % de VMA très important.",
+          "category": "instruction"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 1200,
+                      "max": 1200
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "numeric",
+                      "metric": "vma_percent",
+                      "value": {
+                        "min": 85,
+                        "max": 85
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                },
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 5,
+                    "max": 5
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 600,
+                            "max": 600
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 90
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        },
+                        "movement": {
+                          "mode": "unspecified"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 1200,
+                      "max": 1200
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "numeric",
+                      "metric": "vma_percent",
+                      "value": {
+                        "min": 85,
+                        "max": 85
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 1 (deuxième version dans le courriel)",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 1000,
+                      "max": 1000
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "numeric",
+                      "metric": "vma_percent",
+                      "value": {
+                        "min": 85,
+                        "max": 85
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                },
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 4,
+                    "max": 4
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 400,
+                            "max": 400
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 90
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        },
+                        "movement": {
+                          "mode": "unspecified"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "distance",
+                    "meters": {
+                      "min": 1000,
+                      "max": 1000
+                    }
+                  },
+                  "targets": [
+                    {
+                      "kind": "numeric",
+                      "metric": "vma_percent",
+                      "value": {
+                        "min": 85,
+                        "max": 85
+                      }
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 120,
+                      "max": 120
+                    }
+                  },
+                  "movement": {
+                    "mode": "unspecified"
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme tous ensemble.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "severity": "blocking",
+      "code": "conflicting",
+      "message": "Le courriel étiquette les deux prescriptions « Groupe 1 ». Il n’est pas possible d’établir à partir du texte si la seconde prescription concerne le Groupe 2 ou s’il s’agit d’une autre variante du Groupe 1.",
+      "paths": [
+        "/workouts/0/versions/0/label",
+        "/workouts/0/versions/1/label"
+      ]
+    },
+    {
+      "severity": "warning",
+      "code": "inferred",
+      "message": "La ligne « 100085% » de la seconde prescription est interprétée comme « 1000 85% » (1000 m à 85 % VMA), par fusion typographique évidente.",
+      "paths": [
+        "/workouts/0/versions/1/main/plan/children/0"
+      ]
+    }
+  ]
+}

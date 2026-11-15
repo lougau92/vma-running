@@ -1,0 +1,289 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement du jeudi 29 octobre 2026.eml",
+      "subject": "Entraînement du jeudi 29 octobre 2026",
+      "sentAt": "2026-10-28T18:43:33+01:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Épisode 2 : 200-600-200",
+      "sport": "running",
+      "scheduledDate": "2026-10-29",
+      "location": "Stade Fallon",
+      "notes": [
+        {
+          "text": "Objectif : Promenade verte.",
+          "category": "route"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 5,
+                    "max": 6
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 200,
+                            "max": 200
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 100
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 600,
+                            "max": 600
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 80,
+                              "max": 80
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 200,
+                            "max": 200
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 100
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 90,
+                        "max": 90
+                      }
+                    },
+                    "movement": {
+                      "mode": "passive"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Tous ensemble.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Échauffement sur la promenade verte"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 5,
+                    "max": 6
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 200,
+                            "max": 200
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 100
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 600,
+                            "max": 600
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 80,
+                              "max": 80
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "between": {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 90,
+                        "max": 90
+                      }
+                    },
+                    "movement": {
+                      "mode": "passive"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Tous ensemble.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "severity": "blocking",
+      "code": "ambiguous",
+      "message": "Pour le Groupe 2, le bloc répété totalise 800 m (200 + 600), alors que la récupération est indiquée comme étant « entre les 1000 ». Il n'est pas clair si la pause sèche de 1 min 30 s s'applique entre chaque répétition de 800 m malgré cette désignation, ou si une partie du bloc manque.",
+      "paths": [
+        "/workouts/0/versions/1/main/plan/children/0/body",
+        "/workouts/0/versions/1/main/plan/children/0/between"
+      ]
+    }
+  ]
+}

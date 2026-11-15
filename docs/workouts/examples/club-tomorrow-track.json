@@ -1,0 +1,1669 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Entraînement de demain sur piste.eml",
+      "subject": "Entraînement de demain sur piste",
+      "sentAt": "2026-01-13T12:24:10+01:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "S 4/8 BLOC 5 : 100-1000",
+      "sport": "running",
+      "location": "Sport-city",
+      "notes": [
+        {
+          "text": "Bien respecter les % de VMA très important.",
+          "category": "instruction"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "children": [
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 900,
+                      "max": 900
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "Boucle habituelle.",
+                      "category": "route"
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "drill",
+                  "end": {
+                    "kind": "repetitions",
+                    "count": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "3 gammes ; exercices non précisés.",
+                      "category": "instruction"
+                    }
+                  ]
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 1200,
+                "max": 1200
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "notes": [
+                {
+                  "text": "Contenu de la séance : 40 min.",
+                  "category": "context"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 1",
+                  "notes": [
+                    {
+                      "text": "Pensez à bien respecter les % pour terminer fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 105,
+                            "max": 105
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 110,
+                            "max": 110
+                          }
+                        }
+                      ],
+                      "notes": [
+                        {
+                          "text": "Source prints the target as 110°%; interpreted as 110% VMA.",
+                          "category": "instruction"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche entre les blocs",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 2",
+                  "notes": [
+                    {
+                      "text": "Commencez fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 110,
+                            "max": 110
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 105,
+                            "max": 105
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 60
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche après le dernier bloc",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 300,
+                  "max": 300
+                }
+              },
+              "movement": {
+                "mode": "active",
+                "allowed": [
+                  "jog"
+                ]
+              },
+              "notes": [
+                {
+                  "text": "Footing lent autour de la piste dans le sens horlogique.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 1 — version allégée",
+          "audience": "Version allégée indiquée dans le mail.",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "children": [
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 900,
+                      "max": 900
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "Boucle habituelle.",
+                      "category": "route"
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "drill",
+                  "end": {
+                    "kind": "repetitions",
+                    "count": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "3 gammes ; exercices non précisés.",
+                      "category": "instruction"
+                    }
+                  ]
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 1200,
+                "max": 1200
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "notes": [
+                {
+                  "text": "Contenu de la séance : 40 min.",
+                  "category": "context"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 1",
+                  "notes": [
+                    {
+                      "text": "Pensez à bien respecter les % pour terminer fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 105,
+                            "max": 105
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 110,
+                            "max": 110
+                          }
+                        }
+                      ],
+                      "notes": [
+                        {
+                          "text": "Source prints the target as 110°%; interpreted as 110% VMA.",
+                          "category": "instruction"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche entre les blocs",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 2",
+                  "notes": [
+                    {
+                      "text": "Commencez fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 110,
+                            "max": 110
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 105,
+                            "max": 105
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche après le dernier bloc",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 300,
+                  "max": 300
+                }
+              },
+              "movement": {
+                "mode": "active",
+                "allowed": [
+                  "jog"
+                ]
+              },
+              "notes": [
+                {
+                  "text": "Footing lent autour de la piste dans le sens horlogique.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "children": [
+                {
+                  "kind": "step",
+                  "role": "effort",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 900,
+                      "max": 900
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "Boucle habituelle.",
+                      "category": "route"
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "drill",
+                  "end": {
+                    "kind": "repetitions",
+                    "count": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "notes": [
+                    {
+                      "text": "3 gammes ; exercices non précisés.",
+                      "category": "instruction"
+                    }
+                  ]
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 1200,
+                "max": 1200
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "notes": [
+                {
+                  "text": "Contenu de la séance : 40 min.",
+                  "category": "context"
+                }
+              ],
+              "children": [
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 1",
+                  "notes": [
+                    {
+                      "text": "Pensez à bien respecter les % pour terminer fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 70,
+                            "max": 70
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 95,
+                            "max": 95
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche entre les blocs",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                },
+                {
+                  "kind": "sequence",
+                  "label": "Bloc 2",
+                  "notes": [
+                    {
+                      "text": "Commencez fort.",
+                      "category": "instruction"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 100,
+                          "max": 100
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 200,
+                          "max": 200
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 95,
+                            "max": 95
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 400,
+                          "max": 400
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 90,
+                            "max": 90
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 600,
+                          "max": 600
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 80,
+                            "max": 80
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 800,
+                          "max": 800
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 75,
+                            "max": 75
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 90,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    },
+                    {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 1000,
+                          "max": 1000
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 70,
+                            "max": 70
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "kind": "step",
+                  "role": "recovery",
+                  "label": "Pause sèche après le dernier bloc",
+                  "end": {
+                    "kind": "time",
+                    "seconds": {
+                      "min": 180,
+                      "max": 180
+                    }
+                  },
+                  "movement": {
+                    "mode": "passive"
+                  }
+                }
+              ],
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              }
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 300,
+                  "max": 300
+                }
+              },
+              "movement": {
+                "mode": "active",
+                "allowed": [
+                  "jog"
+                ]
+              },
+              "notes": [
+                {
+                  "text": "Footing lent autour de la piste dans le sens horlogique.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "severity": "warning",
+      "code": "ambiguous",
+      "message": "For the final 100 m effort of Groupe 1 Bloc 1, the source prints 110°%; the conversion reads this as 110% VMA based on the surrounding percentage targets.",
+      "paths": [
+        "/workouts/0/versions/0/main/plan/children/0/children/10/targets/0",
+        "/workouts/0/versions/1/main/plan/children/0/children/10/targets/0"
+      ]
+    }
+  ]
+}

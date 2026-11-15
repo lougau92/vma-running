@@ -1,0 +1,419 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "tool/mails/Ce jeudi, 1er entraînement au Stade Fallon.eml",
+      "subject": "Ce jeudi, 1er entraînement au Stade Fallon",
+      "sentAt": "2026-05-04T07:41:43+02:00"
+    },
+    {
+      "type": "review_feedback",
+      "reference": "docs/workouts/review-feedback.json"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Premier entraînement sur la piste du Stade Fallon",
+      "sport": "running",
+      "location": "Stade Fallon",
+      "versions": [
+        {
+          "label": "Groupe 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 900,
+                  "max": 900
+                }
+              },
+              "notes": [
+                {
+                  "text": "Sur la promenade verte du Stade Fallon.",
+                  "category": "route"
+                }
+              ]
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 4,
+                    "max": 5
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 600,
+                            "max": 600
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 80,
+                              "max": 80
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 30,
+                            "max": 30
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 400,
+                            "max": 400
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 90
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 45,
+                            "max": 45
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 200,
+                            "max": 200
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 100,
+                              "max": 100
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 120,
+                            "max": 120
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme sur la piste, tous ensemble.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Groupe 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "time",
+                "seconds": {
+                  "min": 900,
+                  "max": 900
+                }
+              },
+              "notes": [
+                {
+                  "text": "Sur la promenade verte du Stade Fallon.",
+                  "category": "route"
+                }
+              ]
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 4,
+                    "max": 5
+                  },
+                  "body": {
+                    "kind": "sequence",
+                    "children": [
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 500,
+                            "max": 500
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 80,
+                              "max": 80
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 30,
+                            "max": 30
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 300,
+                            "max": 300
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 90,
+                              "max": 90
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 45,
+                            "max": 45
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      },
+                      {
+                        "kind": "step",
+                        "role": "effort",
+                        "end": {
+                          "kind": "distance",
+                          "meters": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        },
+                        "targets": [
+                          {
+                            "kind": "numeric",
+                            "metric": "vma_percent",
+                            "value": {
+                              "min": 100,
+                              "max": 100
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "kind": "step",
+                        "role": "recovery",
+                        "end": {
+                          "kind": "time",
+                          "seconds": {
+                            "min": 120,
+                            "max": 120
+                          }
+                        },
+                        "movement": {
+                          "mode": "active",
+                          "allowed": [
+                            "jog",
+                            "walk"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Retour au calme sur la piste, tous ensemble.",
+                  "category": "instruction"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "notes": [
+        {
+          "text": "Le courriel indique 18h15 pour le tour de chauffe et 18h30 pour l'entraînement.",
+          "category": "instruction"
+        },
+        {
+          "text": "Bien respecter les % de VMA, très important.",
+          "category": "instruction"
+        }
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "severity": "blocking",
+      "code": "ambiguous",
+      "message": "The draft puts the two-minute active recovery after each 200 m (or 100 m) inside each repeated block, including the final block. The source does not explicitly say whether this recovery is also taken after the final block or only between blocks; confirm the intended boundary placement.",
+      "paths": [
+        "/workouts/0/versions/0/main/plan/children/0/body/children/5",
+        "/workouts/0/versions/1/main/plan/children/0/body/children/5"
+      ],
+      "resolution": {
+        "by": "reviewer",
+        "text": "Louis confirmed that the two-minute recovery is correctly placed inside each repeated block, including the final iteration (review exported 2026-11-15)."
+      }
+    }
+  ]
+}

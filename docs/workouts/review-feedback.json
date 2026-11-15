@@ -1,0 +1,63 @@
+{
+  "source": "mail-review-feedback.json supplied by Louis",
+  "feedback": {
+    "Ce jeudi, 1er entraînement au Stade Fallon.eml": "recovery types are important to extract (active trottiner ou marche). otherwise looks good to me",
+    "Entraînement + AG.eml": "ok",
+    "Entraînement + repas du club.eml": "you missed the rest between the 300m series R : 1’ marche ou trott, and 400m R : 1’30 marche ou trott (for group 1, i guess there are also missings for g2)",
+    "Entraînement de ce jeudi 17_09_2026.eml": "seem ok",
+    "Entraînement de ce jeudi..... Stade Fallon.eml": "recov note is important : Possibilité de trottiner entre les 8 premiers mais les 4 derniers pause\nsèche.",
+    "Entraînement de demain sur piste.eml": "you missed all recovery information.",
+    "Entraînement de demain, jeudi 13_08_2026.eml": "recovery info not precise enough",
+    "Entraînement de demain_ Changement de programme.eml": "ok",
+    "Entraînement de jeudi.eml": "this is a hard case: there are multiple workout options",
+    "Entraînement de mardi.eml": "all workout info was missed"
+  },
+  "conversionReviews": {
+    "source": "Louis’s exported review notes supplied in conversation",
+    "exportedAt": "2026-11-15T21:27:18.314Z",
+    "reviews": [
+      {
+        "conversion": "club-first-fallon",
+        "source": "tool/mails/Ce jeudi, 1er entraînement au Stade Fallon.eml",
+        "status": "changes",
+        "notes": "how could we make sure irrelevant notes are not included? like Vestiaires avec douches disponibles mais non sécurisés ; sacs sous la tribune ; buvette après l'entraînement. about blocking · ambiguous: the recovery is well placed. other than that, it looks very good\n\n",
+        "updatedAt": "2026-11-15T20:31:15.182Z"
+      },
+      {
+        "conversion": "club-tomorrow-track",
+        "source": "tool/mails/Entraînement de demain sur piste.eml",
+        "status": "reviewed",
+        "notes": "looks perfect",
+        "updatedAt": "2026-11-15T20:36:56.460Z"
+      },
+      {
+        "conversion": "club-tuesday",
+        "source": "tool/mails/Entraînement de mardi.eml",
+        "status": "reviewed",
+        "notes": "looks perfect (but very similar email than 'Track session'",
+        "updatedAt": "2026-11-15T20:39:01.310Z"
+      },
+      {
+        "conversion": "club-2026-10-15",
+        "source": "tool/mails/Entraînement du jeudi 15 octobre 2026.eml",
+        "status": "reviewed",
+        "notes": "perfect",
+        "updatedAt": "2026-11-15T21:14:49.511Z"
+      },
+      {
+        "conversion": "club-2026-10-29",
+        "source": "tool/mails/Entraînement du jeudi 29 octobre 2026.eml",
+        "status": "changes",
+        "notes": "the convertion could be considered correct but i think this is a bit unecessary complexity:\nSequence\nDeclared budget: 40 min (not a calculated duration)\nRepeat 5–6 times\nSequence\nEffort · 200 m\n90–100% VMA\nEffort · 600 m\n80% VMA\nEffort · 200 m\n90–100% VMA\nBetween iterations only · no final recovery\nRecovery · 90 s\nMovement: passive\n\n\n-> why not use this form? (remove a nested sequence, repeat could be an attribute of a sequence) hence it become clearer that the recovery is part of a repeatable sequence\n\nSequence\nDeclared budget: 40 min (not a calculated duration)\nRepeat 5–6 times\nEffort · 200 m\n90–100% VMA\nEffort · 600 m\n80% VMA\nEffort · 200 m\n90–100% VMA\nRecovery · 90 s\nMovement: passive",
+        "updatedAt": "2026-11-15T21:23:01.308Z"
+      },
+      {
+        "conversion": "club-2026-10-08",
+        "source": "tool/mails/Entraînement du jeudi 8 octobre 2026.eml",
+        "status": "changes",
+        "notes": "here it would be clearer that the recovery is part of the repeated block, so  this becomes unecessary 'Between iterations only · no final recovery'\n\nRepeat 5 times · 5 × 200 m\nEffort · 200 m · 200 m\n110% VMA\nBetween iterations only · no final recovery\nRecovery · 45–60 s · Récupération\nMovement: unspecified\n\n\nsame story for\nRepeat 4 times · 4 × 400 m\nEffort · 400 m · 400 m\n100% VMA\nBetween iterations only · no final recovery\nRecovery · 90 s · Récupération\nMovement: unspecified",
+        "updatedAt": "2026-11-15T21:26:39.380Z"
+      }
+    ]
+  }
+}

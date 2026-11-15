@@ -8,6 +8,25 @@ also be read directly by a worker with no prior conversation context.
 The existing `lib/training_plan.dart` still serves the app; these conversions
 remain separate draft artifacts.
 
+## Review the three GPT Luna conversions
+
+Open [review.html](review.html) directly in a browser. It embeds the original
+plain-text emails and conversion JSON for August 13, September 17 and
+October 22, 2026, with selectable versions, issue navigation and local review
+notes. Export notes to keep a portable copy; this page does not update the
+conversion files or record approval.
+
+After editing a conversion, rebuild the embedded snapshot from the repository
+root:
+
+```sh
+python3 tool/build_workout_review.py
+```
+
+Pass conversion basenames to review another batch. The original `.eml` files
+under `tool/mails/` are local inputs and are intentionally not committed. The
+generated page embeds the source text so it can be reviewed without those files.
+
 ## Python model
 
 [`tool/workout_model.py`](../../tool/workout_model.py) implements the contract
@@ -23,7 +42,7 @@ from tool.workout_model import (
 )
 
 plan = WorkoutConversion.from_json(
-    Path("path/to/converted-workout.json").read_text()
+    Path("docs/workouts/examples/club-2026-11-05.json").read_text()
 )
 json_text = plan.to_json()
 
@@ -54,8 +73,9 @@ one recovery per set. Warmup and cooldown are strings. This cannot faithfully
 represent `3 × (400 + recovery + 400 + recovery + 200 + recovery + 1200)`, a
 range of repetitions, choices of workout, or structured preparation drills.
 
-Recovery is part of the workout: its duration, placement, movement and
-exceptions must survive conversion. A summary pointing to a similar email is not a complete conversion.
+[Louis's annotations](review-feedback.json) emphasize that recovery is part of
+the workout: its duration, placement, movement and exceptions must survive
+conversion. A summary pointing to a similar email is not a complete conversion.
 
 ## Data types
 
@@ -131,8 +151,9 @@ last, put it inside the body sequence. To rest between two blocks, insert a
 recovery step between those blocks in their parent sequence.
 A recovery listed at the end of a repeated block stays inside the repeated body,
 including its final iteration, unless the source restricts it or indicates a
-replacement. A merely hypothetical alternative does not warrant a blocking
-ambiguity issue.
+replacement. Louis confirmed this placement for the first Stade Fallon email;
+its former blocking issue now records that reviewer resolution. A merely
+hypothetical alternative does not warrant a blocking ambiguity issue.
 
 For example, `4 × 300 m, R: 1 min walk/jog`, followed by `2 min pause sèche`,
 can be represented as:
@@ -147,8 +168,7 @@ Sequence
 ```
 
 Whether that section rest replaces or adds to the final short recovery is a
-source interpretation. Record a blocking issue when the source leaves that
-boundary genuinely unresolved.
+source interpretation. The example retains a blocking issue until confirmed.
 The structure makes the proposed interpretation explicit, without hiding a
 default in an exporter.
 
@@ -167,9 +187,9 @@ remain ranges. Do not choose a midpoint or lower bound during extraction.
 
 End conditions are distinct from targets. A 400 m step ends after 400 m; its
 VMA percentage describes the effort. A recovery can end by time or distance.
-When a reviewer confirms that “1 min active (200 m)” means a timed recovery,
-use a 60-second end condition and a 200 m note. That source-specific decision
-does not automatically resolve other emails with similar wording.
+“1 min active (200 m)” uses a 60-second end condition and a 200 m note for the
+November 5 session, following Louis's explicit decision. That decision does
+not automatically resolve other emails with similar wording.
 
 | End kind | Meaning |
 | --- | --- |
@@ -277,3 +297,20 @@ Garmin is an export adapter: it receives a resolved executable plan, converts
 supported units and targets, and reports unsupported instructions or device
 limits. It must not silently discard drills, choices, route instructions or
 recovery notes. An app display can support more of this structure than a watch.
+
+## Examples and review decisions
+
+| File | What it demonstrates |
+| --- | --- |
+| [club-2026-11-05.json](examples/club-2026-11-05.json) | Complete Groupe 1/2, nested repeats, active vs passive recovery, VMA ranges, shared warmup and lap cooldown. |
+| [club-meal-recoveries.json](examples/club-meal-recoveries.json) | Both groups, walk/jog recoveries between repetitions, separate section rests, warmup drills and a blocking boundary interpretation. |
+| [club-options-20km.json](examples/club-options-20km.json) | Three alternatives per block with distinct recovery times, audience and unresolved pairing. Only the supplied group is represented. |
+| [no-workout.json](examples/no-workout.json) | A venue update containing no workout prescription. |
+
+These remain draft artifacts, not published workouts. Louis reviewed the track
+and Tuesday conversions positively; the first Stade Fallon conversion now
+excludes administrative notes and records his recovery-placement confirmation.
+See [review-feedback.json](review-feedback.json) for the original annotations
+and later exported reviews. Latest source-specific review decisions take
+precedence over earlier comments. Similar emails still require separate full
+conversions and source checks.

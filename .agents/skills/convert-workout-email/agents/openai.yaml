@@ -1,0 +1,4 @@
+interface:
+  display_name: "Convert workout email"
+  short_description: "Convert club emails into source-faithful workout JSON"
+  default_prompt: "Use $convert-workout-email to convert the assigned workout email into the draft workout schema."

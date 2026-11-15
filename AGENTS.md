@@ -29,3 +29,9 @@ navy/colored ink. Avoid neutral gray panels with black text. Define surface and
 foreground pairs in `lib/theme.dart`, including all text styles, labels, and
 helper text; new widgets should inherit those theme values. Keep light cards
 opaque and avoid elevation shadows that muddy their background color.
+
+## Workout email conversion
+
+Use [.agents/skills/convert-workout-email/SKILL.md](.agents/skills/convert-workout-email/SKILL.md)
+when converting workout emails to the draft JSON contract. The skill is the
+operational entrypoint; `docs/workouts/README.md` is the detailed model reference.

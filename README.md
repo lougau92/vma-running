@@ -26,6 +26,12 @@ updates on load, when returning to the tab, and when reconnecting; a completed
 update reloads the app while keeping saved preferences and VMA. A failed precache
 keeps the previous installed release available offline.
 
+Every push to `main` runs the web build and offline checks, but GitHub Pages is
+published only when the SemVer portion of `pubspec.yaml` differs from the version
+in the currently deployed `version.json`. Bump `MAJOR.MINOR.PATCH` for an
+intentional release; changing only the `+build` value does not publish. The
+service-worker cache uses a separate CI run and commit identifier.
+
 Run `npm run test:web` after installing Playwright Chromium. This covers upgrade
 from the legacy worker, retained cookies/preferences, stale HTTP and legacy
 caches, incomplete updates, and offline reloads at `/` and `/vma-running/`.

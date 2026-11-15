@@ -7,9 +7,10 @@ const __dirname = dirname(__filename);
 
 const buildVersion = process.env.BUILD_NAME || 'local-dev';
 const buildNumber = process.env.BUILD_NUMBER || '0';
+const deploymentId = process.env.DEPLOYMENT_ID || `${buildVersion}+${buildNumber}`;
 
 const sanitize = (value) => value.replace(/[^0-9A-Za-z_.-]/g, '-');
-const fullVersion = `${sanitize(buildVersion)}+${sanitize(buildNumber)}`;
+const cacheVersion = sanitize(deploymentId);
 
 const swPath = join(__dirname, '../web/service_worker.js');
 
@@ -24,11 +25,11 @@ try {
 
   const updatedContent = swContent.replace(
     cacheNameRegex,
-    `const CACHE_NAME = 'vma-running-cache-${fullVersion}';`
+    `const CACHE_NAME = 'vma-running-cache-${cacheVersion}';`
   );
 
   writeFileSync(swPath, updatedContent);
-  console.log(`Service worker stamped with cache version: ${fullVersion}`);
+  console.log(`Service worker stamped with deployment cache ID: ${cacheVersion}`);
 } catch (error) {
   console.error(error);
   process.exit(1);

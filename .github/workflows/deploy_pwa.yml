@@ -122,11 +122,32 @@ jobs:
           print(f'Using app version {version_name}+{build_number} from pubspec.yaml')
           PYCODE
 
+      - name: Check whether this app version needs deployment
+        id: release
+        env:
+          APP_VERSION: ${{ steps.app_version.outputs.version_name }}
+        run: |
+          deployed_version=""
+          if git fetch --no-tags --depth=1 origin gh-pages; then
+            if deployed_json="$(git show FETCH_HEAD:version.json 2>/dev/null)"; then
+              deployed_version="$(printf '%s' "$deployed_json" | python3 -c 'import json, sys; print(json.load(sys.stdin).get("version", ""))' 2>/dev/null || true)"
+            fi
+          fi
+
+          if [[ "$APP_VERSION" == "$deployed_version" ]]; then
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "App version $APP_VERSION is already deployed; skipping publish."
+          else
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+            echo "Deploying app version $APP_VERSION (currently deployed: ${deployed_version:-unknown})."
+          fi
+
       - name: Stamp Service Worker Version
         run: node tool/inject-sw-version.mjs
         env:
           BUILD_NAME: ${{ steps.app_version.outputs.version_name }}
           BUILD_NUMBER: ${{ steps.app_version.outputs.build_number }}
+          DEPLOYMENT_ID: ${{ github.run_number }}-${{ github.sha }}
 
       # --- SINGLE BUILD ---
       - name: Build Web App
@@ -149,6 +170,7 @@ jobs:
 
       # --- DEPLOY ---
       - name: Deploy to gh-pages branch
+        if: steps.release.outputs.deploy == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

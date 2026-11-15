@@ -30,8 +30,41 @@ jobs:
       - name: Test content publisher
         run: npm run test:content
 
+      - name: Detect web update changes
+        id: web_update_changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          if [[ "$EVENT_NAME" == "workflow_dispatch" || -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif git fetch --no-tags --depth=1 origin "$BEFORE"; then
+            if git diff --quiet "$BEFORE" "$GITHUB_SHA" -- \
+              .github/workflows/deploy_pwa.yml \
+              package.json \
+              package-lock.json \
+              web/service_worker.js \
+              web/app_update.js \
+              web/flutter_bootstrap.js \
+              web/index.html \
+              tool/inject-sw-version.mjs \
+              tool/sw-update.test.mjs; then
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "::warning::Could not fetch the previous commit; running web update tests as a precaution."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install Playwright Browsers
+        if: steps.web_update_changes.outputs.changed == 'true'
         run: npx playwright install --with-deps chromium
+
+      - name: Test web release updates
+        if: steps.web_update_changes.outputs.changed == 'true'
+        run: npm run test:web
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2

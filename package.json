@@ -8,6 +8,7 @@
   },
   "scripts": {
     "content:publish": "node tool/publish-content.mjs",
-    "test:content": "node --test tool/publish-content.test.mjs"
+    "test:content": "node --test tool/publish-content.test.mjs",
+    "test:web": "node --test tool/sw-update.test.mjs"
   }
 }

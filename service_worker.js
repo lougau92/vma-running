@@ -1,5 +1,5 @@
 // The release build stamps this name before Flutter copies the web assets.
-const CACHE_NAME = 'vma-running-cache-1.10.32+41';
+const CACHE_NAME = 'vma-running-cache-60-745dcff58358a831c615f394c6e840c2f7f0c338';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -16,8 +16,7 @@ const CORE_ASSETS = [
   './assets/fonts/MaterialIcons-Regular.otf',
   './assets/packages/cupertino_icons/assets/CupertinoIcons.ttf',
   './assets/assets/feedback.json',
-  './assets/assets/enjambee_img/logo-header-minimized.png',
-  './assets/assets/training_plans/training_example.json'
+  './assets/assets/enjambee_img/logo-header-minimized.png'
 ];
 
 self.addEventListener('install', (event) => {

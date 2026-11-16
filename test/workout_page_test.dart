@@ -28,7 +28,19 @@ class _Loader extends RemoteAssetLoader {
   }
 }
 
-Widget _app(_Loader loader, String locale, bool dark) => MaterialApp(
+Widget _app(
+  _Loader loader,
+  String locale,
+  bool dark, {
+  String? themeId,
+  double textScale = 1,
+}) => MaterialApp(
+  builder: (context, child) => MediaQuery(
+    data: MediaQuery.of(
+      context,
+    ).copyWith(textScaler: TextScaler.linear(textScale)),
+    child: child!,
+  ),
   locale: Locale(locale),
   supportedLocales: AppLocalizations.supportedLocales,
   localizationsDelegates: const [
@@ -38,11 +50,38 @@ Widget _app(_Loader loader, String locale, bool dark) => MaterialApp(
     GlobalCupertinoLocalizations.delegate,
   ],
   theme: dark
-      ? AppThemes.resolve('summit').dark
-      : AppThemes.resolve('enjambee').light,
+      ? AppThemes.resolve(themeId ?? 'summit').dark
+      : AppThemes.resolve(themeId ?? 'enjambee').light,
   home: Scaffold(body: TrainingPlanPage(userVma: 18, loader: loader)),
 );
 void main() {
+  for (final theme in AppThemes.all) {
+    for (final dark in [false, true]) {
+      testWidgets(
+        'narrow workout with large text in ${theme.id}${dark ? ' dark' : ' light'}',
+        (tester) async {
+          await tester.binding.setSurfaceSize(const Size(320, 900));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+          final loader = _Loader(
+            File('test/fixtures/workouts/all_features.json').readAsStringSync(),
+          );
+          await tester.pumpWidget(
+            _app(loader, 'fr', dark, themeId: theme.id, textScale: 1.6),
+          );
+          await tester.pumpAndSettle();
+          await tester.drag(
+            find.byType(SingleChildScrollView).first,
+            const Offset(0, -800),
+          );
+          await tester.pumpAndSettle();
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox());
+          unawaited(loader.updates.close());
+        },
+      );
+    }
+  }
+
   for (final locale in ['en', 'fr', 'nl']) {
     for (final width in [320.0, 1100.0]) {
       testWidgets('all structures render in $locale at width $width', (

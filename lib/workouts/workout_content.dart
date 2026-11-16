@@ -5,6 +5,7 @@ import '../remote_asset_loader.dart';
 import '../widgets/content_refresh_button.dart';
 import 'workout.dart';
 import 'workout_view.dart';
+import 'workout_session_header.dart';
 
 class WorkoutContent extends StatefulWidget {
   const WorkoutContent({
@@ -97,7 +98,12 @@ class _WorkoutContentState extends State<WorkoutContent> {
                             Expanded(
                               child: Text(
                                 s.trainingPlanTab,
-                                style: Theme.of(context).textTheme.titleMedium,
+                                style: Theme.of(context).textTheme.titleSmall
+                                    ?.copyWith(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.onSurfaceVariant,
+                                    ),
                               ),
                             ),
                             ContentRefreshButton(
@@ -133,22 +139,8 @@ class _WorkoutContentState extends State<WorkoutContent> {
                             }),
                           ),
                         const SizedBox(height: 12),
-                        Text(
-                          session.title,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        if (session.scheduledDate != null ||
-                            session.location != null)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Text(
-                              [
-                                if (session.scheduledDate != null)
-                                  session.scheduledDate!,
-                                if (session.location != null) session.location!,
-                              ].join(' · '),
-                            ),
-                          ),
+                        WorkoutSessionHeader(session: session),
+                        const SizedBox(height: 8),
                         ...view.notes(widget.conversion.notes),
                         ...[
                           FeedbackContextScope(
@@ -163,7 +155,7 @@ class _WorkoutContentState extends State<WorkoutContent> {
                         ...view.globalWarnings(),
                         if (session.versions.length > 1)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Wrap(
                               spacing: 8,
                               runSpacing: 8,
@@ -175,6 +167,25 @@ class _WorkoutContentState extends State<WorkoutContent> {
                                 )
                                   ChoiceChip(
                                     label: Text(session.versions[i].label),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 10,
+                                    ),
+                                    selectedColor: Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
+                                    labelStyle: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          color: i == versionIndex
+                                              ? Theme.of(
+                                                  context,
+                                                ).colorScheme.onPrimaryContainer
+                                              : Theme.of(
+                                                  context,
+                                                ).colorScheme.onSurface,
+                                        ),
                                     selected: i == versionIndex,
                                     onSelected: (_) => setState(() {
                                       _versionLabel = session.versions[i].label;

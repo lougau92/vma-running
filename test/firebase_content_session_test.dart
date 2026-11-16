@@ -111,11 +111,11 @@ void main() {
             firestore: firestore,
             session: _OfflineSession(),
           ).loadText(
-            documentPath: 'app_documents/training_plan',
-            assetPath: 'assets/training_plans/training_example.json',
+            documentPath: 'app_documents/communications',
+            assetPath: 'assets/communications/messages.json',
           );
       expect(result.origin, RemoteLoadOrigin.asset);
-      expect(result.data, contains('groups'));
+      expect(result.data, isNotEmpty);
       expect(result.error, isA<FirebaseAuthException>());
       expect(firestore.reads, 0);
     },
@@ -134,8 +134,8 @@ void main() {
     await RemoteAssetLoader(
       session: FirebaseContentSession(auth: auth),
     ).loadText(
-      documentPath: 'app_documents/training_plan',
-      assetPath: 'assets/training_plans/training_example.json',
+      documentPath: 'app_documents/communications',
+      assetPath: 'assets/communications/messages.json',
     );
     expect(messages, [
       'Remote content load failed (firebase_auth/network-request-failed); '
@@ -148,8 +148,8 @@ void main() {
     final session = _DeferredSession();
     final pending = RemoteAssetLoader(firestore: firestore, session: session)
         .loadText(
-          documentPath: 'app_documents/training_plan',
-          assetPath: 'assets/training_plans/training_example.json',
+          documentPath: 'app_documents/communications',
+          assetPath: 'assets/communications/messages.json',
         );
     expect(firestore.reads, 0);
     session.ready.complete();

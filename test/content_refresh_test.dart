@@ -1,3 +1,4 @@
+import 'workout_fixture.dart';
 import 'dart:async' show StreamController, TimeoutException, unawaited;
 import 'dart:convert' show jsonEncode;
 
@@ -5,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart' show AppLocalizations;
-import 'package:vma_running/app_settings.dart' show AppSettings;
 import 'package:vma_running/widgets/club_communications_page.dart'
     show ClubCommunicationsPage;
 import 'package:vma_running/remote_asset_loader.dart'
@@ -23,7 +23,7 @@ class _Loader extends RemoteAssetLoader {
   @override
   Stream<RemoteLoadResult> watchText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) {
@@ -36,24 +36,11 @@ class _Loader extends RemoteAssetLoader {
   }
 }
 
-String _plan(String label, int groups) => jsonEncode({
-  'title': 'Plan',
-  'warmup': label,
-  'cooldown': 'Cool down',
-  'remarks': '',
-  'groups': List.generate(
-    groups,
-    (i) => {'title': 'Group ${i + 1}', 'blocks': []},
-  ),
-});
+String _plan(String label, int groups) =>
+    jsonEncode(workoutFixture(warmup: label, groups: groups));
 
 Widget _screen(int kind, _Loader loader) => switch (kind) {
-  0 => TrainingPlanPage(
-    userVma: 18,
-    settings: const AppSettings(),
-    onSettingsChanged: (_) {},
-    loader: loader,
-  ),
+  0 => TrainingPlanPage(userVma: 18, loader: loader),
   1 => ChallengeTable(loader: loader),
   _ => ClubCommunicationsPage(loader: loader),
 };
@@ -105,9 +92,9 @@ void main() {
           await tester.pump();
           expect(
             tester
-                .widget<SegmentedButton<int>>(find.byType(SegmentedButton<int>))
+                .widget<ChoiceChip>(find.widgetWithText(ChoiceChip, 'Group 2'))
                 .selected,
-            {1},
+            true,
           );
         }
         loader.updates.add(

@@ -156,8 +156,6 @@ class _HomeWorkspaceState extends State<HomeWorkspace> {
         ),
         _HomePage.trainingPlan => TrainingPlanPage(
           userVma: vma!,
-          settings: widget.settings,
-          onSettingsChanged: widget.onSettingsChanged,
           loader: widget.loader,
         ),
         _HomePage.calculator => RunningCalculatorTab(

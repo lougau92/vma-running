@@ -7,7 +7,6 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 - Intensity tab: pace table across customizable %VMA and a configurable reference distance.
 - Times tab: predicted splits for distance or time ranges with adjustable intensity slider.
 - Training plan tab: loads an interval plan from Firestore with local caching and shows reps, pace targets, and recoveries by group.
-- Export: copy the selected training-plan group to the clipboard.
 - Settings: language (EN/FR/NL), theme (light/dark/system), and default distance/time ranges.
 - Offline-first: ships a service worker that caches the app shell so core features load without network; training plan data reuses cached responses if offline.
 
@@ -58,7 +57,7 @@ Restart `flutter run -d chrome` for web, or select a connected Android/iOS devic
 with `flutter devices` and `flutter run -d <device-id>`. Android needs the Android
 SDK command-line tools and accepted licenses; iOS needs macOS and Xcode.
 
-Content lives in the `app_documents` collection: `training_plan`,
+Content lives in the `app_documents` collection: `workout_plan`,
 `club_communications`, and `challenge_classement`. Each document has a `content`
 string containing its JSON or CSV payload. Enable Cloud Firestore and create its
 default database in Firebase Console, then create the documents and configure
@@ -71,7 +70,7 @@ cached/bundled fallback and can be retried on refresh. Enable the Anonymous
 provider in Firebase Authentication for `vma-training`.
 
 `firestore.rules` requires an authenticated Firebase session for individual reads
-of the three content documents. Client writes, collection listing, and all other
+of the content documents, including the legacy training plan. Client writes, collection listing, and all other
 paths are denied. Anonymous sessions can be obtained by anyone; this controls
 session access rather than club membership. Supabase feedback sessions are
 independent.
@@ -86,7 +85,7 @@ Feedback uses its separate Supabase backend described below.
 ### Content loading, retries, and refresh
 
 - Opening any of the three content screens immediately shows the last downloaded
-  version (memory or device/browser storage), or the bundled file on a first run.
+  version (memory or device/browser storage), or the bundled file on a first run for communications and challenge data. Workout plans have no bundled fallback.
   A server read then updates the visible content in the background.
 - Each refresh allows at most **3 attempts**, with delays of **500 ms** and
   **1 second** after transient Firebase errors (`unavailable`,
@@ -121,29 +120,37 @@ not mean the documents are absent; the app also uses bundled files when offline.
 
 ## Publishing content to Firestore
 
-Use Node 24 and `npm ci`, then sign in once with `firebase login` (or
-`npm exec -- firebase login`). The publisher reuses that CLI login; no service
-account key or token is added to the repository. The Firebase CLI Node library is
-pinned because the authentication adapter uses its internal APIs.
+Both publishers use Python and share Google authentication and Firestore
+publishing code. Install dependencies and sign in once:
+
+```sh
+python3 -m pip install -r tool/scripts/requirements.txt
+gcloud auth application-default login
+```
+
+The signed-in account needs Firestore IAM write access in the target project.
+No service-account key or token is added to the repository. Node.js and the
+Firebase CLI are still used for web tooling, rules deployment, and emulator
+checks; uploading content does not require them.
 
 Preview the bundled files and target project without authentication or network:
 
 ```sh
-npm run content:publish
+python3 -m tool.scripts.publish_content
 ```
 
-Publish all three documents, or only the training plan:
+Publish communications and challenge content together, or select one:
 
 ```sh
-npm run content:publish -- --write
-npm run content:publish -- --write --only training_plan
+python3 -m tool.scripts.publish_content --write
+python3 -m tool.scripts.publish_content --write --only club_communications
 ```
 
 `--dry-run` is also accepted explicitly. The project defaults to `vma-training`; `--project PROJECT_ID` overrides it.
 The script resolves source files relative to the repository, validates all
 selected files before authenticating, and stores their original UTF-8 text in
 `app_documents/<id>.content` in the `(default)` database. It uploads
-`training_plan`, `club_communications` (encrypted `messages.json`, never the raw
+`club_communications` (encrypted `messages.json`, never the raw
 message file), and `challenge_classement` using one atomic commit. Existing
 `content` values are replaced; other fields are preserved. Files must be at most
 1,000,000 UTF-8 bytes each. Failed requests are not automatically retried.
@@ -151,8 +158,69 @@ message file), and `challenge_classement` using one atomic commit. Existing
 Create the default Firestore database once in Firebase Console before publishing.
 The publisher does not create databases or deploy access rules. Uploading with
 an administrator login does not grant the app permission to read: configure
-Firestore rules for the intended readers separately. Run `npm run test:content`
+Firestore rules for the intended readers separately. Run `python3 -m unittest tool.scripts.tests.test_publish_content`
 to check validation and publishing behavior without touching a live database.
+
+
+## Publishing workouts
+
+Install the local tooling once:
+
+```sh
+python3 -m pip install -r tool/scripts/requirements.txt
+gcloud auth application-default login
+```
+
+Preview an extracted schema `0.1` conversion without authentication or network:
+
+```sh
+python3 -m tool.scripts.publish_workout --file path/to/converted-workout.json
+```
+
+After reviewing the source and conversion, replace the current publication:
+
+```sh
+python3 -m tool.scripts.publish_workout --file path/to/converted-workout.json --write --approve
+```
+
+`--approve` attests that source review is complete. Validation does not establish
+source fidelity. Warnings and recorded resolutions are displayed; unresolved
+blocking issues, non-workout outcomes, invalid issue paths, and unsupported
+schema versions prevent publication. JSON Schema validation is required for
+publishing. Use `--project PROJECT_ID` to override `vma-training`.
+
+The tool reads the selected file once, validates those exact bytes through the
+shared Python validator, and writes `app_documents/workout_plan` atomically.
+Its `content` string contains the complete conversion envelope, `contentHash`
+is its SHA-256 hash, and `publishedAt` is a server timestamp. The limit is
+900,000 UTF-8 bytes, leaving room for Firestore metadata. There is one current
+publication, with no remote history or scheduled activation. An envelope can
+contain several sessions; the app offers a session selector in that case.
+
+Only the JSON is uploaded: original email bodies and experiment review pages
+remain local. Source references and interpretation issues remain in the JSON.
+The Python uploader uses Google Application Default Credentials (ADC), independently
+of Firebase CLI login. Install the Google Cloud CLI for the local login command
+above. The signed-in account needs permission to write Firestore in the selected
+project (for example, the Cloud Datastore User IAM role). A service-account key
+is not required. In hosted environments, ADC can use the attached identity.
+Authentication and publishing use google-auth and the Firestore REST API;
+Node.js and firebase-tools are not required for workout uploads.
+It does not deploy rules. Authentication failures and unconfirmed writes have
+separate errors; after an unconfirmed write, inspect the remote hash before
+retrying. Re-uploading the same file safely replaces the same publication.
+
+### First rollout
+
+1. Run `npm run test:workouts` and `npm run test:workout-rules` (requires Java 21).
+2. Deploy the additive rule with `npm exec -- firebase deploy --only firestore:rules --project vma-training`.
+3. Publish the approved conversion with the command above.
+4. Release the rebuilt app and verify online refresh and offline startup.
+
+The new app reads only `app_documents/workout_plan`. Keep the legacy
+`app_documents/training_plan` document and read permission for installed older
+apps. The legacy workout uploader and clipboard exporter have been removed.
+Communications and challenge publishing remain independent.
 
 ## Release feature flags
 
@@ -170,13 +238,13 @@ defaults (both disabled). Navigation uses stable page identifiers, so flags do
 not change which page an existing tab selection represents.
 
 The previous Intervals.icu/Garmin integration is preserved on the local
-`feature/intervals-icu` branch. Main contains clipboard export only and no longer
+`feature/intervals-icu` branch. The app provides workout display only and no longer
 reads or writes Intervals.icu credentials. Previously saved credentials remain
 in device storage, unused.
 
 ## Service worker offline/online switch test
 1) Run web build: `flutter run -d chrome` (or `flutter build web && npx serve build/web`).
-2) Load once online so the service worker installs and caches assets (including `assets/training_plans/training_example.json`).
+2) Load once online so the service worker installs and caches assets.
 3) In DevTools → Application → Service Workers, confirm it is “activated”.
 4) In DevTools → Network, toggle “Offline” and reload:
    - App shell should load from cache.
@@ -188,11 +256,13 @@ in device storage, unused.
 1) Build web: `flutter build web --release`
 2) Install test deps: `npm install playwright@1.41.2 http-server && npx playwright install --with-deps chromium`
 3) Run: `node tool/sw-offline-test.js`
-   - Starts a local server, waits for the service worker, goes offline, checks the cached training plan, and asserts no font error spam.
+   - Starts a local server, waits for the service worker, goes offline, checks the cached app configuration, and asserts no font error spam.
 
 ## Training plan data
-- Default source: Firestore document `app_documents/training_plan`, with the plan JSON stored in a string field named `content`. The loader shows cached data or the bundled example immediately, then revalidates against the server with the bounded policy above.
-- Local example: `assets/training_plans/training_example.json` shows the schema. Each plan includes `warmup`, `cooldown`, `remarks`, and `groups` with `blocks` of interval `sets` (reps, distance or duration, `%VMA`, recovery, and recovery type).
+- Default source: Firestore document `app_documents/workout_plan`, with a schema `0.1` conversion in its `content` string.
+- Synthetic test examples live in `test/fixtures/workouts/` and are not shipped in the app. The app preserves sessions, complete group versions, phases, recursive repeats, recoveries, choices, notes, ranges, and interpretation details.
+- The existing cache-first loader validates remote content before caching and uses previously downloaded content when available. Without a valid cache or remote document, the page shows a retry state. Refresh keeps usable content visible.
+- Personalized pace guidance uses the athlete's VMA without rewriting the prescription. This version has no execution setup or export.
 
 ## Localization & theming
 - Strings live in `lib/l10n/translations_*.dart`; add languages by creating another translation file and wiring it in `AppLocalizations`.
@@ -203,10 +273,10 @@ in device storage, unused.
 - App preferences (locale, theme, times/distances bounds) are handled in `lib/settings_storage.dart` and edited via the settings page.
 
 ## Assets
-- Logos live under `assets/enjambee_img/`; training plans under `assets/training_plans/`. Add new assets and list them in `pubspec.yaml`.
+- Logos live under `assets/enjambee_img/`. Add new assets and list them in `pubspec.yaml`.
 
 ## Troubleshooting
-- Training plan not loading: check Firebase initialization, the `app_documents/training_plan` document and its `content` string, and the Firestore rules for the intended reader. A failed remote read uses cached or bundled data.
+- Training plan not loading: check Firebase initialization, the `app_documents/workout_plan` document and its `content` string, and the Firestore rules for the intended reader. A failed remote workout read uses a valid previously downloaded cache, or shows a retry state.
 - Pace tables empty: set your VMA from the top banner; the app will prompt on first use.
 
 ## User feedback
@@ -288,7 +358,7 @@ return `null`. Results retain full precision until display formatting.
 Calculator field handling and input-pair selection stay in
 `lib/calculator/running_calculator_draft.dart`. Table presets and row selection
 stay with the tables. Shared duration parsing and pace/duration formatting live
-in `lib/running/running_time.dart`, so the screens and clipboard export use the
+in `lib/running/running_time.dart`, so the screens use the
 same rounding and clock notation.
 
 Distance constants, parsing, and numeric formatting live in

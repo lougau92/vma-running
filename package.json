@@ -7,8 +7,11 @@
     "tree-kill": "^1.2.2"
   },
   "scripts": {
-    "content:publish": "node tool/publish-content.mjs",
-    "test:content": "node --test tool/publish-content.test.mjs",
-    "test:web": "node --test tool/sw-update.test.mjs"
+    "content:publish": "python3 -m tool.scripts.publish_content",
+    "test:content": "python3 -m unittest tool.scripts.tests.test_publish_content",
+    "test:web": "node --test tool/sw-update.test.mjs",
+    "workout:publish": "python3 -m tool.scripts.publish_workout",
+    "test:workouts": "python3 -m unittest tool.scripts.tests.test_publish_workout",
+    "test:workout-rules": "firebase emulators:exec --only firestore --project demo-vma-workout \"python3 -m unittest tool.scripts.tests.test_workout_rules\""
   }
 }

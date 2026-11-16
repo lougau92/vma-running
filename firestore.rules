@@ -6,6 +6,7 @@ service cloud.firestore {
     match /app_documents/{id} {
       allow get: if request.auth != null && id in [
         'training_plan',
+        'workout_plan',
         'club_communications',
         'challenge_classement'
       ];

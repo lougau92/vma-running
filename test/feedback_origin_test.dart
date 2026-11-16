@@ -20,7 +20,7 @@ class _Loader extends RemoteAssetLoader {
   @override
   Stream<RemoteLoadResult> watchText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) => const Stream.empty();

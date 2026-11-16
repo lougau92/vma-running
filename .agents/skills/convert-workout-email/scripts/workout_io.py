@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(ROOT))
-from tool.workout_model import WorkoutConversion
+from tool.scripts.workout_validation import validate_document
 
 
 class PlainHTML(HTMLParser):
@@ -56,47 +56,9 @@ def read_email(path):
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
-def resolve(document, pointer):
-    if pointer == '':
-        return document
-    if not pointer.startswith('/'):
-        raise ValueError(f'Invalid JSON Pointer: {pointer}')
-    value = document
-    for part in pointer[1:].split('/'):
-        key = part.replace('~1', '/').replace('~0', '~')
-        if isinstance(value, list):
-            if not key.isdecimal() or (len(key) > 1 and key.startswith('0')):
-                raise ValueError(f'Invalid array index: {pointer}')
-            value = value[int(key)]
-        else:
-            value = value[key]
-    return value
-
-
 def validate(path):
-    text = path.read_text()
-    conversion = WorkoutConversion.from_json(text)
-    document = json.loads(text)
-    ids = [w.id for w in conversion.workouts]
-    if len(ids) != len(set(ids)):
-        raise ValueError('Workout IDs must be unique within the envelope')
-    for issue in document['issues']:
-        for pointer in issue['paths']:
-            resolve(document, pointer)
-    if document['status'] == 'unreadable' and not any(
-            i['severity'] == 'blocking' and 'resolution' not in i for i in document['issues']):
-        raise ValueError('Unreadable extraction requires an unresolved blocking issue')
-    checks = ['typed model', 'unique IDs', 'issue pointers']
-    try:
-        import jsonschema
-    except ImportError:
-        checks.append('JSON Schema skipped (jsonschema unavailable)')
-    else:
-        schema = json.loads((ROOT / 'docs/workouts/workout.schema.json').read_text())
-        jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(document)
-        checks.append('JSON Schema')
+    checks = validate_document(json.loads(path.read_text()))
     print(f'{path}: PASS ({", ".join(checks)}); source completeness requires cross-check')
-
 
 if __name__ == '__main__':
     cli = argparse.ArgumentParser(description=__doc__)

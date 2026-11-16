@@ -24,13 +24,13 @@ class EnjambeeTheme {
       seedColor: orange,
       primary: orange,
       secondary: navy,
-      background: const Color(0xFF0F142F),
+      surface: const Color(0xFF0F142F),
       brightness: Brightness.dark,
     );
 
     return ThemeData(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.surface,
       appBarTheme: const AppBarTheme(
         backgroundColor: navy,
         foregroundColor: white,
@@ -47,7 +47,7 @@ class EnjambeeTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        color: Colors.white.withOpacity(0.06),
+        color: Colors.white.withValues(alpha: 0.06),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       textTheme: const TextTheme(
@@ -61,7 +61,7 @@ class EnjambeeTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withOpacity(0.05),
+        fillColor: Colors.white.withValues(alpha: 0.05),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
@@ -72,7 +72,7 @@ class EnjambeeTheme {
       seedColor: orange,
       primary: orange,
       secondary: navy,
-      background: white,
+      surface: white,
       brightness: Brightness.light,
     );
 
@@ -101,20 +101,20 @@ class SummitTheme {
       seedColor: blue,
       primary: blue,
       secondary: sky,
-      background: midnight,
+      surface: midnight,
       brightness: Brightness.dark,
     );
 
     return _buildTheme(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.surface,
       appBarBackgroundColor: const Color(0xFF10294A),
       appBarForegroundColor: Colors.white,
       buttonBackgroundColor: blue,
       buttonForegroundColor: Colors.white,
-      cardColor: Colors.white.withOpacity(0.06),
+      cardColor: Colors.white.withValues(alpha: 0.06),
       textColor: Colors.white,
-      inputFillColor: Colors.white.withOpacity(0.05),
+      inputFillColor: Colors.white.withValues(alpha: 0.05),
     );
   }
 
@@ -123,7 +123,7 @@ class SummitTheme {
       seedColor: blue,
       primary: blue,
       secondary: sky,
-      background: cloud,
+      surface: cloud,
       brightness: Brightness.light,
     );
 
@@ -153,20 +153,20 @@ class LagoonTheme {
       seedColor: teal,
       primary: teal,
       secondary: coral,
-      background: deepSea,
+      surface: deepSea,
       brightness: Brightness.dark,
     );
 
     return _buildTheme(
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.surface,
       appBarBackgroundColor: deepTeal,
       appBarForegroundColor: Colors.white,
       buttonBackgroundColor: coral,
       buttonForegroundColor: Colors.white,
-      cardColor: Colors.white.withOpacity(0.08),
+      cardColor: Colors.white.withValues(alpha: 0.08),
       textColor: Colors.white,
-      inputFillColor: Colors.white.withOpacity(0.06),
+      inputFillColor: Colors.white.withValues(alpha: 0.06),
     );
   }
 
@@ -175,7 +175,7 @@ class LagoonTheme {
       seedColor: teal,
       primary: teal,
       secondary: coral,
-      background: mist,
+      surface: mist,
       brightness: Brightness.light,
     );
 
@@ -241,6 +241,21 @@ ThemeData _buildTheme({
     // Translucent Material cards can pick up a muddy gray elevation shadow.
     colorScheme = colorScheme.copyWith(
       surface: scaffoldBackgroundColor,
+      primaryContainer: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.08),
+        scaffoldBackgroundColor,
+      ),
+      onPrimaryContainer: textColor,
+      secondaryContainer: Color.alphaBlend(
+        colorScheme.secondary.withValues(alpha: 0.06),
+        scaffoldBackgroundColor,
+      ),
+      onSecondaryContainer: textColor,
+      tertiaryContainer: Color.alphaBlend(
+        colorScheme.primary.withValues(alpha: 0.04),
+        scaffoldBackgroundColor,
+      ),
+      onTertiaryContainer: textColor,
       surfaceContainerLowest: inputFillColor,
       surfaceContainerLow: cardColor,
       surfaceContainer: cardColor,

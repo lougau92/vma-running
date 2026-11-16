@@ -3,10 +3,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/calculator_draft.dart';
-import 'package:vma_running/plan_exporter.dart';
+import 'package:vma_running/workouts/workout.dart';
+import 'package:vma_running/workouts/workout_format.dart';
 import 'package:vma_running/running/distance_labels.dart';
 import 'package:vma_running/running.dart';
-import 'package:vma_running/training_plan.dart';
 import 'package:vma_running/widgets/pace_table.dart';
 import 'package:vma_running/widgets/times_table.dart';
 
@@ -33,18 +33,16 @@ void main() {
     expect(row.pacePerKm, formatPacePerKm(run.speed));
     expect(row.timeForDistance, '01:00');
     expect(row.timeForDistance, formatRunningDuration(run.seconds));
-    final text = formatSetLine(
-      const IntervalSet(
-        repetitions: 4,
-        distanceMeters: 400,
-        vmaPercent: 120,
-        recoverySeconds: 60,
-        recoveryType: RecoveryType.jog,
-      ),
-      20,
+    final text = formatWorkoutTarget(
+      WorkoutTarget({
+        'kind': 'numeric',
+        'metric': 'vma_percent',
+        'value': {'min': 120, 'max': 120},
+      }),
       AppLocalizations(const Locale('en')),
+      20,
     );
-    expect(text, '4x 400 m @ 02:30 /km | 01:00 jog');
+    expect(text, '120 % VMA · 02:30 /km');
   });
 
   test(

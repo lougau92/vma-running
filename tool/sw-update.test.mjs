@@ -147,9 +147,9 @@ for (const { base, legacy } of [
       await context.setOffline(true);
       await page.reload({ waitUntil: 'load' });
       await page.waitForFunction(() => document.body.dataset.release === '2');
-      const offlinePlan = await page.evaluate(async () =>
-        (await fetch('assets/assets/training_plans/training_example.json')).json());
-      assert.equal(offlinePlan.release, 2);
+      const offlineConfig = await page.evaluate(async () =>
+        (await fetch('assets/assets/feedback.json')).json());
+      assert.equal(offlineConfig.release, 2);
       const offlineVersion = await page.evaluate(async () =>
         (await fetch(`version.json?cachebuster=${Date.now()}`)).json());
       assert.equal(offlineVersion.release, 2);

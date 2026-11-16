@@ -16,8 +16,7 @@ const CORE_ASSETS = [
   './assets/fonts/MaterialIcons-Regular.otf',
   './assets/packages/cupertino_icons/assets/CupertinoIcons.ttf',
   './assets/assets/feedback.json',
-  './assets/assets/enjambee_img/logo-header-minimized.png',
-  './assets/assets/training_plans/training_example.json'
+  './assets/assets/enjambee_img/logo-header-minimized.png'
 ];
 
 self.addEventListener('install', (event) => {

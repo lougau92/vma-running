@@ -1,3 +1,4 @@
+import 'package:vma_running/workouts/workout.dart';
 import 'dart:async' show Completer, StreamIterator, TimeoutException;
 
 import 'package:cloud_firestore/cloud_firestore.dart'
@@ -17,8 +18,8 @@ import 'package:vma_running/remote_asset_loader.dart'
     show RemoteAssetLoader, RemoteLoadOrigin;
 import 'package:vma_running/remote_read_policy.dart' show RemoteReadPolicy;
 
-const _path = 'app_documents/training_plan';
-const _asset = 'assets/training_plans/training_example.json';
+const _path = 'app_documents/workout_plan';
+const String? _asset = null;
 final _cacheKey =
     'firebase_doc_cache_${Uri.encodeComponent('$_path::content')}';
 
@@ -80,6 +81,20 @@ void main() {
   );
 
   test(
+    'first online launch loads a remote plan without bundled assets',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final store = _Store((_) async => {'content': 'published plan'});
+      final values = await _loader(
+        store,
+      ).watchText(documentPath: _path).toList();
+      expect(values, hasLength(1));
+      expect(values.single.origin, RemoteLoadOrigin.network);
+      expect(values.single.data, 'published plan');
+    },
+  );
+
+  test(
     'shows saved content before a slow server read and then replaces it',
     () async {
       final remote = Completer<Map<String, dynamic>>();
@@ -106,7 +121,7 @@ void main() {
   );
 
   test(
-    'first offline launch shows bundled content and stops after three transient failures',
+    'first offline launch without a cache reports failure after three attempts',
     () async {
       SharedPreferences.setMockInitialValues({});
       final store = _Store(
@@ -115,15 +130,10 @@ void main() {
           code: 'unavailable',
         ),
       );
-      final values = await _loader(
-        store,
-      ).watchText(documentPath: _path, assetPath: _asset).toList();
-      expect(values.first.origin, RemoteLoadOrigin.asset);
-      expect(values.first.data, contains('groups'));
-      expect(values.first.refreshing, isTrue);
-      expect(values.last.data, values.first.data);
-      expect(values.last.refreshing, isFalse);
-      expect(values.last.error, isA<FirebaseException>());
+      await expectLater(
+        _loader(store).watchText(documentPath: _path).toList(),
+        throwsA(isA<FirebaseException>()),
+      );
       expect(store.reads, 3);
     },
   );
@@ -260,6 +270,23 @@ void main() {
       expect(results.current.data, 'late plan');
       expect((await refreshed).data, 'late plan');
       expect(await results.moveNext(), isFalse);
+    },
+  );
+  test(
+    'invalid schema cache and invalid remote workout fall back without caching bad content',
+    () async {
+      SharedPreferences.setMockInitialValues({_cacheKey: '{"groups":[]}'});
+      final store = _Store((_) async => {'content': '{"schemaVersion":"99"}'});
+      await expectLater(
+        _loader(
+          store,
+        ).loadText(documentPath: _path, validate: WorkoutConversion.parse),
+        throwsA(isA<FormatException>()),
+      );
+      expect(
+        (await SharedPreferences.getInstance()).getString(_cacheKey),
+        '{"groups":[]}',
+      );
     },
   );
 }

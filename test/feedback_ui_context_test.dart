@@ -1,3 +1,4 @@
+import 'workout_fixture.dart';
 import 'dart:convert' show jsonEncode;
 import 'package:app_feedback/app_feedback.dart';
 import 'package:flutter/material.dart';
@@ -19,22 +20,19 @@ class _Loader extends RemoteAssetLoader {
   @override
   Stream<RemoteLoadResult> watchText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) => Stream.value(
     RemoteLoadResult(
       origin: RemoteLoadOrigin.cache,
-      data: jsonEncode({
-        'title': 'Private workout title',
-        'warmup': 'Private coach instructions',
-        'cooldown': '',
-        'remarks': '',
-        'groups': [
-          {'title': 'Group 1', 'blocks': []},
-          {'title': 'Group 2', 'blocks': []},
-        ],
-      }),
+      data: jsonEncode(
+        workoutFixture(
+          title: 'Private workout title',
+          warmup: 'Private coach instructions',
+          groups: 2,
+        ),
+      ),
     ),
   );
 }

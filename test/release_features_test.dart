@@ -1,8 +1,8 @@
+import 'workout_fixture.dart';
 import 'dart:convert' show jsonEncode;
 
 import 'package:flutter/cupertino.dart' show CupertinoPicker;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -24,7 +24,7 @@ class _Loader extends RemoteAssetLoader {
   @override
   Stream<RemoteLoadResult> watchText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) {
@@ -37,15 +37,7 @@ class _Loader extends RemoteAssetLoader {
         'keyCheck': '',
         'passwordHint': 'Club hint',
       }),
-      _ => jsonEncode({
-        'title': 'Test workout',
-        'warmup': 'Easy warmup',
-        'cooldown': 'Easy cooldown',
-        'remarks': '',
-        'groups': [
-          {'title': 'Group 1', 'blocks': []},
-        ],
-      }),
+      _ => jsonEncode(workoutFixture()),
     };
     return Stream.value(
       RemoteLoadResult(data: data, origin: RemoteLoadOrigin.network),
@@ -121,7 +113,7 @@ void main() {
           await tester.tap(find.byIcon(Icons.fitness_center));
           await tester.pumpAndSettle();
           expect(find.byType(TrainingPlanPage), findsOneWidget);
-          expect(loader.reads, ['app_documents/training_plan']);
+          expect(loader.reads, ['app_documents/workout_plan']);
 
           if (communications) {
             await tester.tap(find.byIcon(Icons.campaign_outlined));
@@ -356,24 +348,8 @@ void main() {
   });
 
   testWidgets(
-    'release defaults retain clipboard export and settings without integration controls',
+    'release defaults show workouts without export and retain settings',
     (tester) async {
-      String? copied;
-      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-        SystemChannels.platform,
-        (call) async {
-          if (call.method == 'Clipboard.setData') {
-            copied = (call.arguments as Map)['text'] as String;
-          }
-          return null;
-        },
-      );
-      addTearDown(
-        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          SystemChannels.platform,
-          null,
-        ),
-      );
       final loader = _Loader();
       await tester.pumpWidget(_app(loader, const FeatureFlags()));
       await tester.pumpAndSettle();
@@ -381,12 +357,8 @@ void main() {
       expect(find.byIcon(Icons.emoji_events), findsNothing);
       await tester.tap(find.byIcon(Icons.fitness_center));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.text('Export'));
-      await tester.tap(find.text('Export'));
-      await tester.pumpAndSettle();
-      expect(copied, contains('Easy warmup'));
-      expect(copied, contains('Group 1'));
-      expect(find.text('Plan copied to clipboard'), findsOneWidget);
+      expect(find.textContaining('Easy warmup'), findsOneWidget);
+      expect(find.byIcon(Icons.ios_share_rounded), findsNothing);
       await tester.tap(find.byIcon(Icons.settings));
       await tester.pumpAndSettle();
       expect(find.text('Language'), findsOneWidget);

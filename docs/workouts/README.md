@@ -5,12 +5,15 @@ its detailed data-model reference. The operational agent instructions are
 [`.agents/skills/convert-workout-email/SKILL.md`](../../.agents/skills/convert-workout-email/SKILL.md).
 Use `$convert-workout-email` with an input email and output path. The skill can
 also be read directly by a worker with no prior conversation context.
-The existing `lib/training_plan.dart` still serves the app; these conversions
-remain separate draft artifacts.
+The app reads this contract directly through immutable Dart types in
+`lib/workouts/`. Approved conversions can be published with
+`python3 -m tool.scripts.publish_workout --file OUTPUT.json --write --approve`; see the root
+README for setup and rollout. The uploader requires the shared structural and
+semantic validator plus JSON Schema validation.
 
 ## Python model
 
-[`tool/workout_model.py`](../../tool/workout_model.py) implements the contract
+[`tool/scripts/workout_model.py`](../../tool/scripts/workout_model.py) implements the contract
 as frozen dataclasses using Python 3.10+ and the standard library. Python fields
 use snake_case; JSON preserves the schema's names, including `schemaVersion`,
 `sourceId`, and progression target `from` (Python `from_`). Nested nodes, targets
@@ -18,7 +21,7 @@ and end conditions deserialize into their concrete dataclass types.
 
 ```python
 from pathlib import Path
-from tool.workout_model import (
+from tool.scripts.workout_model import (
     WorkoutConversion, Repeat, Step, TimeEnd, PositiveBounds, Count,
 )
 
@@ -47,10 +50,10 @@ These checks do not establish source completeness or approval. The broader
 semantic review rules below (including workout IDs, issue paths
 and unresolved source interpretations) still apply.
 
-## Why the current model needs to change
+## Why the model is recursive
 
-The current model assumes a flat list of interval sets, one VMA percentage and
-one recovery per set. Warmup and cooldown are strings. This cannot faithfully
+The former model assumed a flat list of interval sets, one VMA percentage and
+one recovery per set. Warmup and cooldown were strings. It could not faithfully
 represent `3 × (400 + recovery + 400 + recovery + 200 + recovery + 1200)`, a
 range of repetitions, choices of workout, or structured preparation drills.
 
@@ -59,8 +62,7 @@ exceptions must survive conversion. A summary pointing to a similar email is not
 
 ## Data types
 
-The JSON is independent of Garmin and of any athlete's VMA. These types can
-later become immutable Dart classes, with a sealed `WorkoutNode` hierarchy.
+The JSON is independent of Garmin and of any athlete's VMA. The Dart consumer has a sealed `WorkoutNode` hierarchy matching these types.
 
 | Type | Responsibility |
 | --- | --- |
@@ -101,7 +103,7 @@ The main distinction is between a repeated *step* and a repeated *sequence*:
 ```text
 Workout
   Groupe 1
-    Warmup: route/event on the promenade verte
+    Warmup: route/event on a marked route
     Main: repeat 3 times
       Body: sequence
         400 m @ 90% VMA
@@ -182,7 +184,7 @@ does not automatically resolve other emails with similar wording.
 | `any_of` / `all_of` | Source explicitly states combined stop conditions; list them without inventing a priority. |
 
 Missing duration is not zero and does not imply manual termination. Warmup
-“on the promenade verte” can remain an event with the source wording, without
+“on a marked route” can remain an event with the source wording, without
 inventing a distance. Two cooldown laps remain two laps, without assuming
 400 m per lap. “15 min + 3 gammes” is a sequence of a timed effort and a drill.
 Its stated 20-minute preparation budget is stored as
@@ -271,9 +273,18 @@ values. Resolve unknown/event conditions or unsupported target types for the
 destination. Supply athlete VMA and lap length when needed. Keep those
 decisions in an execution record referencing the workout ID and JSON paths within this plan; do not
 rewrite the coach's original prescription. A future execution-record contract
-and Dart implementation are outside this draft.
+is outside this version.
 
 Garmin is an export adapter: it receives a resolved executable plan, converts
 supported units and targets, and reports unsupported instructions or device
 limits. It must not silently discard drills, choices, route instructions or
 recovery notes. An app display can support more of this structure than a watch.
+
+## Maintaining consumers
+
+After editing the schema, run `python3 tool/scripts/generate_workout_schema.py` and
+`dart format lib/workouts/workout_schema.g.dart`. The generated structural
+validator supports the JSON Schema keywords used by this contract. Add support
+and shared fixture cases when introducing new keywords or semantics.
+`test/fixtures/workouts/contract_cases.json` is exercised by both Dart and the
+Python-backed uploader. The app never reads experiment fixtures at runtime.

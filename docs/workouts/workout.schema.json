@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "VMA workout conversion draft 0.1",
-  "description": "Reviewable source-preserving workout plans. Additional semantic constraints are documented in README.md. Draft: not the current app or Garmin payload.",
+  "description": "Source-preserving workout plans for conversion, review and app display. Additional semantic constraints are documented in README.md. Independent of device export.",
   "type": "object",
   "additionalProperties": false,
   "properties": {

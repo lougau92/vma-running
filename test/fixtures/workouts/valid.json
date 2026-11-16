@@ -1,0 +1,248 @@
+{
+  "schemaVersion": "0.1",
+  "status": "workout",
+  "sources": [
+    {
+      "type": "email",
+      "reference": "fixtures/synthetic-workout.eml",
+      "subject": "Synthetic interval workout",
+      "sentAt": "2030-04-02T11:22:58+02:00"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "session",
+      "title": "Example interval session",
+      "sport": "running",
+      "scheduledDate": "2030-04-04",
+      "location": "Example athletics track",
+      "notes": [
+        {
+          "text": "Follow the prescribed intensity.",
+          "category": "instruction"
+        }
+      ],
+      "versions": [
+        {
+          "label": "Group 1",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Warm up along the marked route"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 2,
+                    "max": 2
+                  },
+                  "body": {
+                    "kind": "repeat",
+                    "count": {
+                      "min": 6,
+                      "max": 6
+                    },
+                    "body": {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 300,
+                          "max": 300
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    "between": {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    }
+                  },
+                  "between": {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 180,
+                        "max": 180
+                      }
+                    },
+                    "movement": {
+                      "mode": "passive"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Finish together.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "label": "Group 2",
+          "warmup": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "event",
+                "description": "Warm up along the marked route"
+              }
+            }
+          },
+          "main": {
+            "status": "specified",
+            "plan": {
+              "kind": "sequence",
+              "declaredDurationSeconds": {
+                "min": 2400,
+                "max": 2400
+              },
+              "children": [
+                {
+                  "kind": "repeat",
+                  "count": {
+                    "min": 2,
+                    "max": 2
+                  },
+                  "body": {
+                    "kind": "repeat",
+                    "count": {
+                      "min": 5,
+                      "max": 5
+                    },
+                    "body": {
+                      "kind": "step",
+                      "role": "effort",
+                      "end": {
+                        "kind": "distance",
+                        "meters": {
+                          "min": 300,
+                          "max": 300
+                        }
+                      },
+                      "targets": [
+                        {
+                          "kind": "numeric",
+                          "metric": "vma_percent",
+                          "value": {
+                            "min": 100,
+                            "max": 100
+                          }
+                        }
+                      ]
+                    },
+                    "between": {
+                      "kind": "step",
+                      "role": "recovery",
+                      "end": {
+                        "kind": "time",
+                        "seconds": {
+                          "min": 60,
+                          "max": 90
+                        }
+                      },
+                      "movement": {
+                        "mode": "unspecified"
+                      }
+                    }
+                  },
+                  "between": {
+                    "kind": "step",
+                    "role": "recovery",
+                    "end": {
+                      "kind": "time",
+                      "seconds": {
+                        "min": 180,
+                        "max": 180
+                      }
+                    },
+                    "movement": {
+                      "mode": "passive"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "cooldown": {
+            "status": "specified",
+            "plan": {
+              "kind": "step",
+              "role": "effort",
+              "end": {
+                "kind": "laps",
+                "count": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "notes": [
+                {
+                  "text": "Finish together.",
+                  "category": "coordination"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "issues": []
+}

@@ -46,7 +46,7 @@ class RemoteAssetLoader {
   /// Shows local content first, then replaces it with a fresh server read.
   Stream<RemoteLoadResult> watchText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) async* {
@@ -56,11 +56,13 @@ class RemoteAssetLoader {
       assetPath,
       validate,
     );
-    yield RemoteLoadResult(
-      data: local.data,
-      origin: local.origin,
-      refreshing: true,
-    );
+    if (local != null) {
+      yield RemoteLoadResult(
+        data: local.data,
+        origin: local.origin,
+        refreshing: true,
+      );
+    }
     final refreshed = loadText(
       documentPath: documentPath,
       assetPath: assetPath,
@@ -85,7 +87,7 @@ class RemoteAssetLoader {
   /// Explicit refresh waits at most [RemoteReadPolicy.timeout] for the server.
   Future<RemoteLoadResult> loadText({
     required String documentPath,
-    required String assetPath,
+    String? assetPath,
     String fieldName = 'content',
     void Function(String)? validate,
   }) async {
@@ -106,6 +108,7 @@ class RemoteAssetLoader {
         assetPath,
         validate,
       );
+      if (local == null) rethrow;
       return RemoteLoadResult(
         data: local.data,
         origin: local.origin,
@@ -147,10 +150,10 @@ class RemoteAssetLoader {
     }
   }
 
-  Future<RemoteLoadResult> _localText(
+  Future<RemoteLoadResult?> _localText(
     String documentPath,
     String fieldName,
-    String assetPath,
+    String? assetPath,
     void Function(String)? validate,
   ) async {
     final key = _cacheKey(documentPath, fieldName);
@@ -169,6 +172,7 @@ class RemoteAssetLoader {
         // Old or corrupt storage must not prevent a bundled fallback.
       }
     }
+    if (assetPath == null) return null;
     final bundled = await rootBundle.loadString(assetPath);
     validate?.call(bundled);
     return RemoteLoadResult(data: bundled, origin: RemoteLoadOrigin.asset);

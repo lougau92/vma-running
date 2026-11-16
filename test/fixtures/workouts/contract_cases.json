@@ -1,0 +1,1291 @@
+[
+  {
+    "name": "synthetic valid session",
+    "valid": true,
+    "changes": []
+  },
+  {
+    "name": "unsupported schema",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "schemaVersion"
+        ],
+        "value": "2"
+      }
+    ]
+  },
+  {
+    "name": "unknown property",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "extra"
+        ],
+        "value": true
+      }
+    ]
+  },
+  {
+    "name": "explicit null",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "label"
+        ],
+        "value": null
+      }
+    ]
+  },
+  {
+    "name": "fractional count",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "count",
+          "min"
+        ],
+        "value": 1.5
+      }
+    ]
+  },
+  {
+    "name": "reversed bounds",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "meters",
+          "min"
+        ],
+        "value": 500
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "meters",
+          "max"
+        ],
+        "value": 400
+      }
+    ]
+  },
+  {
+    "name": "zero distance",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "meters",
+          "min"
+        ],
+        "value": 0
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "meters",
+          "max"
+        ],
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "negative target",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "min"
+        ],
+        "value": -1
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "max"
+        ],
+        "value": -1
+      }
+    ]
+  },
+  {
+    "name": "out of range rpe",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "metric"
+        ],
+        "value": "rpe_0_10"
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "min"
+        ],
+        "value": 11
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "max"
+        ],
+        "value": 11
+      }
+    ]
+  },
+  {
+    "name": "high VMA accepted",
+    "valid": true,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "min"
+        ],
+        "value": 120
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "max"
+        ],
+        "value": 120
+      }
+    ]
+  },
+  {
+    "name": "out of range HR",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "metric"
+        ],
+        "value": "heart_rate_max_percent"
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "min"
+        ],
+        "value": 101
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets",
+          0,
+          "value",
+          "max"
+        ],
+        "value": 101
+      }
+    ]
+  },
+  {
+    "name": "unspecified recovery",
+    "valid": true,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "between",
+          "movement"
+        ],
+        "remove": true
+      }
+    ]
+  },
+  {
+    "name": "effort between repeats",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "between",
+          "role"
+        ],
+        "value": "effort"
+      }
+    ]
+  },
+  {
+    "name": "between with one repetition",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "count",
+          "min"
+        ],
+        "value": 1
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "count",
+          "max"
+        ],
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "unknown end",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "kind"
+        ],
+        "value": "unknown"
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "meters"
+        ],
+        "remove": true
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "end",
+          "text"
+        ],
+        "value": "Missing"
+      }
+    ]
+  },
+  {
+    "name": "missing main",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "status"
+        ],
+        "value": "not_specified"
+      },
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan"
+        ],
+        "remove": true
+      }
+    ]
+  },
+  {
+    "name": "duplicate workout ID",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts"
+        ],
+        "value": [
+          {
+            "id": "session",
+            "title": "Example interval session",
+            "sport": "running",
+            "scheduledDate": "2030-04-04",
+            "location": "Example athletics track",
+            "notes": [
+              {
+                "text": "Follow the prescribed intensity.",
+                "category": "instruction"
+              }
+            ],
+            "versions": [
+              {
+                "label": "Group 1",
+                "warmup": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "event",
+                      "description": "Warm up along the marked route"
+                    }
+                  }
+                },
+                "main": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "sequence",
+                    "declaredDurationSeconds": {
+                      "min": 2400,
+                      "max": 2400
+                    },
+                    "children": [
+                      {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 2,
+                          "max": 2
+                        },
+                        "body": {
+                          "kind": "repeat",
+                          "count": {
+                            "min": 6,
+                            "max": 6
+                          },
+                          "body": {
+                            "kind": "step",
+                            "role": "effort",
+                            "end": {
+                              "kind": "distance",
+                              "meters": {
+                                "min": 300,
+                                "max": 300
+                              }
+                            },
+                            "targets": [
+                              {
+                                "kind": "numeric",
+                                "metric": "vma_percent",
+                                "value": {
+                                  "min": 100,
+                                  "max": 100
+                                }
+                              }
+                            ]
+                          },
+                          "between": {
+                            "kind": "step",
+                            "role": "recovery",
+                            "end": {
+                              "kind": "time",
+                              "seconds": {
+                                "min": 60,
+                                "max": 90
+                              }
+                            },
+                            "movement": {
+                              "mode": "unspecified"
+                            }
+                          }
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 180,
+                              "max": 180
+                            }
+                          },
+                          "movement": {
+                            "mode": "passive"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "cooldown": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "laps",
+                      "count": {
+                        "min": 2,
+                        "max": 2
+                      }
+                    },
+                    "notes": [
+                      {
+                        "text": "Finish together.",
+                        "category": "coordination"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "label": "Group 2",
+                "warmup": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "event",
+                      "description": "Warm up along the marked route"
+                    }
+                  }
+                },
+                "main": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "sequence",
+                    "declaredDurationSeconds": {
+                      "min": 2400,
+                      "max": 2400
+                    },
+                    "children": [
+                      {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 2,
+                          "max": 2
+                        },
+                        "body": {
+                          "kind": "repeat",
+                          "count": {
+                            "min": 5,
+                            "max": 5
+                          },
+                          "body": {
+                            "kind": "step",
+                            "role": "effort",
+                            "end": {
+                              "kind": "distance",
+                              "meters": {
+                                "min": 300,
+                                "max": 300
+                              }
+                            },
+                            "targets": [
+                              {
+                                "kind": "numeric",
+                                "metric": "vma_percent",
+                                "value": {
+                                  "min": 100,
+                                  "max": 100
+                                }
+                              }
+                            ]
+                          },
+                          "between": {
+                            "kind": "step",
+                            "role": "recovery",
+                            "end": {
+                              "kind": "time",
+                              "seconds": {
+                                "min": 60,
+                                "max": 90
+                              }
+                            },
+                            "movement": {
+                              "mode": "unspecified"
+                            }
+                          }
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 180,
+                              "max": 180
+                            }
+                          },
+                          "movement": {
+                            "mode": "passive"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "cooldown": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "laps",
+                      "count": {
+                        "min": 2,
+                        "max": 2
+                      }
+                    },
+                    "notes": [
+                      {
+                        "text": "Finish together.",
+                        "category": "coordination"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "session",
+            "title": "Example interval session",
+            "sport": "running",
+            "scheduledDate": "2030-04-04",
+            "location": "Example athletics track",
+            "notes": [
+              {
+                "text": "Follow the prescribed intensity.",
+                "category": "instruction"
+              }
+            ],
+            "versions": [
+              {
+                "label": "Group 1",
+                "warmup": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "event",
+                      "description": "Warm up along the marked route"
+                    }
+                  }
+                },
+                "main": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "sequence",
+                    "declaredDurationSeconds": {
+                      "min": 2400,
+                      "max": 2400
+                    },
+                    "children": [
+                      {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 2,
+                          "max": 2
+                        },
+                        "body": {
+                          "kind": "repeat",
+                          "count": {
+                            "min": 6,
+                            "max": 6
+                          },
+                          "body": {
+                            "kind": "step",
+                            "role": "effort",
+                            "end": {
+                              "kind": "distance",
+                              "meters": {
+                                "min": 300,
+                                "max": 300
+                              }
+                            },
+                            "targets": [
+                              {
+                                "kind": "numeric",
+                                "metric": "vma_percent",
+                                "value": {
+                                  "min": 100,
+                                  "max": 100
+                                }
+                              }
+                            ]
+                          },
+                          "between": {
+                            "kind": "step",
+                            "role": "recovery",
+                            "end": {
+                              "kind": "time",
+                              "seconds": {
+                                "min": 60,
+                                "max": 90
+                              }
+                            },
+                            "movement": {
+                              "mode": "unspecified"
+                            }
+                          }
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 180,
+                              "max": 180
+                            }
+                          },
+                          "movement": {
+                            "mode": "passive"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "cooldown": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "laps",
+                      "count": {
+                        "min": 2,
+                        "max": 2
+                      }
+                    },
+                    "notes": [
+                      {
+                        "text": "Finish together.",
+                        "category": "coordination"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "label": "Group 2",
+                "warmup": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "event",
+                      "description": "Warm up along the marked route"
+                    }
+                  }
+                },
+                "main": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "sequence",
+                    "declaredDurationSeconds": {
+                      "min": 2400,
+                      "max": 2400
+                    },
+                    "children": [
+                      {
+                        "kind": "repeat",
+                        "count": {
+                          "min": 2,
+                          "max": 2
+                        },
+                        "body": {
+                          "kind": "repeat",
+                          "count": {
+                            "min": 5,
+                            "max": 5
+                          },
+                          "body": {
+                            "kind": "step",
+                            "role": "effort",
+                            "end": {
+                              "kind": "distance",
+                              "meters": {
+                                "min": 300,
+                                "max": 300
+                              }
+                            },
+                            "targets": [
+                              {
+                                "kind": "numeric",
+                                "metric": "vma_percent",
+                                "value": {
+                                  "min": 100,
+                                  "max": 100
+                                }
+                              }
+                            ]
+                          },
+                          "between": {
+                            "kind": "step",
+                            "role": "recovery",
+                            "end": {
+                              "kind": "time",
+                              "seconds": {
+                                "min": 60,
+                                "max": 90
+                              }
+                            },
+                            "movement": {
+                              "mode": "unspecified"
+                            }
+                          }
+                        },
+                        "between": {
+                          "kind": "step",
+                          "role": "recovery",
+                          "end": {
+                            "kind": "time",
+                            "seconds": {
+                              "min": 180,
+                              "max": 180
+                            }
+                          },
+                          "movement": {
+                            "mode": "passive"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                },
+                "cooldown": {
+                  "status": "specified",
+                  "plan": {
+                    "kind": "step",
+                    "role": "effort",
+                    "end": {
+                      "kind": "laps",
+                      "count": {
+                        "min": 2,
+                        "max": 2
+                      }
+                    },
+                    "notes": [
+                      {
+                        "text": "Finish together.",
+                        "category": "coordination"
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "empty versions",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions"
+        ],
+        "value": []
+      }
+    ]
+  },
+  {
+    "name": "empty sequence",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children"
+        ],
+        "value": []
+      }
+    ]
+  },
+  {
+    "name": "empty source",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "sources"
+        ],
+        "value": []
+      }
+    ]
+  },
+  {
+    "name": "no workout",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "status"
+        ],
+        "value": "no_workout"
+      },
+      {
+        "path": [
+          "workouts"
+        ],
+        "value": []
+      }
+    ]
+  },
+  {
+    "name": "bad date",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "scheduledDate"
+        ],
+        "value": "2026-02-30"
+      }
+    ]
+  },
+  {
+    "name": "bad timestamp",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "sources",
+          0,
+          "sentAt"
+        ],
+        "value": "2030-04-02T11:22:58"
+      }
+    ]
+  },
+  {
+    "name": "unresolvable issue",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [
+          {
+            "severity": "warning",
+            "code": "inferred",
+            "message": "Note",
+            "paths": [
+              "/workouts/99"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "conflicting movement",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "between",
+          "movement",
+          "allowed"
+        ],
+        "value": [
+          "walk"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "duplicate metric",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "workouts",
+          0,
+          "versions",
+          0,
+          "main",
+          "plan",
+          "children",
+          0,
+          "body",
+          "body",
+          "targets"
+        ],
+        "value": [
+          {
+            "kind": "numeric",
+            "metric": "vma_percent",
+            "value": {
+              "min": 100,
+              "max": 100
+            }
+          },
+          {
+            "kind": "numeric",
+            "metric": "vma_percent",
+            "value": {
+              "min": 100,
+              "max": 100
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "warning accepted",
+    "valid": true,
+    "changes": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [
+          {
+            "severity": "warning",
+            "code": "inferred",
+            "message": "Obvious typo",
+            "paths": [
+              "/workouts/0"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "resolved blocking",
+    "valid": true,
+    "changes": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [
+          {
+            "severity": "blocking",
+            "code": "ambiguous",
+            "message": "Source interpretation",
+            "paths": [
+              "/workouts/0"
+            ],
+            "resolution": {
+              "text": "Confirmed with coach",
+              "by": "source"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "unresolved blocking",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "issues"
+        ],
+        "value": [
+          {
+            "severity": "blocking",
+            "code": "ambiguous",
+            "message": "Source interpretation",
+            "paths": [
+              "/workouts/0"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "normalized invalid timestamp date",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "sources",
+          0,
+          "sentAt"
+        ],
+        "value": "2026-02-30T12:00:00Z"
+      }
+    ]
+  },
+  {
+    "name": "normalized invalid timestamp hour",
+    "valid": false,
+    "changes": [
+      {
+        "path": [
+          "sources",
+          0,
+          "sentAt"
+        ],
+        "value": "2030-04-02T25:00:00Z"
+      }
+    ]
+  }
+]

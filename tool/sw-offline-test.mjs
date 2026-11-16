@@ -123,7 +123,7 @@ const waitForServer = async (port) => {
     const cachedOk = await page.evaluate(async () => {
       try {
         // Use the relative path logic from your SW
-        const res = await fetch('./assets/assets/training_plans/training_example.json');
+        const res = await fetch('./assets/assets/feedback.json');
         if (!res.ok) return false;
         await res.arrayBuffer();
         return true;
@@ -132,7 +132,7 @@ const waitForServer = async (port) => {
       }
     });
 
-    if (!cachedOk) throw new Error('Cached training plan not available offline');
+    if (!cachedOk) throw new Error('Cached app configuration not available offline');
 
     await page.reload({ waitUntil: 'load' });
     await page.waitForSelector('flutter-view', { state: 'attached', timeout: 30000 });

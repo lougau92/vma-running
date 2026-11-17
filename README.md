@@ -15,6 +15,12 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 2) Fetch deps: `flutter pub get`  
 3) Run: `flutter run -d chrome` (or any connected device)
 
+## Garmin export
+
+Connect Garmin from Settings, then export the selected workout group and optionally
+send it to a watch. This requires the separately hosted Python proxy; see
+[configuration, behavior and verification](docs/garmin.md).
+
 ## Web release updates
 
 `web/app_update.js` owns service-worker registration; the custom Flutter bootstrap

@@ -15,6 +15,17 @@ import 'package:vma_running/remote_asset_loader.dart'
 
 class _User extends Fake implements User {}
 
+class _TokenUser extends Fake implements User {
+  final refreshes = <bool>[];
+  @override
+  String get uid => 'persisted-anonymous';
+  @override
+  Future<String?> getIdToken([bool forceRefresh = false]) async {
+    refreshes.add(forceRefresh);
+    return forceRefresh ? 'fresh-token' : 'saved-token';
+  }
+}
+
 class _Credential extends Fake implements UserCredential {}
 
 class _Auth extends Fake implements FirebaseAuth {
@@ -60,6 +71,20 @@ class _Firestore extends Fake implements FirebaseFirestore {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() => SharedPreferences.setMockInitialValues({}));
+
+  test(
+    'Garmin token access preserves identity and supports forced refresh',
+    () async {
+      final user = _TokenUser();
+      final auth = _Auth()..user = user;
+      final session = FirebaseContentSession(auth: auth);
+      expect(await session.userId(), 'persisted-anonymous');
+      expect(await session.idToken(), 'saved-token');
+      expect(await session.idToken(forceRefresh: true), 'fresh-token');
+      expect(auth.signIns, 0);
+      expect(user.refreshes, [false, true]);
+    },
+  );
 
   test(
     'reuses a persisted Firebase session without signing in again',

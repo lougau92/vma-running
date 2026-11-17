@@ -3,6 +3,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../app_localizations.dart';
 import '../app_settings.dart';
+import '../garmin/garmin_client.dart';
+import '../garmin/garmin_connection.dart';
 import '../vma_storage.dart';
 
 /// Loads platform data, then delegates the visible settings to [SettingsContent].
@@ -146,6 +148,23 @@ class _SettingsContentState extends State<SettingsContent> {
                 _VmaSettingCard(
                   vma: widget.vma,
                   onPressed: widget.onVmaPressed,
+                ),
+                const SizedBox(height: 16),
+                Material(
+                  type: MaterialType.transparency,
+                  child: ListTile(
+                    leading: const Icon(Icons.watch_outlined),
+                    title: const Text('Garmin Connect'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () async {
+                      final client = GarminClient();
+                      try {
+                        await showGarminConnection(context, client);
+                      } finally {
+                        client.close();
+                      }
+                    },
+                  ),
                 ),
                 const SizedBox(height: 28),
                 Text(

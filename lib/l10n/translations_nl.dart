@@ -1,5 +1,67 @@
 class TranslationsNl {
   static const Map<String, String> values = {
+    'garmin_seconds': 'Duur (seconden)',
+    'garmin_metres': 'Afstand (meter)',
+    "garmin_export": "Exporteren naar Garmin",
+    "garmin_save": "Opslaan in Garmin Connect",
+    "garmin_send": "Naar horloge sturen",
+    "garmin_watch": "Horloge",
+    "garmin_connect": "Verbinden / opnieuw aanmelden",
+    "garmin_disconnect": "Verbinding verbreken",
+    "garmin_close": "Sluiten",
+    "garmin_connected":
+        "Garmin-sessie opgeslagen. Deze wordt bij het volgende verzoek gecontroleerd.",
+    "garmin_identity_note":
+        "Geen app-account nodig. Je Garmin-sessie wordt versleuteld op de server bewaard. Browsergegevens wissen of van apparaat wisselen kan deze verbinding verloren doen gaan.",
+    "garmin_email": "Garmin-e-mailadres",
+    "garmin_password": "Garmin-wachtwoord",
+    "garmin_mfa": "Verificatiecode",
+    "garmin_mfa_note":
+        "Voer de Garmin-code binnen 5 minuten in. Eén poging; meld opnieuw aan als die mislukt.",
+    "garmin_mfa_restart": "Verificatie verlopen of mislukt. Meld opnieuw aan.",
+    "garmin_error":
+        "Verzoek mislukt. Controleer de verbinding en probeer opnieuw. Een opgeslagen bewerking opnieuw proberen maakt geen nieuwe training.",
+    "garmin_unavailable": "Garmin-export is niet ingesteld in deze versie.",
+    "garmin_unknown_outcome":
+        "Garmin heeft dit verzoek mogelijk ontvangen. Controleer Garmin Connect voordat je een nieuwe kopie maakt. Deze bewerking kan niet veilig automatisch worden herhaald.",
+    "garmin_reconnect":
+        "Verbind opnieuw met Garmin en probeer deze bewerking opnieuw.",
+    "garmin_rate_limit":
+        "Te veel verzoeken. Wacht voordat je opnieuw probeert.",
+    "garmin_busy": "Er loopt al een Garmin-bewerking. Probeer het zo opnieuw.",
+    "garmin_journal_error":
+        "Exportgeschiedenis kan niet worden gelezen of opgeslagen. Er wordt geen nieuw verzoek verzonden totdat lokale opslag werkt.",
+    "garmin_saved": "Opgeslagen in Garmin Connect",
+    "garmin_copy_link": "Trainingslink kopiëren",
+    "garmin_no_watch":
+        "Geen geschikt hardloophorloge gevonden. De training blijft opgeslagen in Garmin Connect.",
+    "garmin_delivery_requested":
+        "Verzending aangevraagd. Synchroniseer je horloge met Garmin Connect.",
+    "garmin_recent": "Recente exports / hervatten",
+    "garmin_pending":
+        "In afwachting of onderbroken — dezelfde bewerking hervatten",
+    "garmin_another": "Nog een kopie maken",
+    "garmin_duplicate_note":
+        "Dit maakt een nieuwe training, ook als Garmin de vorige al heeft ontvangen. Controleer eerst Garmin Connect. Doorgaan?",
+    "garmin_optional": "Optioneel blok",
+    "garmin_include": "Opnemen",
+    "garmin_exclude": "Weglaten",
+    "garmin_range_error": "Kies een waarde binnen het bereik (hele rondes).",
+    "garmin_max_repetitions":
+        "Maximaal aantal herhalingen; overslaan hangt af van je horloge",
+    "garmin_default_lap": "Rondelengte niet opgegeven: 400 m gebruikt.",
+    "garmin_unsupported_end":
+        "Deze eindvoorwaarde kan niet worden geëxporteerd",
+    "garmin_invalid_target":
+        "Tegenstrijdige of ongeldige tempodoelen. Controleer VMA en het bronplan.",
+    "garmin_instruction_target":
+        "Sommige doelen zijn alleen instructies, zonder horlogemeldingen.",
+    "garmin_shortened":
+        "Een titel of beschrijving is ingekort tot de Garmin-limiet.",
+    "garmin_empty": "Er zijn geen exporteerbare stappen.",
+    "garmin_too_many":
+        "Deze training overschrijdt de ondersteunde limiet van 200 stappen.",
+
     "workout_retry": "Opnieuw proberen",
     "workout_load_error":
         "Kan deze training niet laden. Probeer te vernieuwen.",

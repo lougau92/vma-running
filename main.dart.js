@@ -33492,7 +33492,7 @@ UN:function UN(){this.b=null},
 alo:function alo(){},
 b3w(){A.b06()
 var s=new A.wH(A.b([],t._))
-return new A.amw("",s,new A.UN())},
+return new A.amw("https://garmin-proxy-125928416256.europe-west4.run.app",s,new A.UN())},
 nd:function nd(a){this.a=a},
 jp:function jp(a,b,c){this.a=a
 this.b=b

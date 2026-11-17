@@ -30,6 +30,10 @@ class TranslationsEn {
     "garmin_busy": "Another Garmin operation is running. Try again shortly.",
     "garmin_journal_error":
         "Cannot save or read the export history. No new request will be sent until local storage works.",
+    "garmin_checking_history":
+        "Checking recent exports before enabling a new upload…",
+    "garmin_complete_inputs":
+        "Complete these workout choices before exporting:",
     "garmin_saved": "Saved in Garmin Connect",
     "garmin_copy_link": "Copy workout link",
     "garmin_no_watch":

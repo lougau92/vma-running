@@ -208,6 +208,9 @@ class _ExportState extends State<GarminExportDialog> {
       values: values,
       notes: widget.notes,
     );
+    final unresolvedInputs = export.inputs
+        .where((input) => !input.resolved)
+        .toList();
     fields.clear();
     for (final input in export.inputs) {
       fields[input.path] = input;
@@ -265,6 +268,21 @@ class _ExportState extends State<GarminExportDialog> {
               ),
             ),
           ),
+        if (operation == null && widget.client.configured && !journalReady)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              children: [
+                const SizedBox(
+                  width: 16,
+                  height: 16,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                const SizedBox(width: 10),
+                Expanded(child: Text(s['garmin_checking_history'])),
+              ],
+            ),
+          ),
         if (operation == null) ...[
           ...fields.values.map(
             (input) => Padding(
@@ -280,6 +298,33 @@ class _ExportState extends State<GarminExportDialog> {
             (p) =>
                 Padding(padding: const EdgeInsets.only(top: 8), child: Text(p)),
           ),
+          if (unresolvedInputs.isNotEmpty)
+            Card(
+              color: Theme.of(context).colorScheme.tertiaryContainer,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      s['garmin_complete_inputs'],
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 4),
+                    for (final input in unresolvedInputs.take(5))
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Text('• ${input.label}'),
+                      ),
+                    if (unresolvedInputs.length > 5)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3),
+                        child: Text('+${unresolvedInputs.length - 5}'),
+                      ),
+                  ],
+                ),
+              ),
+            ),
         ],
         const SizedBox(height: 12),
         Card(

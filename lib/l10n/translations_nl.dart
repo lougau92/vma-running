@@ -31,6 +31,10 @@ class TranslationsNl {
     "garmin_busy": "Er loopt al een Garmin-bewerking. Probeer het zo opnieuw.",
     "garmin_journal_error":
         "Exportgeschiedenis kan niet worden gelezen of opgeslagen. Er wordt geen nieuw verzoek verzonden totdat lokale opslag werkt.",
+    "garmin_checking_history":
+        "Recente exports controleren voordat uploaden mogelijk is…",
+    "garmin_complete_inputs":
+        "Vul deze trainingskeuzes in voordat je exporteert:",
     "garmin_saved": "Opgeslagen in Garmin Connect",
     "garmin_copy_link": "Trainingslink kopiëren",
     "garmin_no_watch":

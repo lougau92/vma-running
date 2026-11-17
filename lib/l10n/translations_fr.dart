@@ -32,6 +32,9 @@ class TranslationsFr {
         "Une autre opération Garmin est en cours. Réessayez dans quelques instants.",
     "garmin_journal_error":
         "Impossible de lire ou d’enregistrer l’historique. Aucune nouvelle requête ne sera envoyée tant que le stockage local ne fonctionne pas.",
+    "garmin_checking_history":
+        "Vérification des derniers exports avant d’autoriser l’envoi…",
+    "garmin_complete_inputs": "Complétez ces choix de séance avant l’export :",
     "garmin_saved": "Enregistré dans Garmin Connect",
     "garmin_copy_link": "Copier le lien de la séance",
     "garmin_no_watch":

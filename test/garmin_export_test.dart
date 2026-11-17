@@ -189,38 +189,34 @@ void main() {
       false,
     );
   });
-  test(
-    'unsupported end conditions block rather than silently becoming LAP',
-    () {
-      for (final end in [
-        {'kind': 'event', 'description': 'Reach stadium'},
-        {'kind': 'unknown', 'text': 'Missing'},
-        {
-          'kind': 'repetitions',
-          'count': {'min': 10, 'max': 10},
-        },
-        {
-          'kind': 'any_of',
-          'conditions': [
-            time(60),
-            {'kind': 'manual'},
-          ],
-        },
-      ]) {
-        expect(export(step(end: end)).problems, isNotEmpty);
-      }
-      final selected = export(
-        step(end: {'kind': 'event', 'description': 'Reach stadium'}),
-        values: {'main/manual_end': 0},
-      );
-      expect(selected.ready, true);
+  test('unsupported end conditions automatically become LAP steps', () {
+    for (final end in [
+      {'kind': 'event', 'description': 'Reach stadium'},
+      {'kind': 'unknown', 'text': 'Missing'},
+      {
+        'kind': 'repetitions',
+        'count': {'min': 10, 'max': 10},
+      },
+      {
+        'kind': 'any_of',
+        'conditions': [
+          time(60),
+          {'kind': 'manual'},
+        ],
+      },
+    ]) {
+      final result = export(step(end: end));
+      expect(result.ready, true);
       expect(
-        steps(selected).single['endCondition']['conditionTypeKey'],
+        steps(result).single['endCondition']['conditionTypeKey'],
         'lap.button',
       );
-      expect(steps(selected).single['description'], contains('Reach stadium'));
-    },
-  );
+    }
+    final event = export(
+      step(end: {'kind': 'event', 'description': 'Reach stadium'}),
+    );
+    expect(steps(event).single['description'], contains('Reach stadium'));
+  });
   test(
     'unsupported targets retain instruction and explicitly warn about alerts',
     () {

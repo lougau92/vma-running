@@ -181,16 +181,7 @@ GarminExport buildGarminExport(
                 (end.lapLength ?? 400);
             if (end.lapLength == null) warnings.add(s['garmin_default_lap']);
           default:
-            final selected = values['$path/manual_end'];
-            inputs.add(
-              ExportInput(
-                '$path/manual_end',
-                '${s['garmin_unsupported_end']}: ${formatWorkoutEnd(end, s)}',
-                options: [s['garmin_finish_lap']],
-                resolved: selected == 0,
-              ),
-            );
-            if (selected != 0) return;
+            // Preserve unsupported instructions and end the step manually.
             endKey = 'lap.button';
             endId = 1;
         }

@@ -63,6 +63,46 @@ class _ExportState extends State<GarminExportDialog> {
   String? error;
   bool busy = false, initialized = false;
   bool journalReady = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _seedChoiceDefaults();
+  }
+
+  void _seedChoiceDefaults() {
+    void seed(WorkoutNode node, String path) {
+      switch (node) {
+        case WorkoutSequence():
+          for (var i = 0; i < node.children.length; i++) {
+            seed(node.children[i], '$path/children/$i');
+          }
+        case WorkoutRepeat():
+          seed(node.body, '$path/body');
+          if (node.between != null) seed(node.between!, '$path/between');
+        case WorkoutChoice():
+          final selected = values.putIfAbsent(path, () => 0);
+          if (selected.isFinite &&
+              selected == selected.roundToDouble() &&
+              selected >= 0 &&
+              selected < node.options.length) {
+            final index = selected.toInt();
+            seed(node.options[index].plan, '$path/options/$index');
+          }
+        case WorkoutStep():
+          break;
+      }
+    }
+
+    for (final entry in {
+      'warmup': widget.version.warmup,
+      'main': widget.version.main,
+      'cooldown': widget.version.cooldown,
+    }.entries) {
+      if (entry.value.plan != null) seed(entry.value.plan!, entry.key);
+    }
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -167,6 +207,9 @@ class _ExportState extends State<GarminExportDialog> {
             ? null
             : (v) => setState(() {
                 if (v != null) values[input.path] = v;
+                if (!input.path.endsWith('/optional')) {
+                  _seedChoiceDefaults();
+                }
               }),
       );
     }

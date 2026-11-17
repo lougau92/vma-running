@@ -4,6 +4,7 @@ import '../app_localizations.dart';
 import '../remote_asset_loader.dart';
 import '../widgets/content_refresh_button.dart';
 import 'workout.dart';
+import '../garmin/garmin_export_dialog.dart';
 import 'workout_view.dart';
 import 'workout_session_header.dart';
 
@@ -195,6 +196,20 @@ class _WorkoutContentState extends State<WorkoutContent> {
                               ],
                             ),
                           ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: OutlinedButton.icon(
+                            onPressed: () => showGarminExport(
+                              context,
+                              session: session,
+                              version: version,
+                              vma: widget.userVma,
+                              notes: widget.conversion.notes,
+                            ),
+                            icon: const Icon(Icons.watch_outlined),
+                            label: Text(s['garmin_export']),
+                          ),
+                        ),
                         if (version.audience != null) Text(version.audience!),
                         ...view.notes(version.notes),
                         ...view.warnings(versionPath),

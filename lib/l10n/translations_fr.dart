@@ -1,5 +1,67 @@
 class TranslationsFr {
   static const Map<String, String> values = {
+    'garmin_seconds': 'Durée (secondes)',
+    'garmin_metres': 'Distance (mètres)',
+    "garmin_export": "Exporter vers Garmin",
+    "garmin_save": "Enregistrer dans Garmin Connect",
+    "garmin_send": "Envoyer à la montre",
+    "garmin_watch": "Montre",
+    "garmin_connect": "Connecter / se reconnecter",
+    "garmin_disconnect": "Déconnecter",
+    "garmin_close": "Fermer",
+    "garmin_connected":
+        "Session Garmin enregistrée. Elle sera vérifiée à la prochaine requête.",
+    "garmin_identity_note":
+        "Aucun compte pour cette application. Votre session Garmin est chiffrée sur le serveur. Effacer le stockage du navigateur ou changer d’appareil peut faire perdre cette connexion.",
+    "garmin_email": "Adresse e-mail Garmin",
+    "garmin_password": "Mot de passe Garmin",
+    "garmin_mfa": "Code de vérification",
+    "garmin_mfa_note":
+        "Saisissez le code Garmin dans les 5 minutes. Un seul essai ; reconnectez-vous en cas d’échec.",
+    "garmin_mfa_restart": "Vérification expirée ou échouée. Reconnectez-vous.",
+    "garmin_error":
+        "Échec de la requête. Vérifiez la connexion et réessayez. Réessayer une opération enregistrée ne crée pas une autre séance.",
+    "garmin_unavailable":
+        "L’export Garmin n’est pas configuré dans cette version.",
+    "garmin_unknown_outcome":
+        "Garmin a peut-être reçu cette requête. Vérifiez Garmin Connect avant de créer une autre copie. Cette opération ne peut pas être répétée automatiquement en toute sécurité.",
+    "garmin_reconnect":
+        "Reconnectez-vous à Garmin, puis réessayez cette opération.",
+    "garmin_rate_limit": "Trop de requêtes. Patientez avant de réessayer.",
+    "garmin_busy":
+        "Une autre opération Garmin est en cours. Réessayez dans quelques instants.",
+    "garmin_journal_error":
+        "Impossible de lire ou d’enregistrer l’historique. Aucune nouvelle requête ne sera envoyée tant que le stockage local ne fonctionne pas.",
+    "garmin_saved": "Enregistré dans Garmin Connect",
+    "garmin_copy_link": "Copier le lien de la séance",
+    "garmin_no_watch":
+        "Aucune montre de course compatible trouvée. La séance reste enregistrée dans Garmin Connect.",
+    "garmin_delivery_requested":
+        "Envoi demandé. Synchronisez votre montre avec Garmin Connect.",
+    "garmin_recent": "Exports récents / reprendre",
+    "garmin_pending": "En attente ou interrompu — reprendre la même opération",
+    "garmin_another": "Créer une autre copie",
+    "garmin_duplicate_note":
+        "Cela crée une nouvelle séance, même si Garmin a déjà reçu la précédente. Vérifiez Garmin Connect avant de continuer.",
+    "garmin_optional": "Bloc facultatif",
+    "garmin_include": "Inclure",
+    "garmin_exclude": "Exclure",
+    "garmin_range_error":
+        "Choisissez une valeur dans l’intervalle (tours entiers).",
+    "garmin_max_repetitions":
+        "Nombre maximal de répétitions ; la possibilité de sauter dépend de la montre",
+    "garmin_default_lap": "Longueur de tour non précisée : 400 m utilisés.",
+    "garmin_unsupported_end": "Condition de fin non exportable",
+    "garmin_invalid_target":
+        "Objectifs d’allure incompatibles ou invalides. Vérifiez la VMA et le plan source.",
+    "garmin_instruction_target":
+        "Certains objectifs sont inclus comme consignes uniquement, sans alertes sur la montre.",
+    "garmin_shortened":
+        "Un titre ou une description a été raccourci à la limite Garmin.",
+    "garmin_empty": "Aucune étape exportable.",
+    "garmin_too_many":
+        "Cette séance dépasse la limite prise en charge de 200 étapes.",
+
     "workout_retry": "Réessayer",
     "workout_load_error": "Impossible de charger cette séance. Réessayez.",
     "workout_session": "Séance",

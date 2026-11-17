@@ -9,9 +9,29 @@ class FirebaseContentSession {
 
   final FirebaseAuth? _auth;
   Future<void>? _pending;
+  static Future<void>? _defaultPending;
 
-  Future<void> ensureSignedIn() =>
-      _pending ??= _ensureSession().whenComplete(() => _pending = null);
+  Future<void> ensureSignedIn() {
+    if (_auth == null) {
+      return _defaultPending ??= _ensureSession().whenComplete(
+        () => _defaultPending = null,
+      );
+    }
+    return _pending ??= _ensureSession().whenComplete(() => _pending = null);
+  }
+
+  Future<String> idToken({bool forceRefresh = false}) async {
+    await ensureSignedIn();
+    final token = await (_auth ?? FirebaseAuth.instance).currentUser!
+        .getIdToken(forceRefresh);
+    if (token == null) throw StateError('Firebase token unavailable');
+    return token;
+  }
+
+  Future<String> userId() async {
+    await ensureSignedIn();
+    return (_auth ?? FirebaseAuth.instance).currentUser!.uid;
+  }
 
   Future<void> _ensureSession() async {
     if (_auth == null && Firebase.apps.isEmpty) {

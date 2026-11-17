@@ -154,9 +154,12 @@ jobs:
 
       # --- SINGLE BUILD ---
       - name: Build Web App
+        env:
+          GARMIN_PROXY_URL: ${{ vars.GARMIN_PROXY_URL }}
         run: |
           flutter build web --release \
             --base-href "/vma-running/" \
+            --dart-define="GARMIN_PROXY_URL=$GARMIN_PROXY_URL" \
             --build-name=${{ steps.app_version.outputs.version_name }} \
             --build-number=${{ steps.app_version.outputs.build_number }}
 

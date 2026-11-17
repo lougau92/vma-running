@@ -45,6 +45,7 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+  if (url.pathname.includes('/garmin/')) return;
   const scope = new URL(self.registration.scope);
   const appAsset = url.origin === scope.origin && url.pathname.startsWith(scope.pathname);
   const renderingAsset = request.destination === 'font' ||

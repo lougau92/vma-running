@@ -1,5 +1,63 @@
 class TranslationsEn {
   static const Map<String, String> values = {
+    'garmin_seconds': 'Duration (seconds)',
+    'garmin_metres': 'Distance (metres)',
+    "garmin_export": "Export to Garmin",
+    "garmin_save": "Save to Garmin Connect",
+    "garmin_send": "Send to watch",
+    "garmin_watch": "Watch",
+    "garmin_connect": "Connect / sign in again",
+    "garmin_disconnect": "Disconnect",
+    "garmin_close": "Close",
+    "garmin_connected":
+        "Garmin session saved. It will be checked on the next request.",
+    "garmin_identity_note":
+        "No app account needed. Your Garmin session is stored encrypted on the server. Clearing browser storage or switching devices can lose access to this connection.",
+    "garmin_email": "Garmin email",
+    "garmin_password": "Garmin password",
+    "garmin_mfa": "Verification code",
+    "garmin_mfa_note":
+        "Enter the Garmin code within 5 minutes. One attempt; sign in again if it fails.",
+    "garmin_mfa_restart": "Verification expired or failed. Sign in again.",
+    "garmin_error":
+        "Request failed. Check the connection and try again. Retrying a saved operation will not create another workout.",
+    "garmin_unavailable": "Garmin export is not configured in this build.",
+    "garmin_unknown_outcome":
+        "Garmin may have received this request. Check Garmin Connect before creating another copy. This operation cannot safely be repeated automatically.",
+    "garmin_reconnect":
+        "Please reconnect to Garmin, then retry this operation.",
+    "garmin_rate_limit": "Too many requests. Wait before trying again.",
+    "garmin_busy": "Another Garmin operation is running. Try again shortly.",
+    "garmin_journal_error":
+        "Cannot save or read the export history. No new request will be sent until local storage works.",
+    "garmin_saved": "Saved in Garmin Connect",
+    "garmin_copy_link": "Copy workout link",
+    "garmin_no_watch":
+        "No compatible running watch found. The workout is still saved in Garmin Connect.",
+    "garmin_delivery_requested":
+        "Delivery requested. Sync your watch with Garmin Connect.",
+    "garmin_recent": "Recent exports / resume",
+    "garmin_pending": "Pending or interrupted — resume with the same operation",
+    "garmin_another": "Create another copy",
+    "garmin_duplicate_note":
+        "This creates a new workout, even if Garmin already received the previous one. Check Garmin Connect first. Continue?",
+    "garmin_optional": "Optional block",
+    "garmin_include": "Include",
+    "garmin_exclude": "Exclude",
+    "garmin_range_error": "Choose a value within the range (whole laps).",
+    "garmin_max_repetitions":
+        "Using maximum repetitions; skipping depends on your watch",
+    "garmin_default_lap": "Unspecified lap length: using 400 m.",
+    "garmin_unsupported_end": "Cannot export this end condition",
+    "garmin_invalid_target":
+        "Cannot export conflicting or invalid pace targets. Check VMA and the source plan.",
+    "garmin_instruction_target":
+        "Some targets are included as instructions only, without watch alerts.",
+    "garmin_shortened":
+        "A title or description was shortened to Garmin’s limit.",
+    "garmin_empty": "There are no exportable steps.",
+    "garmin_too_many": "This workout exceeds the supported limit of 200 steps.",
+
     "workout_retry": "Retry",
     "workout_load_error": "Unable to load this workout. Try refreshing.",
     "workout_session": "Session",

@@ -126,6 +126,19 @@ for (const { base, legacy } of [
       assert.ok(!state.keys.includes('vma-running-cache-test-1'));
       assert.deepEqual(state.registrations, [new URL('service_worker.js', url).href]);
 
+      // A same-origin proxy must never put authenticated Garmin responses in
+      // the app-shell cache, even if an upstream cache header is misconfigured.
+      const garminCached = await page.evaluate(async () => {
+        const api = new URL('garmin/status', document.baseURI);
+        await fetch(api, { cache: 'no-store', headers: { Authorization: 'Bearer test-only' } });
+        const names = await caches.keys();
+        for (const name of names) {
+          if (await (await caches.open(name)).match(api)) return true;
+        }
+        return false;
+      });
+      assert.equal(garminCached, false, 'Garmin API responses bypass app caching');
+
       // A partially published release must not displace the working one.
       release = 3;
       broken = true;
@@ -153,6 +166,13 @@ for (const { base, legacy } of [
       const offlineVersion = await page.evaluate(async () =>
         (await fetch(`version.json?cachebuster=${Date.now()}`)).json());
       assert.equal(offlineVersion.release, 2);
+      const offlineGarmin = await page.evaluate(async () => {
+        try {
+          await fetch('garmin/status', { cache: 'no-store' });
+          return true;
+        } catch (_) { return false; }
+      });
+      assert.equal(offlineGarmin, false, 'offline Garmin requests cannot replay cached data');
       assert.deepEqual(errors, []);
     } finally {
       if (browser) await browser.close();

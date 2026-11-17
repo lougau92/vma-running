@@ -221,8 +221,50 @@ class _ExportState extends State<GarminExportDialog> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (operation == null)
-          Text('${widget.version.label} · VMA ${widget.vma} km/h'),
-        if (!widget.client.configured) Text(s['garmin_unavailable']),
+          Card(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.watch_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.version.label,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        const SizedBox(height: 2),
+                        Text('VMA ${workoutNumber(widget.vma)} km/h'),
+                      ],
+                    ),
+                  ),
+                  if (widget.client.configured)
+                    const Icon(Icons.cloud_done_outlined, size: 20),
+                ],
+              ),
+            ),
+          ),
+        if (!widget.client.configured)
+          Card(
+            color: Theme.of(context).colorScheme.errorContainer,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Row(
+                children: [
+                  const Icon(Icons.cloud_off_outlined),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(s['garmin_unavailable'])),
+                ],
+              ),
+            ),
+          ),
         if (operation == null) ...[
           ...fields.values.map(
             (input) => Padding(
@@ -240,12 +282,49 @@ class _ExportState extends State<GarminExportDialog> {
           ),
         ],
         const SizedBox(height: 12),
-        Text(
-          payload['workoutName'] as String,
-          style: Theme.of(context).textTheme.titleMedium,
+        Card(
+          margin: const EdgeInsets.only(top: 8, bottom: 4),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.directions_run,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        payload['workoutName'] as String,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    Text(
+                      '${steps.length}',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const SizedBox(width: 3),
+                    Icon(
+                      Icons.list_alt,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+                if (payload['description'] != null) ...[
+                  const SizedBox(height: 10),
+                  _CoachNotes(
+                    text: payload['description'] as String,
+                    title: s.remarks,
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
-        if (payload['description'] != null)
-          Text(payload['description'] as String),
         for (final raw in steps)
           _StepPreview(step: raw as Map<String, dynamic>),
         if (id != null) ...[
@@ -413,24 +492,176 @@ class _StepPreview extends StatelessWidget {
       'recovery' || 'rest' => s.recovery,
       _ => s.sessionContent,
     };
+    final icon = switch (type) {
+      'warmup' => Icons.wb_twilight,
+      'cooldown' => Icons.nights_stay_outlined,
+      'recovery' || 'rest' => Icons.pause_circle_outline,
+      _ => Icons.bolt,
+    };
+    final distanceLabel = end == 'lap.button'
+        ? 'LAP'
+        : end == 'time'
+        ? workoutTime(value!.toDouble())
+        : '${workoutNumber(value!.toDouble())} m';
     String pace(num speed) => workoutTime((1000 / speed).roundToDouble());
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    final paceLabel = step['targetValueOne'] == null
+        ? null
+        : '${pace(step['targetValueTwo'] as num)}–${pace(step['targetValueOne'] as num)} /km';
+    final colors = Theme.of(context).colorScheme;
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 3),
+      color: colors.surfaceContainerLow,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: colors.primaryContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                '${step['stepOrder']}',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Icon(icon, size: 19, color: colors.primary),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          label,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
+                      Text(
+                        distanceLabel,
+                        style: Theme.of(context).textTheme.labelLarge,
+                      ),
+                    ],
+                  ),
+                  if (paceLabel != null) ...[
+                    const SizedBox(height: 3),
+                    Text(
+                      paceLabel,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                  if (step['description'] != null) ...[
+                    const SizedBox(height: 3),
+                    _CoachNotes(
+                      text: step['description'] as String,
+                      compact: true,
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CoachNotes extends StatelessWidget {
+  const _CoachNotes({required this.text, this.title, this.compact = false});
+
+  final String text;
+  final String? title;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final lines = text
+        .split('\n')
+        .map((line) => line.trim())
+        .where((line) => line.isNotEmpty)
+        .toList();
+    if (lines.isEmpty) return const SizedBox.shrink();
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: compact ? 9 : 11,
+        vertical: compact ? 7 : 9,
+      ),
+      decoration: BoxDecoration(
+        color: colors.secondaryContainer,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${step['stepOrder']}. $label · ${end == 'lap.button'
-                ? 'LAP'
-                : end == 'time'
-                ? workoutTime(value!.toDouble())
-                : '${workoutNumber(value!.toDouble())} m'}',
-          ),
-          if (step['targetValueOne'] != null)
-            Text(
-              '${pace(step['targetValueOne'] as num)}–${pace(step['targetValueTwo'] as num)} /km',
+          if (title != null || compact)
+            Padding(
+              padding: EdgeInsets.only(bottom: lines.length > 1 ? 4 : 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.sticky_note_2_outlined,
+                    size: compact ? 15 : 17,
+                    color: colors.onSecondaryContainer,
+                  ),
+                  if (title != null) ...[
+                    const SizedBox(width: 5),
+                    Text(
+                      title!,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colors.onSecondaryContainer,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          if (step['description'] != null) Text(step['description'] as String),
+          for (final line in lines)
+            Padding(
+              padding: EdgeInsets.only(top: compact ? 2 : 3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (lines.length > 1) ...[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 6, right: 7),
+                      child: Container(
+                        width: 4,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: colors.onSecondaryContainer,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                  Expanded(
+                    child: Text(
+                      line,
+                      style: compact
+                          ? theme.textTheme.bodySmall?.copyWith(
+                              color: colors.onSecondaryContainer,
+                            )
+                          : theme.textTheme.bodyMedium?.copyWith(
+                              color: colors.onSecondaryContainer,
+                            ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

@@ -1,5 +1,5 @@
 // The release build stamps this name before Flutter copies the web assets.
-const CACHE_NAME = 'vma-running-cache-60-745dcff58358a831c615f394c6e840c2f7f0c338';
+const CACHE_NAME = 'vma-running-cache-64-2cbf870c1b828a6b332e5cd923eaf47cf7e72b43';
 const CORE_ASSETS = [
   './',
   './index.html',

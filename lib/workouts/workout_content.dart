@@ -221,19 +221,24 @@ class _WorkoutContentState extends State<WorkoutContent> {
                           kind: 2,
                         ),
                         if (widget.conversion.issues.isNotEmpty)
-                          ExpansionTile(
-                            title: Text(s['workout_interpretations']),
-                            children: [
-                              for (final issue in widget.conversion.issues)
-                                ListTile(
-                                  title: Text(issue.message),
-                                  subtitle: issue.resolution == null
-                                      ? Text(s['workout_warning'])
-                                      : Text(
-                                          '${s['workout_resolved']}: ${issue.resolution} · ${s['workout_resolved_by_${issue.resolvedBy}']}',
-                                        ),
-                                ),
-                            ],
+                          Material(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerLowest,
+                            child: ExpansionTile(
+                              title: Text(s['workout_interpretations']),
+                              children: [
+                                for (final issue in widget.conversion.issues)
+                                  ListTile(
+                                    title: Text(issue.message),
+                                    subtitle: issue.resolution == null
+                                        ? Text(s['workout_warning'])
+                                        : Text(
+                                            '${s['workout_resolved']}: ${issue.resolution} · ${s['workout_resolved_by_${issue.resolvedBy}']}',
+                                          ),
+                                  ),
+                              ],
+                            ),
                           ),
                       ],
                     ),

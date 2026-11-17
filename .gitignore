@@ -62,3 +62,5 @@ supabase/.temp/
 
 # Generated local DevTools settings
 /devtools_options.yaml
+# Widget Preview related
+.widget_preview/

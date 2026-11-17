@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
 import '../app_localizations.dart';
 import '../app_settings.dart';
 import '../vma_storage.dart';
 
+/// Loads platform data, then delegates the visible settings to [SettingsContent].
 class SettingsView extends StatefulWidget {
   const SettingsView({
     super.key,
@@ -11,11 +13,9 @@ class SettingsView extends StatefulWidget {
     required this.onSettingsChanged,
     this.onVmaChanged,
   });
-
   final AppSettings settings;
   final ValueChanged<AppSettings> onSettingsChanged;
   final ValueChanged<double>? onVmaChanged;
-
   @override
   State<SettingsView> createState() => _SettingsViewState();
 }
@@ -24,7 +24,6 @@ class _SettingsViewState extends State<SettingsView> {
   late final Future<PackageInfo> _packageInfoFuture;
   final _vmaStorage = VmaStorage();
   double? _vma;
-
   @override
   void initState() {
     super.initState();
@@ -45,10 +44,40 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   @override
+  Widget build(BuildContext context) => FutureBuilder<PackageInfo>(
+    future: _packageInfoFuture,
+    builder: (context, snapshot) => SettingsContent(
+      settings: widget.settings,
+      vma: _vma,
+      versionLabel: snapshot.hasData
+          ? '${snapshot.data!.version} (${snapshot.data!.buildNumber})'
+          : null,
+      onSettingsChanged: widget.onSettingsChanged,
+      onVmaPressed: _editVma,
+    ),
+  );
+}
+
+/// Settings presentation with explicit state, suitable for screens and previews.
+class SettingsContent extends StatelessWidget {
+  const SettingsContent({
+    super.key,
+    required this.settings,
+    required this.vma,
+    required this.versionLabel,
+    required this.onSettingsChanged,
+    required this.onVmaPressed,
+  });
+  final AppSettings settings;
+  final double? vma;
+  final String? versionLabel;
+  final ValueChanged<AppSettings> onSettingsChanged;
+  final VoidCallback onVmaPressed;
+
+  @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
-    final localeValue = widget.settings.localeCode ?? 'system';
-
+    final localeValue = settings.localeCode ?? 'system';
     return Column(
       children: [
         Expanded(
@@ -61,9 +90,9 @@ class _SettingsViewState extends State<SettingsView> {
                   key: const ValueKey('vma-edit'),
                   contentPadding: EdgeInsets.zero,
                   title: Text(strings.updateVma),
-                  subtitle: _vma == null ? null : Text(strings.yourVma(_vma!)),
+                  subtitle: vma == null ? null : Text(strings.yourVma(vma!)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: _editVma,
+                  onTap: onVmaPressed,
                 ),
               ),
               const SizedBox(height: 24),
@@ -80,33 +109,29 @@ class _SettingsViewState extends State<SettingsView> {
                     label: strings.systemDefault,
                     value: 'system',
                     current: localeValue,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(localeCode: null),
-                    ),
+                    onSelected: () =>
+                        onSettingsChanged(settings.copyWith(localeCode: null)),
                   ),
                   _SelectionChip<String>(
                     label: strings.english,
                     value: 'en',
                     current: localeValue,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(localeCode: 'en'),
-                    ),
+                    onSelected: () =>
+                        onSettingsChanged(settings.copyWith(localeCode: 'en')),
                   ),
                   _SelectionChip<String>(
                     label: strings.french,
                     value: 'fr',
                     current: localeValue,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(localeCode: 'fr'),
-                    ),
+                    onSelected: () =>
+                        onSettingsChanged(settings.copyWith(localeCode: 'fr')),
                   ),
                   _SelectionChip<String>(
                     label: strings.dutch,
                     value: 'nl',
                     current: localeValue,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(localeCode: 'nl'),
-                    ),
+                    onSelected: () =>
+                        onSettingsChanged(settings.copyWith(localeCode: 'nl')),
                   ),
                 ],
               ),
@@ -123,55 +148,46 @@ class _SettingsViewState extends State<SettingsView> {
                   _SelectionChip<ThemeMode>(
                     label: strings.dark,
                     value: ThemeMode.dark,
-                    current: widget.settings.themeMode,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(themeMode: ThemeMode.dark),
+                    current: settings.themeMode,
+                    onSelected: () => onSettingsChanged(
+                      settings.copyWith(themeMode: ThemeMode.dark),
                     ),
                   ),
                   _SelectionChip<ThemeMode>(
                     label: strings.light,
                     value: ThemeMode.light,
-                    current: widget.settings.themeMode,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(themeMode: ThemeMode.light),
+                    current: settings.themeMode,
+                    onSelected: () => onSettingsChanged(
+                      settings.copyWith(themeMode: ThemeMode.light),
                     ),
                   ),
                   _SelectionChip<ThemeMode>(
                     label: strings.systemDefault,
                     value: ThemeMode.system,
-                    current: widget.settings.themeMode,
-                    onSelected: () => widget.onSettingsChanged(
-                      widget.settings.copyWith(themeMode: ThemeMode.system),
+                    current: settings.themeMode,
+                    onSelected: () => onSettingsChanged(
+                      settings.copyWith(themeMode: ThemeMode.system),
                     ),
                   ),
                 ],
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
-        SafeArea(
-          top: false,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
-            child: FutureBuilder<PackageInfo>(
-              future: _packageInfoFuture,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox.shrink();
-                final info = snapshot.data!;
-                final version = info.version;
-                final buildNumber = info.buildNumber;
-                return ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  dense: true,
-                  leading: const Icon(Icons.verified_sharp),
-                  title: Text(
-                    '${strings.appVersionLabel}: $version ($buildNumber)',
-                  ),
-                );
-              },
+        if (versionLabel != null)
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                dense: true,
+                leading: const Icon(Icons.verified_sharp),
+                title: Text('${strings.appVersionLabel}: $versionLabel'),
+              ),
             ),
           ),
-        ),
       ],
     );
   }
@@ -184,12 +200,10 @@ class _SelectionChip<T> extends StatelessWidget {
     required this.current,
     required this.onSelected,
   });
-
   final String label;
   final T value;
   final T current;
   final VoidCallback onSelected;
-
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;

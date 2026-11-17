@@ -104,6 +104,9 @@ jobs:
       - name: Install Flutter Dependencies
         run: flutter pub get
 
+      - name: Test Flutter app and widget previews
+        run: flutter test
+
       # --- 2. VERSION MANAGEMENT ---
       - name: Read version from pubspec.yaml
         id: app_version

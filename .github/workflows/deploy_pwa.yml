@@ -59,7 +59,6 @@ jobs:
           fi
 
       - name: Install Playwright Browsers
-        if: steps.web_update_changes.outputs.changed == 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Test web release updates

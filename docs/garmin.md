@@ -23,7 +23,13 @@ variable `GARMIN_PROXY_URL` to the deployed proxy URL and allow the origin
 not a secret. The existing deployment version gate still applies. No URL means
 Garmin is unavailable in that build; other app features keep working.
 
-Cloud deployment is separate and has not been performed by this change.
+The production proxy is deployed at
+`https://garmin-proxy-125928416256.europe-west4.run.app` in `europe-west4`.
+GitHub Actions variable `GARMIN_PROXY_URL` selects it for release builds.
+The public `/health` route checks process health; device lookup additionally
+checks Firebase authentication, Firestore access and the saved Garmin session.
+The service uses Secret Manager and encrypted Firestore records, with zero
+minimum instances and a maximum of one instance.
 
 ## Use
 

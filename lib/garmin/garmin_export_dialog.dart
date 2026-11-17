@@ -219,7 +219,9 @@ class _ExportState extends State<GarminExportDialog> {
       enabled: !busy,
       initialValue: values[input.path]?.isFinite == true
           ? workoutNumber(values[input.path]!)
-          : null,
+          : values.containsKey(input.path)
+          ? null
+          : workoutNumber(b.max),
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
         labelText: input.label,

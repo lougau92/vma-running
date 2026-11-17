@@ -3,6 +3,7 @@ class TranslationsNl {
     'garmin_seconds': 'Duur (seconden)',
     'garmin_metres': 'Afstand (meter)',
     "garmin_export": "Exporteren naar Garmin",
+    "garmin_finish_lap": "Handmatig beëindigen met de LAP-knop",
     "garmin_save": "Opslaan in Garmin Connect",
     "garmin_send": "Naar horloge sturen",
     "garmin_watch": "Horloge",

@@ -133,14 +133,15 @@ void main() {
       expect(result.payload['description'], 'Session note\nGroup note');
     },
   );
-  test('duration ranges require an explicit selection and remain editable', () {
+  test('duration ranges default to the maximum and remain editable', () {
     final main = step(
       end: {
         'kind': 'time',
         'seconds': {'min': 60, 'max': 90},
       },
     );
-    expect(export(main).ready, false);
+    expect(export(main).ready, true);
+    expect(steps(export(main)).single['endConditionValue'], 90);
     final selected = export(main, values: {'main/end': 75});
     expect(selected.ready, true);
     expect(selected.inputs.single.resolved, true);
@@ -155,7 +156,7 @@ void main() {
         'count': {'min': 2, 'max': 3},
       },
     );
-    expect(export(main).ready, false);
+    expect(export(main).ready, true);
     expect(export(main, values: {'main/end': 2.5}).ready, false);
     final resolved = export(main, values: {'main/end': 3});
     expect(steps(resolved).single['endConditionValue'], 1200);
@@ -208,6 +209,16 @@ void main() {
       ]) {
         expect(export(step(end: end)).problems, isNotEmpty);
       }
+      final selected = export(
+        step(end: {'kind': 'event', 'description': 'Reach stadium'}),
+        values: {'main/manual_end': 0},
+      );
+      expect(selected.ready, true);
+      expect(
+        steps(selected).single['endCondition']['conditionTypeKey'],
+        'lap.button',
+      );
+      expect(steps(selected).single['description'], contains('Reach stadium'));
     },
   );
   test(

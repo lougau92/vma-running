@@ -48,7 +48,7 @@ GarminExport buildGarminExport(
 
   double resolve(Bounds b, String path, String label, {bool integer = false}) {
     if (b.min == b.max) return b.min;
-    final value = values[path];
+    final value = values.containsKey(path) ? values[path] : b.max;
     final valid =
         value != null &&
         value.isFinite &&
@@ -181,16 +181,26 @@ GarminExport buildGarminExport(
                 (end.lapLength ?? 400);
             if (end.lapLength == null) warnings.add(s['garmin_default_lap']);
           default:
-            problems.add(
-              '${s['garmin_unsupported_end']}: ${formatWorkoutEnd(end, s)}',
+            final selected = values['$path/manual_end'];
+            inputs.add(
+              ExportInput(
+                '$path/manual_end',
+                '${s['garmin_unsupported_end']}: ${formatWorkoutEnd(end, s)}',
+                options: [s['garmin_finish_lap']],
+                resolved: selected == 0,
+              ),
             );
-            return;
+            if (selected != 0) return;
+            endKey = 'lap.button';
+            endId = 1;
         }
         if (amount != null && (!amount.isFinite || amount <= 0)) {
           problems.add(s['garmin_unsupported_end']);
         }
         final description = [
           ...context,
+          if (!['manual', 'time', 'distance', 'laps'].contains(end.kind))
+            formatWorkoutEnd(end, s),
           if (node.movement != null) formatWorkoutMovement(node.movement, s),
           ...node.targets.map((t) => formatWorkoutTarget(t, s, vma)),
         ];

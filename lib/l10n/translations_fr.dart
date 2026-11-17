@@ -3,6 +3,7 @@ class TranslationsFr {
     'garmin_seconds': 'Durée (secondes)',
     'garmin_metres': 'Distance (mètres)',
     "garmin_export": "Exporter vers Garmin",
+    "garmin_finish_lap": "Terminer manuellement avec le bouton LAP",
     "garmin_save": "Enregistrer dans Garmin Connect",
     "garmin_send": "Envoyer à la montre",
     "garmin_watch": "Montre",

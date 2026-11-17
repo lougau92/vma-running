@@ -59,7 +59,7 @@ class _SettingsViewState extends State<SettingsView> {
 }
 
 /// Settings presentation with explicit state, suitable for screens and previews.
-class SettingsContent extends StatelessWidget {
+class SettingsContent extends StatefulWidget {
   const SettingsContent({
     super.key,
     required this.settings,
@@ -75,107 +75,164 @@ class SettingsContent extends StatelessWidget {
   final VoidCallback onVmaPressed;
 
   @override
+  State<SettingsContent> createState() => _SettingsContentState();
+}
+
+class _SettingsContentState extends State<SettingsContent> {
+  static const _dismissDistance = 96.0;
+  double _pullDownDistance = 0;
+  bool _dismissRequested = false;
+
+  bool _handleSettingsScroll(ScrollNotification notification) {
+    if (notification.depth != 0 || notification.metrics.axis != Axis.vertical) {
+      return false;
+    }
+
+    if (notification is ScrollStartNotification &&
+        notification.dragDetails != null) {
+      _pullDownDistance = 0;
+      _dismissRequested = false;
+    } else if (notification is OverscrollNotification &&
+        notification.dragDetails != null &&
+        notification.metrics.pixels <= notification.metrics.minScrollExtent) {
+      if (notification.overscroll < 0) {
+        _pullDownDistance += -notification.overscroll;
+      } else {
+        _pullDownDistance = (_pullDownDistance - notification.overscroll)
+            .clamp(0.0, double.infinity)
+            .toDouble();
+      }
+      if (_pullDownDistance >= _dismissDistance) _dismissSettings();
+    } else if (notification is ScrollUpdateNotification &&
+        notification.dragDetails != null) {
+      final pulled =
+          notification.metrics.minScrollExtent - notification.metrics.pixels;
+      if (pulled > 0) {
+        _pullDownDistance = pulled;
+        if (_pullDownDistance >= _dismissDistance) _dismissSettings();
+      } else if (notification.metrics.pixels >
+          notification.metrics.minScrollExtent) {
+        _pullDownDistance = 0;
+      }
+    } else if (notification is ScrollEndNotification) {
+      _pullDownDistance = 0;
+      _dismissRequested = false;
+    }
+    return false;
+  }
+
+  void _dismissSettings() {
+    if (_dismissRequested) return;
+    final navigator = Navigator.of(context);
+    if (!navigator.canPop()) return;
+    _dismissRequested = true;
+    navigator.pop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    final settings = widget.settings;
     final localeValue = settings.localeCode ?? 'system';
     return Column(
       children: [
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.all(24),
-            children: [
-              Material(
-                type: MaterialType.transparency,
-                child: ListTile(
-                  key: const ValueKey('vma-edit'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(strings.updateVma),
-                  subtitle: vma == null ? null : Text(strings.yourVma(vma!)),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: onVmaPressed,
+          child: NotificationListener<ScrollNotification>(
+            onNotification: _handleSettingsScroll,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(24),
+              children: [
+                _VmaSettingCard(
+                  vma: widget.vma,
+                  onPressed: widget.onVmaPressed,
                 ),
-              ),
-              const SizedBox(height: 24),
-              Text(
-                strings.language,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _SelectionChip<String>(
-                    label: strings.systemDefault,
-                    value: 'system',
-                    current: localeValue,
-                    onSelected: () =>
-                        onSettingsChanged(settings.copyWith(localeCode: null)),
-                  ),
-                  _SelectionChip<String>(
-                    label: strings.english,
-                    value: 'en',
-                    current: localeValue,
-                    onSelected: () =>
-                        onSettingsChanged(settings.copyWith(localeCode: 'en')),
-                  ),
-                  _SelectionChip<String>(
-                    label: strings.french,
-                    value: 'fr',
-                    current: localeValue,
-                    onSelected: () =>
-                        onSettingsChanged(settings.copyWith(localeCode: 'fr')),
-                  ),
-                  _SelectionChip<String>(
-                    label: strings.dutch,
-                    value: 'nl',
-                    current: localeValue,
-                    onSelected: () =>
-                        onSettingsChanged(settings.copyWith(localeCode: 'nl')),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Text(
-                strings.theme,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _SelectionChip<ThemeMode>(
-                    label: strings.dark,
-                    value: ThemeMode.dark,
-                    current: settings.themeMode,
-                    onSelected: () => onSettingsChanged(
-                      settings.copyWith(themeMode: ThemeMode.dark),
+                const SizedBox(height: 28),
+                Text(
+                  strings.language,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _SelectionChip<String>(
+                      label: strings.systemDefault,
+                      value: 'system',
+                      current: localeValue,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(localeCode: null),
+                      ),
                     ),
-                  ),
-                  _SelectionChip<ThemeMode>(
-                    label: strings.light,
-                    value: ThemeMode.light,
-                    current: settings.themeMode,
-                    onSelected: () => onSettingsChanged(
-                      settings.copyWith(themeMode: ThemeMode.light),
+                    _SelectionChip<String>(
+                      label: strings.english,
+                      value: 'en',
+                      current: localeValue,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(localeCode: 'en'),
+                      ),
                     ),
-                  ),
-                  _SelectionChip<ThemeMode>(
-                    label: strings.systemDefault,
-                    value: ThemeMode.system,
-                    current: settings.themeMode,
-                    onSelected: () => onSettingsChanged(
-                      settings.copyWith(themeMode: ThemeMode.system),
+                    _SelectionChip<String>(
+                      label: strings.french,
+                      value: 'fr',
+                      current: localeValue,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(localeCode: 'fr'),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-            ],
+                    _SelectionChip<String>(
+                      label: strings.dutch,
+                      value: 'nl',
+                      current: localeValue,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(localeCode: 'nl'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  strings.theme,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _SelectionChip<ThemeMode>(
+                      label: strings.dark,
+                      value: ThemeMode.dark,
+                      current: settings.themeMode,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(themeMode: ThemeMode.dark),
+                      ),
+                    ),
+                    _SelectionChip<ThemeMode>(
+                      label: strings.light,
+                      value: ThemeMode.light,
+                      current: settings.themeMode,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(themeMode: ThemeMode.light),
+                      ),
+                    ),
+                    _SelectionChip<ThemeMode>(
+                      label: strings.systemDefault,
+                      value: ThemeMode.system,
+                      current: settings.themeMode,
+                      onSelected: () => widget.onSettingsChanged(
+                        settings.copyWith(themeMode: ThemeMode.system),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
-        if (versionLabel != null)
+        if (widget.versionLabel != null)
           SafeArea(
             top: false,
             child: Padding(
@@ -184,11 +241,82 @@ class SettingsContent extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 dense: true,
                 leading: const Icon(Icons.verified_sharp),
-                title: Text('${strings.appVersionLabel}: $versionLabel'),
+                title: Text(
+                  '${strings.appVersionLabel}: ${widget.versionLabel}',
+                ),
               ),
             ),
           ),
       ],
+    );
+  }
+}
+
+class _VmaSettingCard extends StatelessWidget {
+  const _VmaSettingCard({required this.vma, required this.onPressed});
+
+  final double? vma;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    final strings = AppLocalizations.of(context);
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final onContainer = colors.onPrimaryContainer;
+    final detail = vma == null ? strings.setVma : strings.yourVma(vma!);
+
+    return Card(
+      key: const ValueKey('vma-setting-card'),
+      margin: EdgeInsets.zero,
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      color: colors.primaryContainer,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(color: colors.primary.withValues(alpha: 0.24)),
+      ),
+      child: InkWell(
+        key: const ValueKey('vma-edit'),
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 26,
+                backgroundColor: colors.surface,
+                child: Icon(Icons.speed_rounded, color: colors.primary),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      strings.updateVma,
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: onContainer,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      detail,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        color: onContainer,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
+              Icon(Icons.edit_outlined, color: onContainer),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

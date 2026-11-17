@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show KeyDownEvent, LogicalKeyboardKey;
 
@@ -195,6 +196,7 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
   @override
   Widget build(BuildContext context) {
     final strings = AppLocalizations.of(context);
+    final mobileWeb = _isMobileWeb(context);
     return Focus(
       onKeyEvent: (_, event) => _onTileKey(_activeTileIndex, event),
       child: SingleChildScrollView(
@@ -230,7 +232,7 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
                         width: width,
                         child: Focus(
                           focusNode: _tileFocusNodes[index],
-                          autofocus: kIsWeb && index == 0,
+                          autofocus: kIsWeb && !mobileWeb && index == 0,
                           onFocusChange: (hasFocus) {
                             if (hasFocus) {
                               _activeTileIndex = index;
@@ -239,7 +241,11 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
                               setState(() {});
                             }
                           },
-                          child: _tile(context, index),
+                          child: _tile(
+                            context,
+                            index,
+                            showFocusBorder: !mobileWeb,
+                          ),
                         ),
                       ),
                   ],
@@ -260,7 +266,11 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
     );
   }
 
-  Widget _tile(BuildContext context, int index) {
+  Widget _tile(
+    BuildContext context,
+    int index, {
+    required bool showFocusBorder,
+  }) {
     final strings = AppLocalizations.of(context);
     final measure = draft.measureAt(index);
     final isInput = draft.isInput(index);
@@ -290,7 +300,7 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: _tileFocusNodes[index].hasFocus
+          color: showFocusBorder && _tileFocusNodes[index].hasFocus
               ? colors.primary
               : Colors.transparent,
           width: 2,
@@ -384,6 +394,14 @@ class _RunningCalculatorPageState extends State<RunningCalculatorPage> {
       ),
     );
   }
+}
+
+bool _isMobileWeb(BuildContext context) {
+  if (!kIsWeb) return false;
+  final platform = defaultTargetPlatform;
+  return platform == TargetPlatform.android ||
+      platform == TargetPlatform.iOS ||
+      MediaQuery.sizeOf(context).shortestSide < 600;
 }
 
 // Validate through the domain parser, then retain the selected card's units.

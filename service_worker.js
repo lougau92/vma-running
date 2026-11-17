@@ -1,5 +1,5 @@
 // The release build stamps this name before Flutter copies the web assets.
-const CACHE_NAME = 'vma-running-cache-64-2cbf870c1b828a6b332e5cd923eaf47cf7e72b43';
+const CACHE_NAME = 'vma-running-cache-65-dad239a76c15cd759893aa0c68375aa632883431';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -45,6 +45,7 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+  if (url.pathname.includes('/garmin/')) return;
   const scope = new URL(self.registration.scope);
   const appAsset = url.origin === scope.origin && url.pathname.startsWith(scope.pathname);
   const renderingAsset = request.destination === 'font' ||

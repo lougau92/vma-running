@@ -27,6 +27,12 @@ class TranslationsNl {
     "watch_oauth_denied": "De {name}-toestemming is geweigerd.",
     "watch_oauth_expired":
         "De {name}-aanmelding is verlopen. Maak opnieuw verbinding.",
+    "watch_oauth_pending":
+        "Geef toegang in {name}, keer dan terug en kies Aanmelding afronden.",
+    "watch_oauth_finish": "Aanmelding afronden",
+    "watch_oauth_original_app":
+        "Ga terug naar de app of browser waarin je bent begonnen en kies Aanmelding afronden bij {name}.",
+    "watch_oauth_restart": "Opnieuw beginnen",
     "watch_export_to": "Exporteren naar {name}",
     "watch_save": "Opslaan in {name}",
     "watch_saved": "Opgeslagen in {name}",

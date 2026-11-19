@@ -27,6 +27,12 @@ class TranslationsEn {
     "watch_error": "The watch service is unavailable. Try again.",
     "watch_oauth_denied": "{name} authorization was declined.",
     "watch_oauth_expired": "The {name} sign-in expired. Connect again.",
+    "watch_oauth_pending":
+        "Approve access in {name}, then return here and choose Finish sign-in.",
+    "watch_oauth_finish": "Finish sign-in",
+    "watch_oauth_original_app":
+        "Return to the app or browser where you started and choose Finish sign-in under {name}.",
+    "watch_oauth_restart": "Start over",
     "watch_export_to": "Export to {name}",
     "watch_save": "Save to {name}",
     "watch_saved": "Saved in {name}",

@@ -10,6 +10,8 @@ import '../watch/watch_provider.dart';
 import '../watch/watch_service_client.dart';
 import 'coros_export_flow.dart';
 
+enum _Authorization { none, pending, connected }
+
 class CorosWatchProvider extends WatchProvider {
   CorosWatchProvider(this.client);
   final WatchServiceClient client;
@@ -30,7 +32,7 @@ class CorosWatchProvider extends WatchProvider {
   Future<String> get _pendingKey async =>
       'watch_oauth_coros_attempt_${await client.session.userId()}';
 
-  Future<void> start() async {
+  Future<void> _start() async {
     final pending = await client.request('POST', '/coros/login/start');
     final url = Uri.parse(pending['url'] as String);
     if (url.origin != 'https://mcpeu.coros.com' ||
@@ -38,27 +40,43 @@ class CorosWatchProvider extends WatchProvider {
       throw const WatchServiceFailure('coros_unavailable');
     }
     final prefs = await SharedPreferences.getInstance();
+    final key = await _pendingKey;
     if (!await prefs.setString(
-      await _pendingKey,
+      key,
       jsonEncode({'attempt': pending['attempt'], 'proof': pending['proof']}),
     )) {
       throw const WatchServiceFailure('coros_unavailable');
     }
-    openBrowserPage(url.toString());
+    try {
+      if (!await openBrowserPage(url)) {
+        throw const WatchServiceFailure('coros_unavailable');
+      }
+    } catch (_) {
+      await prefs.remove(key);
+      rethrow;
+    }
   }
 
-  Future<void> complete() async {
+  Future<_Authorization> _complete() async {
     final prefs = await SharedPreferences.getInstance();
     final key = await _pendingKey;
     final pending = prefs.getString(key);
-    if (pending == null) return;
+    if (pending == null) return _Authorization.none;
     try {
       final result = await client.request(
         'POST',
         '/coros/login/complete',
         body: jsonDecode(pending) as Map<String, dynamic>,
       );
-      if (result['status'] == 'connected') await prefs.remove(key);
+      switch (result['status']) {
+        case 'pending':
+          return _Authorization.pending;
+        case 'connected':
+          await prefs.remove(key);
+          return _Authorization.connected;
+        default:
+          throw const WatchServiceFailure('coros_unavailable');
+      }
     } on WatchServiceFailure catch (error) {
       if ([
         'coros_sign_in_expired',
@@ -78,9 +96,18 @@ class CorosWatchProvider extends WatchProvider {
   }
 
   @override
-  Future<void> manage(BuildContext context) => showDialog<void>(
+  Future<void> manage(BuildContext context) => _showConnection(context);
+
+  @override
+  Future<void> resumeSignIn(BuildContext context) =>
+      _showConnection(context, returning: true);
+
+  Future<void> _showConnection(
+    BuildContext context, {
+    bool returning = false,
+  }) => showDialog<void>(
     context: context,
-    builder: (_) => _CorosConnection(provider: this),
+    builder: (_) => _CorosConnection(provider: this, returning: returning),
   );
 
   @override
@@ -97,27 +124,60 @@ class CorosWatchProvider extends WatchProvider {
 }
 
 class _CorosConnection extends StatefulWidget {
-  const _CorosConnection({required this.provider});
+  const _CorosConnection({required this.provider, required this.returning});
   final CorosWatchProvider provider;
+  final bool returning;
 
   @override
   State<_CorosConnection> createState() => _CorosConnectionState();
 }
 
 class _CorosConnectionState extends State<_CorosConnection> {
-  bool busy = false, connected = false;
+  late final AppLifecycleListener _lifecycle;
+  bool busy = false, connected = false, pending = false, canRetry = false;
+  bool missingAttempt = false;
   String? error;
 
   @override
   void initState() {
     super.initState();
-    _run(() async {
-      await widget.provider.complete();
-      connected = await widget.provider.connected();
-    });
+    _lifecycle = AppLifecycleListener(
+      onResume: () {
+        if (pending) _check();
+      },
+    );
+    _check();
   }
 
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
+  Future<void> _check() => _run(() async {
+    canRetry = true;
+    final authorization = await widget.provider._complete();
+    pending = authorization == _Authorization.pending;
+    connected = switch (authorization) {
+      _Authorization.none => await widget.provider.connected(),
+      _Authorization.pending => false,
+      _Authorization.connected => true,
+    };
+    missingAttempt =
+        widget.returning && authorization == _Authorization.none && !connected;
+    canRetry = false;
+  });
+
+  Future<void> _start() => _run(() async {
+    await widget.provider._start();
+    pending = true;
+    canRetry = false;
+    missingAttempt = false;
+  });
+
   Future<void> _run(Future<void> Function() action) async {
+    if (busy) return;
     setState(() {
       busy = true;
       error = null;
@@ -130,6 +190,10 @@ class _CorosConnectionState extends State<_CorosConnection> {
         'coros_sign_in_expired' || 'coros_reconnect' => 'watch_oauth_expired',
         _ => 'watch_error',
       };
+      if (error != 'watch_error') {
+        pending = false;
+        canRetry = false;
+      }
     } catch (_) {
       error = 'watch_error';
     } finally {
@@ -141,14 +205,21 @@ class _CorosConnectionState extends State<_CorosConnection> {
   Widget build(BuildContext context) {
     final s = AppLocalizations.of(context);
     return AlertDialog(
+      scrollable: true,
       title: Text(widget.provider.name),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (busy) const LinearProgressIndicator(),
-          if (!busy)
-            Text(connected ? s['watch_connected'] : s['watch_disconnected']),
+          if (connected)
+            Text(s['watch_connected'])
+          else if (pending)
+            Text(s.watchLabel('watch_oauth_pending', widget.provider.name))
+          else if (missingAttempt)
+            Text(s.watchLabel('watch_oauth_original_app', widget.provider.name))
+          else if (!busy)
+            Text(s['watch_disconnected']),
           if (error case final key?)
             Text(s.watchLabel(key, widget.provider.name)),
         ],
@@ -168,11 +239,23 @@ class _CorosConnectionState extends State<_CorosConnection> {
                   }),
             child: Text(s['watch_disconnect']),
           )
-        else
+        else if (!missingAttempt) ...[
+          if (pending || canRetry)
+            TextButton(
+              onPressed: busy ? null : _start,
+              child: Text(s['watch_oauth_restart']),
+            ),
           FilledButton(
-            onPressed: busy ? null : () => _run(widget.provider.start),
-            child: Text(s['watch_connect']),
+            onPressed: busy ? null : (pending || canRetry ? _check : _start),
+            child: Text(
+              pending
+                  ? s['watch_oauth_finish']
+                  : canRetry
+                  ? s['workout_retry']
+                  : s['watch_connect'],
+            ),
           ),
+        ],
       ],
     );
   }

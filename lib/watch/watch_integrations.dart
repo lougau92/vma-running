@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +16,7 @@ class WatchIntegrations {
       _adapters = {
         for (final provider in [
           GarminWatchProvider(client),
-          if (kIsWeb) CorosWatchProvider(client),
+          CorosWatchProvider(client),
           ...?providers,
         ])
           provider.id: provider,
@@ -191,10 +190,19 @@ class _IntegrationListState extends State<_IntegrationList> {
   @override
   void initState() {
     super.initState();
-    _load(returningProvider: widget.returningProvider);
+    final returning = widget.integrations._adapters[widget.returningProvider];
+    if (returning == null) {
+      _load();
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) return;
+        await returning.resumeSignIn(context);
+        if (mounted) await _load();
+      });
+    }
   }
 
-  Future<void> _load({String? returningProvider}) async {
+  Future<void> _load() async {
     final available = await widget.integrations.available();
     final preferred = await widget.integrations.defaultProvider().onError(
       (_, _) => null,
@@ -211,15 +219,6 @@ class _IntegrationListState extends State<_IntegrationList> {
       this.preferred = preferred;
       loading = false;
     });
-    if (returningProvider != null) {
-      final returning = entries
-          .where((entry) => entry.provider.id == returningProvider)
-          .firstOrNull;
-      if (returning != null) {
-        await _manage(returning);
-        return;
-      }
-    }
     final names = await Future.wait([
       for (final entry in available)
         if (entry.canListDevices && statuses[entry.provider.id] == true)
@@ -238,8 +237,8 @@ class _IntegrationListState extends State<_IntegrationList> {
     }
   }
 
-  Future<void> _manage(WatchDestination entry) async {
-    await entry.provider.manage(context);
+  Future<void> _manage(WatchProvider provider) async {
+    await provider.manage(context);
     if (mounted) await _load();
   }
 
@@ -283,7 +282,7 @@ class _IntegrationListState extends State<_IntegrationList> {
                           ...?linkedDevices[entry.provider.id],
                         ].join(' · '),
                       ),
-                      onTap: () => _manage(entry),
+                      onTap: () => _manage(entry.provider),
                     ),
                   if (exportable.isNotEmpty)
                     DropdownButtonFormField<String>(

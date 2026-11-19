@@ -5,7 +5,12 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'runtime_environment.dart' show RuntimeEnvironment;
 
 @JS('location.assign')
-external void openBrowserPage(String url);
+external void _assignLocation(String url);
+
+Future<bool> openBrowserPage(Uri url) async {
+  _assignLocation(url.toString());
+  return true;
+}
 
 @JS('history.state')
 external JSAny? get _historyState;

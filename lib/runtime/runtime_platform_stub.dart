@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'runtime_environment.dart' show RuntimeEnvironment;
 
@@ -7,8 +8,7 @@ RuntimeEnvironment readEnvironment() =>
 
 void Function() watchEnvironment(void Function() onChanged) => () {};
 
-void openBrowserPage(String url) {
-  throw UnsupportedError('Browser navigation is available on the web');
-}
+Future<bool> openBrowserPage(Uri url) =>
+    launchUrl(url, mode: LaunchMode.externalApplication);
 
 String? takeBrowserQueryParameter(String name) => null;

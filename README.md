@@ -15,11 +15,22 @@ VMA-focused training helper built with Flutter. Enter your VMA once, then explor
 2) Fetch deps: `flutter pub get`  
 3) Run: `flutter run -d chrome` (or any connected device)
 
-## Garmin export
+## Watch export
 
 Connect Garmin from Settings, then export the selected workout group and optionally
 send it to a watch. This requires the separately hosted Python proxy; see
 [configuration, behavior and verification](docs/garmin.md).
+
+When the proxy advertises COROS, open **Settings → Watch integrations → COROS**
+and approve access in the browser. Return to the same app that started sign-in.
+If it's still pending, choose **Finish sign-in** under COROS. After exporting a
+workout, open it in the COROS app and send it to your paired watch.
+
+For a local Android run, pass the HTTPS URL of a COROS enabled proxy:
+
+```sh
+flutter run -d <device-id> --dart-define=WATCH_SERVICE_URL=https://your-proxy.example
+```
 
 ## Web release updates
 
@@ -40,8 +51,9 @@ service-worker cache uses a separate CI run and commit identifier.
 Run `npm run test:web` after installing Playwright Chromium. This covers upgrade
 from the legacy worker, retained cookies/preferences, stale HTTP and legacy
 caches, incomplete updates, and offline reloads at `/` and `/vma-running/`.
-Set `CHROME_EXECUTABLE` to use an existing Chrome binary. CI runs these checks
-before building, then runs `tool/sw-offline-test.mjs` against the Flutter build.
+Set `CHROME_EXECUTABLE` to use an existing Chrome binary. CI uses the runner's
+preinstalled Chrome for both the update checks and `tool/sw-offline-test.mjs`,
+which checks the Flutter build.
 
 ## Firebase configuration
 
@@ -258,11 +270,12 @@ in device storage, unused.
    - Console should not spam font errors (fonts are cached with a graceful fallback).
 5) Toggle “Offline” off and reload to confirm it resumes normal online fetching.
 
-### Automated local SW test (same as CI)
-1) Build web: `flutter build web --release`
-2) Install test deps: `npm install playwright@1.41.2 http-server && npx playwright install --with-deps chromium`
-3) Run: `node tool/sw-offline-test.js`
-   - Starts a local server, waits for the service worker, goes offline, checks the cached app configuration, and asserts no font error spam.
+### Automated local offline test
+1. Build with `flutter build web --release --base-href /vma-running/`.
+2. Install test dependencies with `npm ci`.
+3. Run `CHROME_EXECUTABLE="$(command -v google-chrome)" node tool/sw-offline-test.mjs` with Chrome on your PATH. To use Playwright's bundled browser, run `npx playwright install --only-shell chromium`, then `node tool/sw-offline-test.mjs`.
+
+The test starts a local server and verifies that the Flutter app restarts offline with its cached configuration and assets.
 
 ## Training plan data
 - Default source: Firestore document `app_documents/workout_plan`, with a schema `0.1` conversion in its `content` string.

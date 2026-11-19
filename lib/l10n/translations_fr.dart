@@ -25,6 +25,12 @@ class TranslationsFr {
     "watch_error": "Le service de la montre est indisponible. Réessayez.",
     "watch_oauth_denied": "L’autorisation {name} a été refusée.",
     "watch_oauth_expired": "La connexion {name} a expiré. Reconnectez-vous.",
+    "watch_oauth_pending":
+        "Autorisez l’accès dans {name}, puis revenez ici et choisissez Terminer la connexion.",
+    "watch_oauth_finish": "Terminer la connexion",
+    "watch_oauth_original_app":
+        "Revenez à l’application ou au navigateur où vous avez commencé, puis choisissez Terminer la connexion dans {name}.",
+    "watch_oauth_restart": "Recommencer",
     "watch_export_to": "Exporter vers {name}",
     "watch_save": "Enregistrer dans {name}",
     "watch_saved": "Enregistré dans {name}",

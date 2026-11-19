@@ -58,8 +58,11 @@ jobs:
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+      - name: Use runner Chrome for Playwright
+        run: |
+          chrome_executable="$(command -v google-chrome)"
+          "$chrome_executable" --version
+          echo "CHROME_EXECUTABLE=$chrome_executable" >> "$GITHUB_ENV"
 
       - name: Test web release updates
         if: steps.web_update_changes.outputs.changed == 'true'

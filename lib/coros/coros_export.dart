@@ -24,10 +24,9 @@ CorosExport buildCorosExport(
     final target = switch (step.end) {
       'distance' => 1,
       'time' => 2,
-      'manual' => 4,
-      _ => null,
+      // Match Garmin: keep descriptive instructions in the notes and end on LAP.
+      _ => 4,
     };
-    if (target == null) problems.add(strings['coros_end_unsupported']);
     final amount = step.amount;
     final value = amount?.isFinite == true ? amount!.round() : null;
     if ((target == 1 || target == 2) &&
@@ -55,8 +54,8 @@ CorosExport buildCorosExport(
         'cooldown' => 4,
         _ => 2,
       },
-      if (target != null) 'targetType': target,
-      if (value != null) 'targetValue': value,
+      'targetType': target,
+      if (target != 4 && value != null) 'targetValue': value,
       if (fast != null && slow != null) ...{
         'intensityType': 2,
         'intensityValueStart': fast,

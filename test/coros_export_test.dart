@@ -104,7 +104,7 @@ void main() {
     expect(sections, hasLength(3));
   });
 
-  test('descriptive end remains an instruction and blocks saving', () {
+  test('descriptive end keeps its instruction and exports as LAP', () {
     final result = export([
       const ResolvedWatchStep(
         'warmup',
@@ -116,7 +116,10 @@ void main() {
         ['Warm up along the marked route.'],
       ),
     ]);
-    expect(result.problems, contains(strings['coros_end_unsupported']));
+    expect(result.problems, isEmpty);
+    expect(result.course['sections'], [
+      {'sectionType': 1, 'targetType': 4},
+    ]);
     expect(
       result.course['courseDescription'],
       'Warm up along the marked route.',

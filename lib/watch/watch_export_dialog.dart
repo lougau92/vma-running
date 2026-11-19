@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
-import '../workouts/workout_format.dart';
 import 'watch_preview.dart';
 import 'watch_provider.dart';
 import 'watch_workout.dart';
@@ -48,31 +47,25 @@ abstract class WatchExportFlow {
   }) => const [];
 }
 
-Future<bool> showWatchExportDialog(
+Future<void> showWatchExportDialog(
   BuildContext context,
   WatchExportRequest workout,
-  WatchExportFlow flow, {
-  required bool canChange,
-}) async =>
-    await showDialog<bool>(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) =>
-          WatchExportDialog(workout: workout, flow: flow, canChange: canChange),
-    ) ??
-    false;
+  WatchExportFlow flow,
+) => showDialog<void>(
+  context: context,
+  barrierDismissible: false,
+  builder: (_) => WatchExportDialog(workout: workout, flow: flow),
+);
 
 class WatchExportDialog extends StatefulWidget {
   const WatchExportDialog({
     super.key,
     required this.workout,
     required this.flow,
-    this.canChange = false,
   });
 
   final WatchExportRequest workout;
   final WatchExportFlow flow;
-  final bool canChange;
 
   @override
   State<WatchExportDialog> createState() => _WatchExportDialogState();
@@ -117,61 +110,76 @@ class _WatchExportDialogState extends State<WatchExportDialog> {
     return _ExportDialogFrame(
       title: s.watchLabel('watch_export_to', flow.name),
       busy: _busy,
+      saved: _saved,
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            '${widget.workout.version.label} · VMA ${workoutNumber(widget.workout.vma)} km/h',
-            style: theme.textTheme.titleSmall,
-          ),
-          if (_busy) const LinearProgressIndicator(),
-          if (_error case final error?)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(flow.errorMessage(s, error)),
+          if (_error case final error?) ...[
+            WatchExportStatus(
+              message: flow.errorMessage(s, error),
+              success: false,
             ),
-          if (!_saved && !flow.inputsLocked) ...[
-            WatchExportInputs(
-              inputs: preview.inputs,
-              enabled: !_busy,
-              onChanged: (path, value) => setState(() => _values[path] = value),
-            ),
-            for (final message in preview.messages)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(message),
-              ),
+            const SizedBox(height: 16),
           ],
           if (_saved) ...[
-            Text(
-              s.watchLabel('watch_saved', flow.destination),
-              style: theme.textTheme.titleMedium,
+            WatchExportStatus(
+              message: s.watchLabel('watch_saved', flow.destination),
+              detail: preview.title,
             ),
+            const SizedBox(height: 16),
             ...flow.savedDetails(
               context,
               busy: _busy,
               run: _run,
               refresh: () => setState(() {}),
             ),
+          ] else ...[
+            Text(preview.title, style: theme.textTheme.titleLarge),
+            const SizedBox(height: 4),
+            Text(
+              s.yourVma(widget.workout.vma),
+              style: theme.textTheme.bodyMedium,
+            ),
+            if (!flow.inputsLocked) ...[
+              if (preview.inputs.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                WatchExportInputs(
+                  inputs: preview.inputs,
+                  enabled: !_busy,
+                  onChanged: (path, value) =>
+                      setState(() => _values[path] = value),
+                ),
+              ],
+              for (final message in preview.messages)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(message, style: theme.textTheme.bodySmall),
+                ),
+            ],
+            if (preview.notes case final notes? when notes.trim().isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: WatchPreviewNotes(text: notes, title: s.remarks),
+              ),
+            const SizedBox(height: 20),
+            Text(s['watch_steps'], style: theme.textTheme.titleSmall),
+            const Divider(),
+            ...preview.steps,
           ],
-          const SizedBox(height: 12),
-          Text(preview.title, style: theme.textTheme.titleMedium),
-          if (preview.notes case final notes? when notes.trim().isNotEmpty)
-            WatchPreviewNotes(text: notes, title: s.remarks),
-          ...preview.steps,
         ],
       ),
       actions: [
-        if (widget.canChange)
-          TextButton(
-            onPressed: _busy ? null : () => Navigator.pop(context, true),
-            child: Text(s['watch_change_destination']),
-          ),
-        TextButton(
-          onPressed: _busy ? null : () => Navigator.pop(context),
-          child: Text(s['watch_close']),
-        ),
         if (!_saved)
+          TextButton(
+            onPressed: _busy ? null : () => Navigator.pop(context),
+            child: Text(s['watch_close']),
+          ),
+        if (_saved)
+          FilledButton(
+            onPressed: _busy ? null : () => Navigator.pop(context),
+            child: Text(s['watch_close']),
+          )
+        else
           FilledButton(
             onPressed: _busy || save == null
                 ? null
@@ -189,40 +197,56 @@ class _ExportDialogFrame extends StatelessWidget {
   const _ExportDialogFrame({
     required this.title,
     required this.busy,
+    required this.saved,
     required this.content,
     required this.actions,
   });
 
   final String title;
-  final bool busy;
+  final bool busy, saved;
   final Widget content;
   final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scroll = SingleChildScrollView(
+      key: ValueKey(saved),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: content,
+    );
+    final progress = busy
+        ? const LinearProgressIndicator()
+        : const Divider(height: 1);
     return PopScope(
       canPop: !busy,
       child: MediaQuery.sizeOf(context).width < 600
           ? Dialog.fullscreen(
+              backgroundColor: theme.colorScheme.surface,
               child: SafeArea(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        title,
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+                      child: Text(title, style: theme.textTheme.titleLarge),
                     ),
+                    progress,
                     Expanded(
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: content,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: scroll,
                       ),
                     ),
+                    const Divider(height: 1),
                     Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Wrap(spacing: 8, children: actions),
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                      child: OverflowBar(
+                        alignment: MainAxisAlignment.end,
+                        overflowAlignment: OverflowBarAlignment.end,
+                        spacing: 8,
+                        children: actions,
+                      ),
                     ),
                   ],
                 ),
@@ -231,8 +255,15 @@ class _ExportDialogFrame extends StatelessWidget {
           : AlertDialog(
               title: Text(title),
               content: SizedBox(
-                width: 600,
-                child: SingleChildScrollView(child: content),
+                width: 520,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    progress,
+                    Flexible(child: scroll),
+                  ],
+                ),
               ),
               actions: actions,
             ),

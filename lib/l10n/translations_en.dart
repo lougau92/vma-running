@@ -2,8 +2,9 @@ class TranslationsEn {
   static const Map<String, String> values = {
     'garmin_seconds': 'Duration (seconds)',
     'garmin_metres': 'Distance (metres)',
+    "coros_sync_help": "How to send to your watch",
     "coros_sync_instructions":
-        "In the {name} app, open the workout and choose Send to Device.",
+        "In the {name} app, go to Profile → Workout Library. Open this workout, tap Send to Device, and select your watch.",
     "coros_end_unsupported":
         "COROS needs a distance, duration, or explicitly open-ended step.",
     "coros_pace_bounds":
@@ -18,12 +19,15 @@ class TranslationsEn {
         "COROS may already have saved this workout. Check the COROS library before exporting another copy.",
     "watch_integrations": "Watch integrations",
     "watch_export": "Export to watch",
-    "watch_destination": "Choose a destination",
-    "watch_change_destination": "Change destination",
+    "watch_choose_default_help":
+        "Choose which integration to use for future exports. You can change it in Watch integrations.",
+    "watch_default_unavailable":
+        "Your default destination is unavailable. Reconnect it or choose another in Watch integrations.",
+    "watch_steps": "Workout steps",
+    "watch_repeats": "Repeat ×{count}",
     "watch_connected": "Connected",
     "watch_disconnected": "Disconnected",
     "watch_default": "Default destination",
-    "watch_no_default": "No default",
     "watch_error": "The watch service is unavailable. Try again.",
     "watch_oauth_denied": "{name} authorization was declined.",
     "watch_oauth_expired": "The {name} sign-in expired. Connect again.",
@@ -39,7 +43,7 @@ class TranslationsEn {
     "watch_connect": "Connect / sign in again",
     "watch_disconnect": "Disconnect",
     "watch_close": "Close",
-    "garmin_send": "Send to watch",
+    "watch_send": "Send to watch",
     "garmin_watch": "Watch",
     "garmin_connected":
         "Garmin session saved. It will be checked on the next request.",

@@ -112,22 +112,118 @@ class WatchStepPreview extends StatelessWidget {
       'recovery' || 'rest' => (s.recovery, Icons.pause_circle_outline),
       _ => (s.sessionContent, Icons.bolt),
     };
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 3),
-      color: colors.surfaceContainerLow,
-      child: ListTile(
-        leading: Icon(icon, color: colors.primary),
-        title: Text(number == null ? label : '$number. $label'),
-        trailing: Text(end),
-        subtitle: pace == null && notes == null
-            ? null
-            : Column(
+    final text = Theme.of(context).textTheme;
+    final instructions = notes;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 20, color: colors.primary),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            number == null ? label : '$number. $label',
+                            style: text.titleSmall,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(end, style: text.labelLarge),
+                      ],
+                    ),
+                    if (pace != null || instructions?.trim().isNotEmpty == true)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: Text(
+                          [
+                            if (pace != null) pace!,
+                            if (instructions != null &&
+                                instructions.trim().isNotEmpty)
+                              instructions,
+                          ].join('\n'),
+                          style: text.bodySmall,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(height: 1),
+      ],
+    );
+  }
+}
+
+class WatchExportStatus extends StatelessWidget {
+  const WatchExportStatus({
+    super.key,
+    required this.message,
+    this.detail,
+    this.success = true,
+  });
+
+  final String message;
+  final String? detail;
+  final bool success;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final foreground = success
+        ? colors.onPrimaryContainer
+        : colors.onErrorContainer;
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: success ? colors.primaryContainer : colors.errorContainer,
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              success ? Icons.check_circle : Icons.error_outline,
+              color: success ? colors.primary : foreground,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (pace != null) Text(pace!),
-                  if (notes != null) WatchPreviewNotes(text: notes!),
+                  Text(
+                    message,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: foreground,
+                    ),
+                  ),
+                  if (detail != null) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      detail!,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: foreground,
+                      ),
+                    ),
+                  ],
                 ],
               ),
+            ),
+          ],
+        ),
       ),
     );
   }

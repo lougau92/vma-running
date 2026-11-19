@@ -133,7 +133,6 @@ class GarminExportFlow extends WatchExportFlow {
     final devices = _devices;
     final selected = _selectedDevice;
     return [
-      SelectableText(url),
       TextButton.icon(
         onPressed: () => Clipboard.setData(ClipboardData(text: url)),
         icon: const Icon(Icons.copy),
@@ -154,7 +153,7 @@ class GarminExportFlow extends WatchExportFlow {
                         : null;
                   });
                 }),
-          child: Text(s['garmin_send']),
+          child: Text(s['watch_send']),
         )
       else if (devices.isEmpty)
         Text(s['garmin_no_watch'])
@@ -175,7 +174,10 @@ class GarminExportFlow extends WatchExportFlow {
                 },
         ),
         if (operation.delivered.contains(selected))
-          Text(s['garmin_delivery_requested'])
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: WatchExportStatus(message: s['garmin_delivery_requested']),
+          )
         else
           FilledButton(
             onPressed: busy || selected == null
@@ -186,7 +188,7 @@ class GarminExportFlow extends WatchExportFlow {
                       () => _journal.send(operation, selected),
                     );
                   }),
-            child: Text(s['garmin_send']),
+            child: Text(s['watch_send']),
           ),
       ],
     ];

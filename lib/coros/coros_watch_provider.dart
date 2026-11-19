@@ -111,16 +111,8 @@ class CorosWatchProvider extends WatchProvider {
   );
 
   @override
-  Future<bool> preview(
-    BuildContext context,
-    WatchExportRequest workout, {
-    required bool canChange,
-  }) => showWatchExportDialog(
-    context,
-    workout,
-    CorosExportFlow(client),
-    canChange: canChange,
-  );
+  Future<void> preview(BuildContext context, WatchExportRequest workout) =>
+      showWatchExportDialog(context, workout, CorosExportFlow(client));
 }
 
 class _CorosConnection extends StatefulWidget {

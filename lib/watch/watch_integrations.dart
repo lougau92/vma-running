@@ -59,12 +59,10 @@ class WatchIntegrations {
     return prefs.getString(await _defaultKey);
   }
 
-  Future<void> setDefault(String? id) async {
+  Future<void> setDefault(String id) async {
     final prefs = await SharedPreferences.getInstance();
     final key = await _defaultKey;
-    final saved = id == null
-        ? await prefs.remove(key)
-        : await prefs.setString(key, id);
+    final saved = await prefs.setString(key, id);
     if (!saved) throw const WatchServiceFailure('preference_unavailable');
   }
 }
@@ -90,11 +88,13 @@ Future<void> _manageIntegrations(
   BuildContext context,
   WatchIntegrations integrations, {
   String? returningProvider,
+  bool defaultUnavailable = false,
 }) => showDialog<void>(
   context: context,
   builder: (_) => _IntegrationList(
     integrations: integrations,
     returningProvider: returningProvider,
+    defaultUnavailable: defaultUnavailable,
   ),
 );
 
@@ -106,36 +106,30 @@ Future<void> showWatchExport(
   final localClient = integrations == null ? GarminClient() : null;
   final registry = integrations ?? WatchIntegrations(localClient!);
   try {
+    final preferred = await registry.defaultProvider().onError((_, _) => null);
     final available = await registry.available();
     final connected = <WatchDestination>[
       for (final entry in available)
-        if (entry.canExport && await _connected(entry.provider)) entry,
+        if (entry.canExport &&
+            (preferred == null || entry.provider.id == preferred) &&
+            await _connected(entry.provider))
+          entry,
     ];
     if (!context.mounted) return;
     if (connected.isEmpty) {
-      await _manageIntegrations(context, registry);
+      await _manageIntegrations(
+        context,
+        registry,
+        defaultUnavailable: preferred != null,
+      );
       return;
     }
-    final preferred = connected.length > 1
-        ? await registry.defaultProvider().onError((_, _) => null)
-        : null;
-    var selected = connected.length == 1
-        ? connected.single
-        : connected
-              .where((entry) => entry.provider.id == preferred)
-              .firstOrNull;
-    while (true) {
-      if (!context.mounted) return;
-      selected ??= await _pick(context, connected);
-      if (selected == null || !context.mounted) return;
-      final change = await selected.provider.preview(
-        context,
-        workout,
-        canChange: connected.length > 1,
-      );
-      if (!change) return;
-      selected = null;
-    }
+    final selected = preferred == null
+        ? await _pick(context, connected)
+        : connected.single;
+    if (selected == null || !context.mounted) return;
+    if (preferred == null) await registry.setDefault(selected.provider.id);
+    if (context.mounted) await selected.provider.preview(context, workout);
   } catch (_) {
     if (context.mounted) await _manageIntegrations(context, registry);
   } finally {
@@ -154,27 +148,42 @@ Future<bool> _connected(WatchProvider provider) async {
 Future<WatchDestination?> _pick(
   BuildContext context,
   List<WatchDestination> connected,
-) => showDialog(
+) => showDialog<WatchDestination>(
   context: context,
-  builder: (context) => SimpleDialog(
-    title: Text(AppLocalizations.of(context)['watch_destination']),
-    children: [
-      for (final entry in connected)
-        SimpleDialogOption(
-          onPressed: () => Navigator.pop(context, entry),
-          child: Text(entry.provider.name),
+  builder: (context) {
+    final s = AppLocalizations.of(context);
+    return SimpleDialog(
+      title: Text(s['watch_default']),
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+          child: Text(s['watch_choose_default_help']),
         ),
-    ],
-  ),
+        for (final entry in connected)
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(context, entry),
+            child: Row(
+              children: [
+                const Icon(Icons.watch_outlined),
+                const SizedBox(width: 12),
+                Expanded(child: Text(entry.provider.name)),
+              ],
+            ),
+          ),
+      ],
+    );
+  },
 );
 
 class _IntegrationList extends StatefulWidget {
   const _IntegrationList({
     required this.integrations,
     required this.returningProvider,
+    required this.defaultUnavailable,
   });
   final WatchIntegrations integrations;
   final String? returningProvider;
+  final bool defaultUnavailable;
 
   @override
   State<_IntegrationList> createState() => _IntegrationListState();
@@ -243,6 +252,7 @@ class _IntegrationListState extends State<_IntegrationList> {
   }
 
   Future<void> _setDefault(String? id) async {
+    if (id == null) return;
     try {
       await widget.integrations.setDefault(id);
       if (mounted) setState(() => preferred = id);
@@ -270,6 +280,14 @@ class _IntegrationListState extends State<_IntegrationList> {
             : ListView(
                 shrinkWrap: true,
                 children: [
+                  if (widget.defaultUnavailable &&
+                      !exportable.any(
+                        (entry) => entry.provider.id == preferred,
+                      ))
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(s['watch_default_unavailable']),
+                    ),
                   for (final entry in entries)
                     ListTile(
                       leading: const Icon(Icons.watch_outlined),
@@ -292,23 +310,18 @@ class _IntegrationListState extends State<_IntegrationList> {
                             (entry) => entry.provider.id == preferred,
                           )
                           ? preferred
-                          : '',
+                          : null,
                       decoration: InputDecoration(
                         labelText: s['watch_default'],
                       ),
                       items: [
-                        DropdownMenuItem(
-                          value: '',
-                          child: Text(s['watch_no_default']),
-                        ),
                         for (final entry in exportable)
                           DropdownMenuItem(
                             value: entry.provider.id,
                             child: Text(entry.provider.name),
                           ),
                       ],
-                      onChanged: (value) =>
-                          _setDefault(value == '' ? null : value),
+                      onChanged: _setDefault,
                     ),
                 ],
               ),

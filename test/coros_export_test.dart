@@ -159,10 +159,17 @@ void main() {
     );
     await tester.pumpAndSettle();
     await tap(tester, 'Save to COROS');
+    expect(find.text('Saved in COROS'), findsNothing);
     await tap(tester, 'Save to COROS');
     expect(keys, hasLength(2));
     expect(keys.first, isNotEmpty);
     expect(keys.first, keys.last);
+    expect(find.text('Saved in COROS'), findsOneWidget);
+    expect(find.byIcon(Icons.check_circle), findsOneWidget);
+    expect(find.text('Workout steps'), findsNothing);
+    await tester.tap(find.text('How to send to your watch'));
+    await tester.pumpAndSettle();
     expect(find.textContaining('Send to Device'), findsOneWidget);
+    expect(keys, hasLength(2));
   });
 }

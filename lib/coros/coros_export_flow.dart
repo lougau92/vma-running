@@ -18,6 +18,7 @@ class CorosExportFlow extends WatchExportFlow {
   final WatchServiceClient client;
   String? _connection;
   bool _outcomeUnknown = false;
+  bool _showSyncHelp = false;
 
   @override
   String get name => corosName;
@@ -90,7 +91,7 @@ class CorosExportFlow extends WatchExportFlow {
       notes: course['courseDescription'] as String?,
       steps: [
         for (final section in course['sections'] as List<Map<String, dynamic>>)
-          _section(section),
+          _section(section, s),
       ],
       inputs: resolved.inputs,
       messages: [...export.warnings, ...export.problems],
@@ -98,17 +99,22 @@ class CorosExportFlow extends WatchExportFlow {
     );
   }
 
-  Widget _section(Map<String, dynamic> step) {
+  Widget _section(Map<String, dynamic> step, AppLocalizations s) {
     if (step['intervalGroup'] == true) {
-      return Card(
-        child: ExpansionTile(
-          initiallyExpanded: true,
-          title: Text('${step['repeats']} ×'),
-          children: [
-            for (final child in step['sets'] as List<Map<String, dynamic>>)
-              _section(child),
-          ],
+      return ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: const EdgeInsets.only(left: 12),
+        leading: const Icon(Icons.repeat),
+        title: Text(
+          s['watch_repeats'].replaceFirst(
+            '{count}',
+            step['repeats'].toString(),
+          ),
         ),
+        children: [
+          for (final child in step['sets'] as List<Map<String, dynamic>>)
+            _section(child, s),
+        ],
       );
     }
     final amount = step['targetValue'] as num?;
@@ -137,9 +143,22 @@ class CorosExportFlow extends WatchExportFlow {
     required bool busy,
     required ValueChanged<WatchExportAction> run,
     required VoidCallback refresh,
-  }) => [
-    Text(
-      AppLocalizations.of(context).watchLabel('coros_sync_instructions', name),
-    ),
-  ];
+  }) {
+    final s = AppLocalizations.of(context);
+    return [
+      if (_showSyncHelp)
+        Text(s.watchLabel('coros_sync_instructions', name))
+      else
+        OutlinedButton.icon(
+          onPressed: busy
+              ? null
+              : () {
+                  _showSyncHelp = true;
+                  refresh();
+                },
+          icon: const Icon(Icons.watch_outlined),
+          label: Text(s['coros_sync_help']),
+        ),
+    ];
+  }
 }

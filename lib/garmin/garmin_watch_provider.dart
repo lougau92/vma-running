@@ -25,14 +25,6 @@ class GarminWatchProvider extends WatchProvider {
   }
 
   @override
-  Future<bool> preview(
-    BuildContext context,
-    WatchExportRequest workout, {
-    required bool canChange,
-  }) => showWatchExportDialog(
-    context,
-    workout,
-    GarminExportFlow(client),
-    canChange: canChange,
-  );
+  Future<void> preview(BuildContext context, WatchExportRequest workout) =>
+      showWatchExportDialog(context, workout, GarminExportFlow(client));
 }

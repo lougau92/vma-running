@@ -21,11 +21,7 @@ abstract class WatchProvider {
   Future<List<String>> devices();
   Future<void> manage(BuildContext context);
   Future<void> resumeSignIn(BuildContext context) => manage(context);
-  Future<bool> preview(
-    BuildContext context,
-    WatchExportRequest workout, {
-    required bool canChange,
-  });
+  Future<void> preview(BuildContext context, WatchExportRequest workout);
 }
 
 class WatchDestination {

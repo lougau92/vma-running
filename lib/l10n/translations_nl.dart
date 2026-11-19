@@ -2,8 +2,9 @@ class TranslationsNl {
   static const Map<String, String> values = {
     'garmin_seconds': 'Duur (seconden)',
     'garmin_metres': 'Afstand (meter)',
+    "coros_sync_help": "Zo stuur je de workout naar je horloge",
     "coros_sync_instructions":
-        "Open de workout in de {name}-app en kies Verzenden naar apparaat.",
+        "Ga in de {name}-app naar Profiel → Trainingsbibliotheek. Open deze workout, tik op Verzenden naar apparaat en kies je horloge.",
     "coros_end_unsupported":
         "COROS vereist een afstand, tijd of expliciet open einde.",
     "coros_pace_bounds": "COROS accepteert tempo’s van 2:00 tot 24:59 per km.",
@@ -16,12 +17,15 @@ class TranslationsNl {
         "COROS heeft deze workout mogelijk al opgeslagen. Controleer de bibliotheek voordat je nog een kopie exporteert.",
     "watch_integrations": "Horlogekoppelingen",
     "watch_export": "Exporteren naar horloge",
-    "watch_destination": "Kies een bestemming",
-    "watch_change_destination": "Bestemming wijzigen",
+    "watch_choose_default_help":
+        "Kies welke koppeling je voor volgende exports wilt gebruiken. Je kunt die wijzigen bij Horlogekoppelingen.",
+    "watch_default_unavailable":
+        "Je standaardbestemming is niet beschikbaar. Maak opnieuw verbinding of kies een andere bestemming bij Horlogekoppelingen.",
+    "watch_steps": "Trainingsstappen",
+    "watch_repeats": "Herhaal ×{count}",
     "watch_connected": "Verbonden",
     "watch_disconnected": "Niet verbonden",
     "watch_default": "Standaardbestemming",
-    "watch_no_default": "Geen voorkeur",
     "watch_error":
         "De horlogeservice is niet beschikbaar. Probeer het opnieuw.",
     "watch_oauth_denied": "De {name}-toestemming is geweigerd.",
@@ -39,7 +43,7 @@ class TranslationsNl {
     "watch_connect": "Verbinden / opnieuw aanmelden",
     "watch_disconnect": "Verbinding verbreken",
     "watch_close": "Sluiten",
-    "garmin_send": "Naar horloge sturen",
+    "watch_send": "Naar horloge sturen",
     "garmin_watch": "Horloge",
     "garmin_connected":
         "Garmin-sessie opgeslagen. Deze wordt bij het volgende verzoek gecontroleerd.",

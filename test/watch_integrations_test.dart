@@ -29,35 +29,23 @@ class _Provider extends WatchProvider {
   }
 
   @override
-  Future<bool> preview(
-    BuildContext context,
-    WatchExportRequest workout, {
-    required bool canChange,
-  }) async =>
-      await showDialog<bool>(
+  Future<void> preview(BuildContext context, WatchExportRequest workout) =>
+      showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('$name preview'),
           actions: [
-            if (canChange)
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text('Change destination'),
-              ),
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: const Text('Close preview'),
             ),
           ],
         ),
-      ) ??
-      false;
+      );
 }
 
 void main() {
-  testWidgets('an additional provider can become the default and switch', (
-    tester,
-  ) async {
+  testWidgets('export remembers the first provider choice', (tester) async {
     SharedPreferences.setMockInitialValues({});
     final first = _Provider('garmin', 'Garmin Connect');
     final additional = _Provider('example', 'Example');
@@ -89,11 +77,6 @@ void main() {
           builder: (context) => Column(
             children: [
               TextButton(
-                onPressed: () =>
-                    showWatchIntegrations(context, integrations: integrations),
-                child: const Text('Open settings'),
-              ),
-              TextButton(
                 onPressed: () => showWatchExport(
                   context,
                   WatchExportRequest(workout, workout.versions.single, 16, []),
@@ -107,33 +90,57 @@ void main() {
       ),
     );
 
-    await tester.tap(find.text('Open settings'));
+    first.enabled = false;
+    await tester.tap(find.text('Open export'));
     await tester.pumpAndSettle();
-    expect(find.text('Connected · Example Watch'), findsOneWidget);
+    expect(find.text('Default destination'), findsOneWidget);
+    expect(find.text('Example'), findsOneWidget);
+    expect(find.text('Garmin Connect'), findsNothing);
+    await tester.tapAt(const Offset(8, 8));
+    await tester.pumpAndSettle();
+    expect(await integrations.defaultProvider(), isNull);
+
+    first.enabled = true;
+    await tester.tap(find.text('Open export'));
+    await tester.pumpAndSettle();
+    expect(find.text('Default destination'), findsOneWidget);
     expect(find.text('unsupported'), findsNothing);
-    await tester.tap(find.byType(DropdownButtonFormField<String>));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Example').last);
+    expect(await integrations.defaultProvider(), isNull);
+    await tester.tap(find.text('Example'));
     await tester.pumpAndSettle();
     expect(await integrations.defaultProvider(), 'example');
-    await tester.tap(find.text('Close'));
+    expect(find.text('Example preview'), findsOneWidget);
+    expect(find.text('Change destination'), findsNothing);
+    await tester.tap(find.text('Close preview'));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('Open export'));
     await tester.pumpAndSettle();
     expect(find.text('Example preview'), findsOneWidget);
-    await tester.tap(find.text('Change destination'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Garmin Connect'));
-    await tester.pumpAndSettle();
-    expect(find.text('Garmin Connect preview'), findsOneWidget);
+    expect(find.text('Default destination'), findsNothing);
     await tester.tap(find.text('Close preview'));
     await tester.pumpAndSettle();
 
     additional.enabled = false;
     await tester.tap(find.text('Open export'));
     await tester.pumpAndSettle();
+    expect(find.text('Watch integrations'), findsOneWidget);
+    expect(
+      find.textContaining('Your default destination is unavailable'),
+      findsOneWidget,
+    );
+    expect(find.text('Garmin Connect preview'), findsNothing);
+    expect(await integrations.defaultProvider(), 'example');
+
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Garmin Connect').last);
+    await tester.pumpAndSettle();
+    expect(await integrations.defaultProvider(), 'garmin');
+    await tester.tap(find.text('Close'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Open export'));
+    await tester.pumpAndSettle();
     expect(find.text('Garmin Connect preview'), findsOneWidget);
-    expect(find.text('Change destination'), findsNothing);
   });
 }

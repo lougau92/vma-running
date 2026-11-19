@@ -10,6 +10,7 @@ import 'package:vma_running/theme.dart';
 import 'package:vma_running/watch/watch_export_dialog.dart';
 import 'package:vma_running/watch/watch_provider.dart';
 import 'package:vma_running/workouts/workout.dart';
+
 import 'garmin_client_test.dart' show TestSession;
 import 'workout_fixture.dart';
 
@@ -126,6 +127,7 @@ void main() {
       await tap(tester, 'Save to Garmin Connect');
       expect(client.uploads, 1);
       expect(find.text('Saved in Garmin Connect'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle), findsOneWidget);
       final choose = find.widgetWithText(OutlinedButton, 'Send to watch');
       await tester.ensureVisible(choose);
       await tester.tap(choose);
@@ -137,6 +139,7 @@ void main() {
       expect(client.uploads, 1);
       expect(client.sendKeys[0], client.sendKeys[1]);
       expect(find.textContaining('Delivery requested'), findsOneWidget);
+      expect(find.byIcon(Icons.check_circle), findsNWidgets(2));
     },
   );
   for (final dark in [false, true]) {

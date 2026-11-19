@@ -2,8 +2,9 @@ class TranslationsFr {
   static const Map<String, String> values = {
     'garmin_seconds': 'Durée (secondes)',
     'garmin_metres': 'Distance (mètres)',
+    "coros_sync_help": "Comment envoyer à la montre",
     "coros_sync_instructions":
-        "Dans l’application {name}, ouvrez la séance et choisissez Envoyer vers l’appareil.",
+        "Dans l’application {name}, ouvrez Profil → Bibliothèque de séances. Ouvrez cette séance, choisissez Envoyer vers l’appareil, puis sélectionnez votre montre.",
     "coros_end_unsupported":
         "COROS exige une distance, une durée ou une fin manuelle explicite.",
     "coros_pace_bounds": "COROS accepte les allures de 2:00 à 24:59 par km.",
@@ -16,12 +17,15 @@ class TranslationsFr {
         "COROS a peut-être déjà enregistré cette séance. Vérifiez la bibliothèque avant d’exporter une nouvelle copie.",
     "watch_integrations": "Montres connectées",
     "watch_export": "Exporter vers une montre",
-    "watch_destination": "Choisir une destination",
-    "watch_change_destination": "Changer de destination",
+    "watch_choose_default_help":
+        "Choisissez l’intégration à utiliser pour vos prochains exports. Vous pourrez la modifier dans Montres connectées.",
+    "watch_default_unavailable":
+        "Votre destination par défaut est indisponible. Reconnectez-la ou choisissez-en une autre dans Montres connectées.",
+    "watch_steps": "Étapes de la séance",
+    "watch_repeats": "Répéter ×{count}",
     "watch_connected": "Connecté",
     "watch_disconnected": "Déconnecté",
     "watch_default": "Destination par défaut",
-    "watch_no_default": "Aucune préférence",
     "watch_error": "Le service de la montre est indisponible. Réessayez.",
     "watch_oauth_denied": "L’autorisation {name} a été refusée.",
     "watch_oauth_expired": "La connexion {name} a expiré. Reconnectez-vous.",
@@ -37,7 +41,7 @@ class TranslationsFr {
     "watch_connect": "Connecter / se reconnecter",
     "watch_disconnect": "Déconnecter",
     "watch_close": "Fermer",
-    "garmin_send": "Envoyer à la montre",
+    "watch_send": "Envoyer à la montre",
     "garmin_watch": "Montre",
     "garmin_connected":
         "Session Garmin enregistrée. Elle sera vérifiée à la prochaine requête.",

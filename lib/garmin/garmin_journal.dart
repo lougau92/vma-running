@@ -59,16 +59,11 @@ class GarminJournal {
     if (!saved) throw const GarminFailure('journal_unavailable');
   }
 
-  Future<GarminOperation> prepare(
-    Map<String, dynamic> payload, {
-    bool anotherCopy = false,
-  }) async {
+  Future<GarminOperation> prepare(Map<String, dynamic> payload) async {
     final operations = await load();
     final encoded = jsonEncode(payload);
-    if (!anotherCopy) {
-      for (final operation in operations.reversed) {
-        if (jsonEncode(operation.payload) == encoded) return operation;
-      }
+    for (final operation in operations.reversed) {
+      if (jsonEncode(operation.payload) == encoded) return operation;
     }
     final operation = GarminOperation(
       jsonDecode(encoded) as Map<String, dynamic>,

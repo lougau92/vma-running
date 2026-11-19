@@ -33,10 +33,10 @@ minimum instances and a maximum of one instance.
 
 ## Use
 
-1. Open **Settings → Garmin Connect** to sign in, complete MFA if needed, or
+1. Open **Settings → Watch integrations → Garmin Connect** to sign in, complete MFA if needed, or
    disconnect. A saved-session status does not guarantee Garmin still accepts it;
    the next request checks that.
-2. Select a workout and group, then choose **Export to Garmin**.
+2. Select a workout and group, then choose **Export to watch** and select Garmin Connect if prompted.
 3. Resolve alternatives and duration/distance/lap-count ranges. Optional blocks
    default to included. Repetition ranges use the maximum. Lap length defaults
    to 400 m only when the plan does not specify one.
@@ -49,7 +49,8 @@ Export uses the saved VMA for numeric VMA targets. Speed and pace ranges become
 Garmin pace alerts. Other targets, including progressions, are preserved as
 instructions with an explicit warning that they have no automated watch alerts.
 Manual LAP is supported. Event, unknown, repetition-count and compound end
-conditions block export. Unspecified warmup/cooldown phases are not invented.
+conditions become manual LAP steps, with the original instruction in the step notes.
+Unspecified warmup/cooldown phases are omitted.
 Expanded workouts are limited to 200 steps by the proxy. Long descriptions are
 shortened with a preview warning. The source workout is never modified.
 
@@ -57,14 +58,13 @@ shortened with a preview warning. The source workout is never modified.
 
 The local journal stores workout snapshots, operation IDs and Garmin workout IDs,
 scoped to the Firebase UID. It contains no login credentials or session tokens.
-It is saved before sending requests. Resume an interrupted export from **Recent
-exports / resume**. Retrying the same snapshot uses its original idempotency key;
-watch delivery uses a different saved key and never re-uploads the workout.
-An already completed export is reused. **Create another copy** explicitly creates
-a fresh upload after confirmation.
+It is saved before sending requests. To resume an interrupted export, reopen the
+same workout with the same export choices and select **Save to Garmin Connect**.
+The app reuses the original request ID and any confirmed Garmin workout.
+Watch delivery uses its own saved request ID.
 
-If Garmin's response was ambiguous, check Garmin Connect first. The proxy blocks
-unsafe replay rather than guessing whether Garmin received the write. There is
+If Garmin's response was ambiguous, check Garmin Connect. The proxy blocks
+retries when Garmin may have accepted the request. There is
 no automatic offline/background export queue. API responses bypass the service
 worker cache. Disconnect removes the backend session but keeps operation history.
 

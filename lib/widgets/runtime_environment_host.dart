@@ -2,12 +2,10 @@ import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
 import 'package:flutter/widgets.dart';
 
 import '../runtime/runtime_environment.dart' show RuntimeEnvironment;
-import '../runtime/runtime_probe_stub.dart'
-    if (dart.library.js_interop) '../runtime/runtime_probe_web.dart'
-    as probe;
+import '../runtime/runtime_platform.dart' as platform;
 
 /// Reads device and window signals without depending on widget ancestry.
-RuntimeEnvironment readRuntimeEnvironment() => probe.readEnvironment();
+RuntimeEnvironment readRuntimeEnvironment() => platform.readEnvironment();
 
 /// Tracks browser/PWA presentation changes without relying on viewport width.
 class RuntimeEnvironmentHost extends StatefulWidget {
@@ -26,9 +24,9 @@ class _RuntimeEnvironmentHostState extends State<RuntimeEnvironmentHost> {
   @override
   void initState() {
     super.initState();
-    _environment = probe.readEnvironment();
-    _stopWatching = probe.watchEnvironment(() {
-      if (mounted) setState(() => _environment = probe.readEnvironment());
+    _environment = platform.readEnvironment();
+    _stopWatching = platform.watchEnvironment(() {
+      if (mounted) setState(() => _environment = platform.readEnvironment());
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../app_localizations.dart';
+import '../watch/watch_provider.dart' show garminConnectName;
 import 'garmin_client.dart';
 
 String garminError(AppLocalizations s, Object error) {
@@ -105,7 +106,7 @@ class _ConnectionState extends State<GarminConnectionDialog> {
     return PopScope(
       canPop: !busy,
       child: AlertDialog(
-        title: const Text('Garmin Connect'),
+        title: const Text(garminConnectName),
         content: SizedBox(
           width: 420,
           child: SingleChildScrollView(
@@ -163,7 +164,7 @@ class _ConnectionState extends State<GarminConnectionDialog> {
             onPressed: busy
                 ? null
                 : () => Navigator.pop(context, connected == true),
-            child: Text(s['garmin_close']),
+            child: Text(s['watch_close']),
           ),
           if (widget.client.configured && connected == null && !busy)
             TextButton(onPressed: _check, child: Text(s['workout_retry'])),
@@ -175,12 +176,12 @@ class _ConnectionState extends State<GarminConnectionDialog> {
                       await widget.client.disconnect();
                       connected = false;
                     }),
-              child: Text(s['garmin_disconnect']),
+              child: Text(s['watch_disconnect']),
             ),
           if (connected == false || challenge != null)
             FilledButton(
               onPressed: busy ? null : _login,
-              child: Text(s['garmin_connect']),
+              child: Text(s['watch_connect']),
             ),
         ],
       ),

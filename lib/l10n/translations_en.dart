@@ -2,13 +2,39 @@ class TranslationsEn {
   static const Map<String, String> values = {
     'garmin_seconds': 'Duration (seconds)',
     'garmin_metres': 'Distance (metres)',
-    "garmin_export": "Export to Garmin",
-    "garmin_save": "Save to Garmin Connect",
+    "coros_sync_instructions":
+        "In the {name} app, open the workout and choose Send to Device.",
+    "coros_end_unsupported":
+        "COROS needs a distance, duration, or explicitly open-ended step.",
+    "coros_pace_bounds":
+        "COROS accepts pace targets from 2:00 to 24:59 per km.",
+    "coros_rounded":
+        "COROS rounds time and distance to whole seconds or metres.",
+    "coros_title_shortened":
+        "The title was shortened to COROS’s 100-character limit.",
+    "coros_notes_limit":
+        "The workout instructions exceed the supported length.",
+    "coros_outcome_unknown":
+        "COROS may already have saved this workout. Check the COROS library before exporting another copy.",
+    "watch_integrations": "Watch integrations",
+    "watch_export": "Export to watch",
+    "watch_destination": "Choose a destination",
+    "watch_change_destination": "Change destination",
+    "watch_connected": "Connected",
+    "watch_disconnected": "Disconnected",
+    "watch_default": "Default destination",
+    "watch_no_default": "No default",
+    "watch_error": "The watch service is unavailable. Try again.",
+    "watch_oauth_denied": "{name} authorization was declined.",
+    "watch_oauth_expired": "The {name} sign-in expired. Connect again.",
+    "watch_export_to": "Export to {name}",
+    "watch_save": "Save to {name}",
+    "watch_saved": "Saved in {name}",
+    "watch_connect": "Connect / sign in again",
+    "watch_disconnect": "Disconnect",
+    "watch_close": "Close",
     "garmin_send": "Send to watch",
     "garmin_watch": "Watch",
-    "garmin_connect": "Connect / sign in again",
-    "garmin_disconnect": "Disconnect",
-    "garmin_close": "Close",
     "garmin_connected":
         "Garmin session saved. It will be checked on the next request.",
     "garmin_identity_note":
@@ -23,28 +49,18 @@ class TranslationsEn {
         "Request failed. Check the connection and try again. Retrying a saved operation will not create another workout.",
     "garmin_unavailable": "Garmin export is not configured in this build.",
     "garmin_unknown_outcome":
-        "Garmin may have received this request. Check Garmin Connect before creating another copy. This operation cannot safely be repeated automatically.",
+        "Garmin may have received this request. Check Garmin Connect for the workout or delivery status.",
     "garmin_reconnect":
         "Please reconnect to Garmin, then retry this operation.",
     "garmin_rate_limit": "Too many requests. Wait before trying again.",
     "garmin_busy": "Another Garmin operation is running. Try again shortly.",
     "garmin_journal_error":
         "Cannot save or read the export history. No new request will be sent until local storage works.",
-    "garmin_checking_history":
-        "Checking recent exports before enabling a new upload…",
-    "garmin_complete_inputs":
-        "Complete these workout choices before exporting:",
-    "garmin_saved": "Saved in Garmin Connect",
     "garmin_copy_link": "Copy workout link",
     "garmin_no_watch":
         "No compatible running watch found. The workout is still saved in Garmin Connect.",
     "garmin_delivery_requested":
         "Delivery requested. Sync your watch with Garmin Connect.",
-    "garmin_recent": "Recent exports / resume",
-    "garmin_pending": "Pending or interrupted — resume with the same operation",
-    "garmin_another": "Create another copy",
-    "garmin_duplicate_note":
-        "This creates a new workout, even if Garmin already received the previous one. Check Garmin Connect first. Continue?",
     "garmin_optional": "Optional block",
     "garmin_include": "Include",
     "garmin_exclude": "Exclude",

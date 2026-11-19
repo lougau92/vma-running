@@ -35,6 +35,7 @@ Map<String, dynamic> numeric(String metric, num min, num max) => {
 GarminExport export(
   Map<String, dynamic> main, {
   Map<String, double> values = const {},
+  bool defaultChoices = false,
   Map<String, dynamic>? warmup,
   Map<String, dynamic>? cooldown,
   double vma = 16,
@@ -67,6 +68,7 @@ GarminExport export(
     vma,
     AppLocalizations(const Locale('en')),
     values: values,
+    defaultChoices: defaultChoices,
   );
 }
 
@@ -180,6 +182,10 @@ void main() {
       ],
     };
     expect(export(main).ready, false);
+    final prefilled = export(main, defaultChoices: true);
+    expect(prefilled.ready, true);
+    expect(prefilled.inputs.single.value, 0);
+    expect(prefilled.payload, export(main, values: {'main': 0}).payload);
     final selected = export(main, values: {'main': 1});
     expect(selected.ready, true);
     expect(steps(selected).single['endConditionValue'], 60);

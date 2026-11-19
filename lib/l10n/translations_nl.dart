@@ -2,13 +2,39 @@ class TranslationsNl {
   static const Map<String, String> values = {
     'garmin_seconds': 'Duur (seconden)',
     'garmin_metres': 'Afstand (meter)',
-    "garmin_export": "Exporteren naar Garmin",
-    "garmin_save": "Opslaan in Garmin Connect",
+    "coros_sync_instructions":
+        "Open de workout in de {name}-app en kies Verzenden naar apparaat.",
+    "coros_end_unsupported":
+        "COROS vereist een afstand, tijd of expliciet open einde.",
+    "coros_pace_bounds": "COROS accepteert tempo’s van 2:00 tot 24:59 per km.",
+    "coros_rounded":
+        "COROS rondt tijden en afstanden af op hele seconden of meters.",
+    "coros_title_shortened":
+        "De titel is ingekort tot de COROS-limiet van 100 tekens.",
+    "coros_notes_limit": "De trainingsinstructies zijn te lang.",
+    "coros_outcome_unknown":
+        "COROS heeft deze workout mogelijk al opgeslagen. Controleer de bibliotheek voordat je nog een kopie exporteert.",
+    "watch_integrations": "Horlogekoppelingen",
+    "watch_export": "Exporteren naar horloge",
+    "watch_destination": "Kies een bestemming",
+    "watch_change_destination": "Bestemming wijzigen",
+    "watch_connected": "Verbonden",
+    "watch_disconnected": "Niet verbonden",
+    "watch_default": "Standaardbestemming",
+    "watch_no_default": "Geen voorkeur",
+    "watch_error":
+        "De horlogeservice is niet beschikbaar. Probeer het opnieuw.",
+    "watch_oauth_denied": "De {name}-toestemming is geweigerd.",
+    "watch_oauth_expired":
+        "De {name}-aanmelding is verlopen. Maak opnieuw verbinding.",
+    "watch_export_to": "Exporteren naar {name}",
+    "watch_save": "Opslaan in {name}",
+    "watch_saved": "Opgeslagen in {name}",
+    "watch_connect": "Verbinden / opnieuw aanmelden",
+    "watch_disconnect": "Verbinding verbreken",
+    "watch_close": "Sluiten",
     "garmin_send": "Naar horloge sturen",
     "garmin_watch": "Horloge",
-    "garmin_connect": "Verbinden / opnieuw aanmelden",
-    "garmin_disconnect": "Verbinding verbreken",
-    "garmin_close": "Sluiten",
     "garmin_connected":
         "Garmin-sessie opgeslagen. Deze wordt bij het volgende verzoek gecontroleerd.",
     "garmin_identity_note":
@@ -23,7 +49,7 @@ class TranslationsNl {
         "Verzoek mislukt. Controleer de verbinding en probeer opnieuw. Een opgeslagen bewerking opnieuw proberen maakt geen nieuwe training.",
     "garmin_unavailable": "Garmin-export is niet ingesteld in deze versie.",
     "garmin_unknown_outcome":
-        "Garmin heeft dit verzoek mogelijk ontvangen. Controleer Garmin Connect voordat je een nieuwe kopie maakt. Deze bewerking kan niet veilig automatisch worden herhaald.",
+        "Garmin heeft dit verzoek mogelijk ontvangen. Controleer in Garmin Connect of de training is opgeslagen of de verzending is aangevraagd.",
     "garmin_reconnect":
         "Verbind opnieuw met Garmin en probeer deze bewerking opnieuw.",
     "garmin_rate_limit":
@@ -31,22 +57,11 @@ class TranslationsNl {
     "garmin_busy": "Er loopt al een Garmin-bewerking. Probeer het zo opnieuw.",
     "garmin_journal_error":
         "Exportgeschiedenis kan niet worden gelezen of opgeslagen. Er wordt geen nieuw verzoek verzonden totdat lokale opslag werkt.",
-    "garmin_checking_history":
-        "Recente exports controleren voordat uploaden mogelijk is…",
-    "garmin_complete_inputs":
-        "Vul deze trainingskeuzes in voordat je exporteert:",
-    "garmin_saved": "Opgeslagen in Garmin Connect",
     "garmin_copy_link": "Trainingslink kopiëren",
     "garmin_no_watch":
         "Geen geschikt hardloophorloge gevonden. De training blijft opgeslagen in Garmin Connect.",
     "garmin_delivery_requested":
         "Verzending aangevraagd. Synchroniseer je horloge met Garmin Connect.",
-    "garmin_recent": "Recente exports / hervatten",
-    "garmin_pending":
-        "In afwachting of onderbroken — dezelfde bewerking hervatten",
-    "garmin_another": "Nog een kopie maken",
-    "garmin_duplicate_note":
-        "Dit maakt een nieuwe training, ook als Garmin de vorige al heeft ontvangen. Controleer eerst Garmin Connect. Doorgaan?",
     "garmin_optional": "Optioneel blok",
     "garmin_include": "Opnemen",
     "garmin_exclude": "Weglaten",

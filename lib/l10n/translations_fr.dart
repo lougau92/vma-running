@@ -2,13 +2,37 @@ class TranslationsFr {
   static const Map<String, String> values = {
     'garmin_seconds': 'Durée (secondes)',
     'garmin_metres': 'Distance (mètres)',
-    "garmin_export": "Exporter vers Garmin",
-    "garmin_save": "Enregistrer dans Garmin Connect",
+    "coros_sync_instructions":
+        "Dans l’application {name}, ouvrez la séance et choisissez Envoyer vers l’appareil.",
+    "coros_end_unsupported":
+        "COROS exige une distance, une durée ou une fin manuelle explicite.",
+    "coros_pace_bounds": "COROS accepte les allures de 2:00 à 24:59 par km.",
+    "coros_rounded":
+        "COROS arrondit les durées et les distances à la seconde ou au mètre.",
+    "coros_title_shortened":
+        "Le titre a été raccourci à la limite de 100 caractères de COROS.",
+    "coros_notes_limit": "Les consignes de la séance sont trop longues.",
+    "coros_outcome_unknown":
+        "COROS a peut-être déjà enregistré cette séance. Vérifiez la bibliothèque avant d’exporter une nouvelle copie.",
+    "watch_integrations": "Montres connectées",
+    "watch_export": "Exporter vers une montre",
+    "watch_destination": "Choisir une destination",
+    "watch_change_destination": "Changer de destination",
+    "watch_connected": "Connecté",
+    "watch_disconnected": "Déconnecté",
+    "watch_default": "Destination par défaut",
+    "watch_no_default": "Aucune préférence",
+    "watch_error": "Le service de la montre est indisponible. Réessayez.",
+    "watch_oauth_denied": "L’autorisation {name} a été refusée.",
+    "watch_oauth_expired": "La connexion {name} a expiré. Reconnectez-vous.",
+    "watch_export_to": "Exporter vers {name}",
+    "watch_save": "Enregistrer dans {name}",
+    "watch_saved": "Enregistré dans {name}",
+    "watch_connect": "Connecter / se reconnecter",
+    "watch_disconnect": "Déconnecter",
+    "watch_close": "Fermer",
     "garmin_send": "Envoyer à la montre",
     "garmin_watch": "Montre",
-    "garmin_connect": "Connecter / se reconnecter",
-    "garmin_disconnect": "Déconnecter",
-    "garmin_close": "Fermer",
     "garmin_connected":
         "Session Garmin enregistrée. Elle sera vérifiée à la prochaine requête.",
     "garmin_identity_note":
@@ -24,7 +48,7 @@ class TranslationsFr {
     "garmin_unavailable":
         "L’export Garmin n’est pas configuré dans cette version.",
     "garmin_unknown_outcome":
-        "Garmin a peut-être reçu cette requête. Vérifiez Garmin Connect avant de créer une autre copie. Cette opération ne peut pas être répétée automatiquement en toute sécurité.",
+        "Garmin a peut-être reçu cette requête. Vérifiez dans Garmin Connect si la séance a été enregistrée ou l’envoi demandé.",
     "garmin_reconnect":
         "Reconnectez-vous à Garmin, puis réessayez cette opération.",
     "garmin_rate_limit": "Trop de requêtes. Patientez avant de réessayer.",
@@ -32,20 +56,11 @@ class TranslationsFr {
         "Une autre opération Garmin est en cours. Réessayez dans quelques instants.",
     "garmin_journal_error":
         "Impossible de lire ou d’enregistrer l’historique. Aucune nouvelle requête ne sera envoyée tant que le stockage local ne fonctionne pas.",
-    "garmin_checking_history":
-        "Vérification des derniers exports avant d’autoriser l’envoi…",
-    "garmin_complete_inputs": "Complétez ces choix de séance avant l’export :",
-    "garmin_saved": "Enregistré dans Garmin Connect",
     "garmin_copy_link": "Copier le lien de la séance",
     "garmin_no_watch":
         "Aucune montre de course compatible trouvée. La séance reste enregistrée dans Garmin Connect.",
     "garmin_delivery_requested":
         "Envoi demandé. Synchronisez votre montre avec Garmin Connect.",
-    "garmin_recent": "Exports récents / reprendre",
-    "garmin_pending": "En attente ou interrompu — reprendre la même opération",
-    "garmin_another": "Créer une autre copie",
-    "garmin_duplicate_note":
-        "Cela crée une nouvelle séance, même si Garmin a déjà reçu la précédente. Vérifiez Garmin Connect avant de continuer.",
     "garmin_optional": "Bloc facultatif",
     "garmin_include": "Inclure",
     "garmin_exclude": "Exclure",

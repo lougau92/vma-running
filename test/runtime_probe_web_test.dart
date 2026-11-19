@@ -4,7 +4,7 @@ library;
 import 'dart:js_interop';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vma_running/runtime/runtime_probe_web.dart' as probe;
+import 'package:vma_running/runtime/runtime_platform.dart' as probe;
 
 @JS('window.matchMedia')
 external JSFunction get _matchMedia;

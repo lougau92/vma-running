@@ -5,8 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/garmin/garmin_client.dart';
 import 'package:vma_running/garmin/garmin_connection.dart';
-import 'package:vma_running/garmin/garmin_export_dialog.dart';
+import 'package:vma_running/garmin/garmin_export_flow.dart';
 import 'package:vma_running/theme.dart';
+import 'package:vma_running/watch/watch_export_dialog.dart';
+import 'package:vma_running/watch/watch_provider.dart';
 import 'package:vma_running/workouts/workout.dart';
 import 'garmin_client_test.dart' show TestSession;
 import 'workout_fixture.dart';
@@ -114,11 +116,9 @@ void main() {
       final plan = session();
       await tester.pumpWidget(
         app(
-          GarminExportDialog(
-            session: plan,
-            version: plan.versions.single,
-            vma: 16,
-            client: client,
+          WatchExportDialog(
+            workout: WatchExportRequest(plan, plan.versions.single, 16, []),
+            flow: GarminExportFlow(client),
           ),
         ),
       );
@@ -149,11 +149,9 @@ void main() {
         final plan = session();
         await tester.pumpWidget(
           app(
-            GarminExportDialog(
-              session: plan,
-              version: plan.versions.single,
-              vma: 16,
-              client: _Garmin(),
+            WatchExportDialog(
+              workout: WatchExportRequest(plan, plan.versions.single, 16, []),
+              flow: GarminExportFlow(_Garmin()),
             ),
             dark: dark,
             lang: lang,

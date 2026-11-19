@@ -115,7 +115,7 @@ void main() {
     expect((await journal.load()).single.workoutId, 123);
     expect((await journal.prepare({'workoutName': 'Test'})).key, operation.key);
     expect(
-      (await journal.prepare({'workoutName': 'Test'}, anotherCopy: true)).key,
+      (await journal.prepare({'workoutName': 'Different workout'})).key,
       isNot(operation.key),
     );
     final other = GarminJournal(

@@ -4,7 +4,7 @@ import '../app_localizations.dart';
 import '../remote_asset_loader.dart';
 import '../widgets/content_refresh_button.dart';
 import 'workout.dart';
-import '../garmin/garmin_export_dialog.dart';
+import '../watch/watch_integrations.dart';
 import 'workout_view.dart';
 import 'workout_session_header.dart';
 
@@ -30,6 +30,18 @@ class _WorkoutContentState extends State<WorkoutContent> {
   final _scroll = ScrollController();
   String? _sessionId, _versionLabel;
   int _versionIndex = 0;
+  bool _openingWatchExport = false;
+
+  Future<void> _exportToWatch(WatchExportRequest request) async {
+    if (_openingWatchExport) return;
+    setState(() => _openingWatchExport = true);
+    try {
+      await showWatchExport(context, request);
+    } finally {
+      if (mounted) setState(() => _openingWatchExport = false);
+    }
+  }
+
   @override
   void dispose() {
     _scroll.dispose();
@@ -199,15 +211,18 @@ class _WorkoutContentState extends State<WorkoutContent> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: OutlinedButton.icon(
-                            onPressed: () => showGarminExport(
-                              context,
-                              session: session,
-                              version: version,
-                              vma: widget.userVma,
-                              notes: widget.conversion.notes,
-                            ),
+                            onPressed: _openingWatchExport
+                                ? null
+                                : () => _exportToWatch(
+                                    WatchExportRequest(
+                                      session,
+                                      version,
+                                      widget.userVma,
+                                      widget.conversion.notes,
+                                    ),
+                                  ),
                             icon: const Icon(Icons.watch_outlined),
-                            label: Text(s['garmin_export']),
+                            label: Text(s['watch_export']),
                           ),
                         ),
                         if (version.audience != null) Text(version.audience!),

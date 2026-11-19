@@ -136,6 +136,9 @@ class AppLocalizations {
 }
 
 extension DynamicStrings on AppLocalizations {
+  String watchLabel(String key, String name) =>
+      this[key].replaceAll('{name}', name);
+
   String yourVma(double vma) =>
       this['yourVma'].replaceFirst('{value}', vma.toStringAsFixed(2));
 

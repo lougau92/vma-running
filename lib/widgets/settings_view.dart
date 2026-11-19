@@ -3,8 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../app_localizations.dart';
 import '../app_settings.dart';
-import '../garmin/garmin_client.dart';
-import '../garmin/garmin_connection.dart';
+import '../watch/watch_integrations.dart';
 import '../vma_storage.dart';
 
 /// Loads platform data, then delegates the visible settings to [SettingsContent].
@@ -154,16 +153,9 @@ class _SettingsContentState extends State<SettingsContent> {
                   type: MaterialType.transparency,
                   child: ListTile(
                     leading: const Icon(Icons.watch_outlined),
-                    title: const Text('Garmin Connect'),
+                    title: Text(strings['watch_integrations']),
                     trailing: const Icon(Icons.chevron_right),
-                    onTap: () async {
-                      final client = GarminClient();
-                      try {
-                        await showGarminConnection(context, client);
-                      } finally {
-                        client.close();
-                      }
-                    },
+                    onTap: () => showWatchIntegrations(context),
                   ),
                 ),
                 const SizedBox(height: 28),

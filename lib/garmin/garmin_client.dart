@@ -1,14 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../firebase_content_session.dart';
+import '../watch/watch_service_client.dart';
 
-class GarminFailure implements Exception {
-  const GarminFailure(this.code);
-  final String code;
-  @override
-  String toString() => 'GarminFailure';
-}
+typedef GarminFailure = WatchServiceFailure;
 
 class GarminDevice {
   GarminDevice(Map<String, dynamic> json)
@@ -34,71 +26,8 @@ class GarminUpload {
   String get url => 'https://connect.garmin.com/modern/workout/$id';
 }
 
-/// Only Firebase ID tokens go to this trusted, build-time configured endpoint.
-class GarminClient {
-  GarminClient({
-    String? baseUrl,
-    http.Client? httpClient,
-    FirebaseContentSession? session,
-  }) : baseUrl = baseUrl ?? const String.fromEnvironment('GARMIN_PROXY_URL'),
-       _http = httpClient ?? http.Client(),
-       session = session ?? FirebaseContentSession();
-  final String baseUrl;
-  final http.Client _http;
-  final FirebaseContentSession session;
-  void close() => _http.close();
-  bool get configured {
-    final uri = Uri.tryParse(baseUrl);
-    return uri != null &&
-        uri.host.isNotEmpty &&
-        uri.userInfo.isEmpty &&
-        uri.query.isEmpty &&
-        uri.fragment.isEmpty &&
-        (uri.scheme == 'https' ||
-            (uri.scheme == 'http' &&
-                ['localhost', '127.0.0.1', '[::1]'].contains(uri.host)));
-  }
-
-  Future<Map<String, dynamic>> request(
-    String method,
-    String path, {
-    Map<String, dynamic>? body,
-    String? key,
-  }) async {
-    if (!configured) throw const GarminFailure('unavailable');
-    try {
-      for (var attempt = 0; attempt < 2; attempt++) {
-        final token = await session.idToken(forceRefresh: attempt == 1);
-        final request = http.Request(
-          method,
-          Uri.parse('${baseUrl.replaceAll(RegExp(r'/+$'), '')}$path'),
-        );
-        request.headers.addAll({
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-          if (key != null) 'Idempotency-Key': key,
-        });
-        if (body != null) request.body = jsonEncode(body);
-        final response = await _http
-            .send(request)
-            .then(http.Response.fromStream)
-            .timeout(const Duration(seconds: 90));
-        if (response.statusCode == 401 && attempt == 0) continue;
-        final json = jsonDecode(response.body) as Map<String, dynamic>;
-        if (response.statusCode < 200 || response.statusCode >= 300) {
-          throw GarminFailure(
-            json['error'] is String ? json['error'] as String : 'unavailable',
-          );
-        }
-        return json;
-      }
-    } on GarminFailure {
-      rethrow;
-    } catch (_) {
-      throw const GarminFailure('unavailable');
-    }
-    throw const GarminFailure('unavailable');
-  }
+class GarminClient extends WatchServiceClient {
+  GarminClient({super.baseUrl, super.httpClient, super.session});
 
   Future<bool> status() async =>
       (await request('GET', '/garmin/status'))['connected'] == true;

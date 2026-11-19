@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import '../app_settings.dart';
 import '../feature_flags.dart';
 import '../remote_asset_loader.dart';
+import '../runtime/runtime_platform.dart' show takeBrowserQueryParameter;
 import '../vma_storage.dart';
 import 'settings_page.dart';
 import 'vma_change_celebration.dart';
 import 'home_app_bar.dart';
 import 'home_workspace.dart';
+import '../watch/watch_integrations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -76,6 +78,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _remoteLoader = widget.loader ?? RemoteAssetLoader();
     _loadVma();
+    final returningProvider = takeBrowserQueryParameter('watch');
+    if (returningProvider != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          showWatchIntegrations(context, returningProvider: returningProvider);
+        }
+      });
+    }
   }
 
   Future<void> _loadVma() async {

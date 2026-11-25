@@ -4,7 +4,6 @@ import XCTest
 final class SafariSmokeTests: XCTestCase {
     func testWorkoutRendersInSafari() throws {
         let safari = XCUIApplication(bundleIdentifier: "com.apple.mobilesafari")
-        safari.activate()
 
         addTeardownBlock {
             let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
@@ -12,6 +11,21 @@ final class SafariSmokeTests: XCTestCase {
             screenshot.lifetime = .keepAlways
             self.add(screenshot)
         }
+
+        safari.launch()
+        let addressPredicate = NSPredicate(
+            format: "identifier == %@ OR label CONTAINS[c] %@",
+            "URL", "Search or enter website name"
+        )
+        let addressBar = safari.descendants(matching: .any)
+            .matching(addressPredicate).firstMatch
+        XCTAssertTrue(addressBar.waitForExistence(timeout: 30), "Safari's address bar did not appear")
+        guard addressBar.exists else { return }
+        addressBar.tap()
+        let keyboard = safari.keyboards.firstMatch
+        XCTAssertTrue(keyboard.waitForExistence(timeout: 10), "Safari's keyboard did not appear")
+        guard keyboard.exists else { return }
+        safari.typeText("https://lougau92.github.io/vma-running/\n")
 
         // Flutter draws its web UI on a canvas. Read the rendered labels directly
         // so the test runs with Safari's default accessibility settings.

@@ -17,8 +17,6 @@ jobs:
        github.event.deployment_status.state == 'success')
     runs-on: macos-26
     timeout-minutes: 20
-    env:
-      APP_URL: https://lougau92.github.io/vma-running/
     steps:
       - uses: actions/checkout@v4
         with:
@@ -30,7 +28,7 @@ jobs:
           brew install xcodegen
           xcodegen generate
 
-      - name: Open the deployed app on a fresh iPhone
+      - name: Boot a fresh iPhone simulator
         run: |
           device_type="$(xcrun simctl list devicetypes -j | jq -er '[.devicetypes[] | select(.name | startswith("iPhone"))][0].identifier')"
           runtime="$(xcrun simctl list runtimes -j | jq -er '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last.identifier')"
@@ -39,7 +37,6 @@ jobs:
           xcrun simctl boot "$device"
           xcrun simctl bootstatus "$device" -b
           xcrun simctl status_bar "$device" override --time 9:41
-          xcrun simctl openurl "$device" "$APP_URL"
 
       - name: Verify the workout in mobile Safari
         working-directory: tool/ios-safari

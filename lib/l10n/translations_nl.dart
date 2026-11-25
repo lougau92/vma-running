@@ -92,6 +92,10 @@ class TranslationsNl {
         "Deze training overschrijdt de ondersteunde limiet van 200 stappen.",
 
     "workout_retry": "Opnieuw proberen",
+    "workout_send_error": "Foutrapport verzenden",
+    "workout_error_sent": "Foutrapport verzonden.",
+    "workout_error_send_failed":
+        "Het foutrapport kon niet worden verzonden. Probeer opnieuw.",
     "workout_load_error":
         "Kan deze training niet laden. Probeer te vernieuwen.",
     "workout_session": "Training",

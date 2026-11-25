@@ -10,6 +10,7 @@ class FirebaseContentSession {
   final FirebaseAuth? _auth;
   Future<void>? _pending;
   static Future<void>? _defaultPending;
+  static bool _defaultInitialized = false;
 
   Future<void> ensureSignedIn() {
     if (_auth == null) {
@@ -34,10 +35,12 @@ class FirebaseContentSession {
   }
 
   Future<void> _ensureSession() async {
-    if (_auth == null && Firebase.apps.isEmpty) {
+    // FlutterFire's web app registry requires the JS SDK to be loaded first.
+    if (_auth == null && !_defaultInitialized) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
+      _defaultInitialized = true;
     }
     final auth = _auth ?? FirebaseAuth.instance;
     if (auth.currentUser == null) await auth.signInAnonymously();

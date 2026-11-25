@@ -183,17 +183,20 @@ String _cacheKey(String documentPath, String fieldName) =>
     'firebase_doc_cache_${Uri.encodeComponent('$documentPath::$fieldName')}';
 
 // Keep diagnostics local and omit messages, tokens, and document content.
-void _logRemoteFailure(Object error) {
-  if (!kDebugMode) return;
-  var code = 'unexpected-error';
+/// A diagnostic code that can be included in logs and feedback reports.
+String? remoteContentErrorCode(Object error) {
   if (error is FirebaseException &&
       RegExp(r'^[a-z][a-z0-9_-]{0,63}$').hasMatch(error.plugin) &&
       RegExp(r'^[a-z][a-z0-9-]{0,63}$').hasMatch(error.code)) {
-    code = '${error.plugin}/${error.code}';
-  } else if (error is StateError || error is FormatException) {
-    code = 'invalid-document';
-  } else if (error is TimeoutException) {
-    code = 'timeout';
+    return '${error.plugin}/${error.code}';
   }
+  if (error is StateError || error is FormatException) return 'invalid-document';
+  if (error is TimeoutException) return 'timeout';
+  return null;
+}
+
+void _logRemoteFailure(Object error) {
+  if (!kDebugMode) return;
+  final code = remoteContentErrorCode(error) ?? 'unexpected-error';
   debugPrint('Remote content load failed ($code); using local fallback.');
 }

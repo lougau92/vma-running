@@ -91,6 +91,10 @@ class TranslationsFr {
         "Cette séance dépasse la limite prise en charge de 200 étapes.",
 
     "workout_retry": "Réessayer",
+    "workout_send_error": "Envoyer un rapport d’erreur",
+    "workout_error_sent": "Rapport d’erreur envoyé.",
+    "workout_error_send_failed":
+        "Impossible d’envoyer le rapport d’erreur. Réessayez.",
     "workout_load_error": "Impossible de charger cette séance. Réessayez.",
     "workout_session": "Séance",
     "workout_laps": "tours",

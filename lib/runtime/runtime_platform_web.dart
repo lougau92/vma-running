@@ -34,6 +34,22 @@ String? takeBrowserQueryParameter(String name) {
 @JS('window.matchMedia')
 external _MediaQuery _matchMedia(String query);
 
+@JS('navigator.userAgent')
+external String get _userAgent;
+
+String? feedbackBrowserFamily() {
+  final agent = _userAgent;
+  if (agent.contains('Firefox/') || agent.contains('FxiOS/')) return 'Firefox';
+  if (agent.contains('Edg/') ||
+      agent.contains('EdgiOS/') ||
+      agent.contains('EdgA/')) {
+    return 'Edge';
+  }
+  if (agent.contains('Chrome/') || agent.contains('CriOS/')) return 'Chrome';
+  if (agent.contains('Safari/') && agent.contains('Version/')) return 'Safari';
+  return 'Unknown';
+}
+
 @JS('navigator.maxTouchPoints')
 external int? get _maxTouchPoints;
 

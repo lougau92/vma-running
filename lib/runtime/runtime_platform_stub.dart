@@ -12,3 +12,5 @@ Future<bool> openBrowserPage(Uri url) =>
     launchUrl(url, mode: LaunchMode.externalApplication);
 
 String? takeBrowserQueryParameter(String name) => null;
+
+String? feedbackBrowserFamily() => null;

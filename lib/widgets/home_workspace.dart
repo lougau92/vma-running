@@ -1,4 +1,5 @@
-import 'package:app_feedback/app_feedback.dart' show FeedbackContextScope;
+import 'package:app_feedback/app_feedback.dart'
+    show FeedbackContextScope, FeedbackSender;
 import 'package:flutter/material.dart';
 
 import '../app_localizations.dart';
@@ -41,6 +42,7 @@ class HomeWorkspace extends StatefulWidget {
     required this.onSettingsChanged,
     required this.features,
     required this.loader,
+    this.feedbackSender,
   });
 
   final PreferredSizeWidget appBar;
@@ -50,6 +52,7 @@ class HomeWorkspace extends StatefulWidget {
   final ValueChanged<AppSettings> onSettingsChanged;
   final FeatureFlags features;
   final RemoteAssetLoader loader;
+  final FeedbackSender? feedbackSender;
 
   @override
   State<HomeWorkspace> createState() => _HomeWorkspaceState();
@@ -157,6 +160,7 @@ class _HomeWorkspaceState extends State<HomeWorkspace> {
         _HomePage.trainingPlan => TrainingPlanPage(
           userVma: vma!,
           loader: widget.loader,
+          feedbackSender: widget.feedbackSender,
         ),
         _HomePage.calculator => RunningCalculatorTab(
           savedVma: vma,

@@ -1,9 +1,12 @@
+import 'package:app_feedback/app_feedback.dart'
+    show FeedbackSender, FeedbackSubmission;
 import 'package:vma_running/theme.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:vma_running/app_localizations.dart';
 import 'package:vma_running/remote_asset_loader.dart';
 import 'package:vma_running/widgets/training_plan_page.dart';
@@ -28,12 +31,24 @@ class _Loader extends RemoteAssetLoader {
   }
 }
 
+class _FeedbackSender implements FeedbackSender {
+  final submissions = <FeedbackSubmission>[];
+  final completion = Completer<void>();
+
+  @override
+  Future<void> send(FeedbackSubmission feedback) {
+    submissions.add(feedback);
+    return completion.future;
+  }
+}
+
 Widget _app(
   _Loader loader,
   String locale,
   bool dark, {
   String? themeId,
   double textScale = 1,
+  FeedbackSender? feedbackSender,
 }) => MaterialApp(
   builder: (context, child) => MediaQuery(
     data: MediaQuery.of(
@@ -52,9 +67,51 @@ Widget _app(
   theme: dark
       ? AppThemes.resolve(themeId ?? 'summit').dark
       : AppThemes.resolve(themeId ?? 'enjambee').light,
-  home: Scaffold(body: TrainingPlanPage(userVma: 18, loader: loader)),
+  home: Scaffold(
+    body: TrainingPlanPage(
+      userVma: 18,
+      loader: loader,
+      feedbackSender: feedbackSender,
+    ),
+  ),
 );
 void main() {
+  testWidgets('workout load failure can be reported through feedback', (
+    tester,
+  ) async {
+    PackageInfo.setMockInitialValues(
+      appName: 'VMA',
+      packageName: 'vma_running',
+      version: '1.10.45',
+      buildNumber: '54',
+      buildSignature: '',
+    );
+    final loader = _Loader('invalid workout');
+    final sender = _FeedbackSender();
+    await tester.pumpWidget(_app(loader, 'en', false, feedbackSender: sender));
+    await tester.pumpAndSettle();
+
+    final send = find.widgetWithText(TextButton, 'Send error report');
+    await tester.tap(send);
+    await tester.pump();
+    expect(tester.widget<TextButton>(send).onPressed, isNull);
+    expect(sender.submissions.single.category, 'Bug report');
+    expect(sender.submissions.single.origin, 'training-plan');
+    expect(sender.submissions.single.message, contains('invalid-document'));
+    expect(
+      sender.submissions.single.message,
+      isNot(contains('invalid workout')),
+    );
+
+    expect(sender.submissions.single.message, contains('App 1.10.45+54'));
+    expect(sender.submissions.single.uiContext, isNotNull);
+
+    sender.completion.complete();
+    await tester.pumpAndSettle();
+    expect(find.text('Error report sent.'), findsOneWidget);
+    unawaited(loader.updates.close());
+  });
+
   for (final theme in AppThemes.all) {
     for (final dark in [false, true]) {
       testWidgets(

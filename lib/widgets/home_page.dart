@@ -126,6 +126,7 @@ class _HomePageState extends State<HomePage> {
         onSettingsChanged: widget.onSettingsChanged,
         features: widget.features,
         loader: _remoteLoader,
+        feedbackSender: widget.feedbackSender,
       ),
     );
   }

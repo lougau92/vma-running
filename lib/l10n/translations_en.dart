@@ -89,6 +89,9 @@ class TranslationsEn {
     "garmin_too_many": "This workout exceeds the supported limit of 200 steps.",
 
     "workout_retry": "Retry",
+    "workout_send_error": "Send error report",
+    "workout_error_sent": "Error report sent.",
+    "workout_error_send_failed": "Could not send the error report. Try again.",
     "workout_load_error": "Unable to load this workout. Try refreshing.",
     "workout_session": "Session",
     "workout_laps": "laps",

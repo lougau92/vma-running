@@ -1,0 +1,57 @@
+name: iPhone Safari smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ci/ios-safari]
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  workout:
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment.environment == 'github-pages' &&
+       github.event.deployment_status.state == 'success')
+    runs-on: macos-26
+    timeout-minutes: 20
+    env:
+      APP_URL: https://lougau92.github.io/vma-running/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'deployment_status' && 'refs/heads/main' || github.sha }}
+
+      - name: Generate the UI test project
+        working-directory: tool/ios-safari
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Open the deployed app on a fresh iPhone
+        run: |
+          device_type="$(xcrun simctl list devicetypes -j | jq -er '[.devicetypes[] | select(.name | startswith("iPhone"))][0].identifier')"
+          runtime="$(xcrun simctl list runtimes -j | jq -er '[.runtimes[] | select(.isAvailable and (.identifier | contains(".iOS-")))] | last.identifier')"
+          device="$(xcrun simctl create WorkoutSmoke "$device_type" "$runtime")"
+          echo "SIMULATOR_ID=$device" >> "$GITHUB_ENV"
+          xcrun simctl boot "$device"
+          xcrun simctl bootstatus "$device" -b
+          xcrun simctl status_bar "$device" override --time 9:41
+          xcrun simctl openurl "$device" "$APP_URL"
+
+      - name: Verify the workout in mobile Safari
+        working-directory: tool/ios-safari
+        run: |
+          xcodebuild test -project SafariSmoke.xcodeproj -scheme SafariSmoke \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            -parallel-testing-enabled NO \
+            -resultBundlePath "$RUNNER_TEMP/SafariSmoke.xcresult"
+
+      - name: Save Safari screenshots and test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: safari-smoke-results
+          path: ${{ runner.temp }}/SafariSmoke.xcresult

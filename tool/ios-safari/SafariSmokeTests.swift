@@ -13,15 +13,11 @@ final class SafariSmokeTests: XCTestCase {
         }
 
         safari.launch()
-        let addressPredicate = NSPredicate(
-            format: "identifier == %@ OR label CONTAINS[c] %@",
-            "URL", "Search or enter website name"
+        let addressPosition = try XCTUnwrap(
+            waitForText(["Search or enter website", "Search or enter website name"], timeout: 30),
+            "Safari's address bar did not appear"
         )
-        let addressBar = safari.descendants(matching: .any)
-            .matching(addressPredicate).firstMatch
-        XCTAssertTrue(addressBar.waitForExistence(timeout: 30), "Safari's address bar did not appear")
-        guard addressBar.exists else { return }
-        addressBar.tap()
+        safari.coordinate(withNormalizedOffset: CGVector(dx: addressPosition.x, dy: addressPosition.y)).tap()
         let keyboard = safari.keyboards.firstMatch
         XCTAssertTrue(keyboard.waitForExistence(timeout: 10), "Safari's keyboard did not appear")
         guard keyboard.exists else { return }
@@ -30,16 +26,11 @@ final class SafariSmokeTests: XCTestCase {
         // Flutter draws its web UI on a canvas. Read the rendered labels directly
         // so the test runs with Safari's default accessibility settings.
         let tabNames = ["Workout", "Entrainement", "Entraînement", "Training"]
-        let deadline = Date().addingTimeInterval(90)
-        var tab: CGPoint?
-        while tab == nil && Date() < deadline {
-            tab = try textPosition(tabNames, below: 0.6)
-            if tab == nil { Thread.sleep(forTimeInterval: 1) }
-        }
-        let tabPosition = try XCTUnwrap(tab, "The workout tab did not render")
-        let screen = safari.coordinate(withNormalizedOffset: .zero)
-        screen.withOffset(CGVector(dx: tabPosition.x * safari.frame.width,
-                                   dy: tabPosition.y * safari.frame.height)).tap()
+        let tabPosition = try XCTUnwrap(
+            waitForText(tabNames, below: 0.6, timeout: 90),
+            "The workout tab did not render"
+        )
+        safari.coordinate(withNormalizedOffset: CGVector(dx: tabPosition.x, dy: tabPosition.y)).tap()
 
         let workoutLabels = ["Session content", "Contenu de la séance", "Inhoud sessie",
                              "Export to watch", "Exporter vers une montre",
@@ -53,6 +44,15 @@ final class SafariSmokeTests: XCTestCase {
             Thread.sleep(forTimeInterval: 1)
         }
         XCTFail("Safari did not render the workout content or watch export control")
+    }
+
+    private func waitForText(_ labels: [String], below minimumY: CGFloat = 0, timeout: TimeInterval) throws -> CGPoint? {
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if let position = try textPosition(labels, below: minimumY) { return position }
+            Thread.sleep(forTimeInterval: 1)
+        }
+        return nil
     }
 
     private func textPosition(_ labels: [String], below minimumY: CGFloat = 0) throws -> CGPoint? {

@@ -12,6 +12,8 @@ class FirebaseContentSession {
   static Future<void>? _defaultPending;
   static bool _defaultInitialized = false;
 
+  FirebaseAuth get _sessionAuth => _auth ?? FirebaseAuth.instance;
+
   Future<void> ensureSignedIn() {
     if (_auth == null) {
       return _defaultPending ??= _ensureSession().whenComplete(
@@ -23,15 +25,14 @@ class FirebaseContentSession {
 
   Future<String> idToken({bool forceRefresh = false}) async {
     await ensureSignedIn();
-    final token = await (_auth ?? FirebaseAuth.instance).currentUser!
-        .getIdToken(forceRefresh);
+    final token = await _sessionAuth.currentUser!.getIdToken(forceRefresh);
     if (token == null) throw StateError('Firebase token unavailable');
     return token;
   }
 
   Future<String> userId() async {
     await ensureSignedIn();
-    return (_auth ?? FirebaseAuth.instance).currentUser!.uid;
+    return _sessionAuth.currentUser!.uid;
   }
 
   Future<void> _ensureSession() async {
@@ -42,7 +43,7 @@ class FirebaseContentSession {
       );
       _defaultInitialized = true;
     }
-    final auth = _auth ?? FirebaseAuth.instance;
+    final auth = _sessionAuth;
     if (auth.currentUser == null) await auth.signInAnonymously();
   }
 }
